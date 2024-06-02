@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Introduction on Documentation for Hugo Learn Theme</title>
+    <link>//localhost:1313/en/</link>
+    <description>Recent content in Introduction on Documentation for Hugo Learn Theme</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 01 Jan 0001 00:00:00 +0000</lastBuildDate>
+    <atom:link href="//localhost:1313/en/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Credits</title>
+      <link>//localhost:1313/en/credits/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/en/credits/</guid>
+      <description>Contributors Thanks to them for making Open Source Software a better place !&#xA;And a special thanks to @vjeantet for his work on docdock, a fork of hugo-theme-learn. v2.0.0 of this theme is inspired by his work.&#xA;Packages and libraries mermaid - generation of diagram and flowchart from text in a similar manner as markdown font awesome - the iconic font and CSS framework jQuery - The Write Less, Do More, JavaScript Library lunr - Lunr enables you to provide a great search experience without the need for external, server-side, search services&amp;hellip; horsey - Progressive and customizable autocomplete component clipboard.</description>
+    </item>
+    <item>
+      <title>Showcase</title>
+      <link>//localhost:1313/en/showcase/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/en/showcase/</guid>
+      <description>TAT by OVH Tshark.dev by Ross Jacobs inteliver by Amir Lavasani </description>
+    </item>
+  </channel>
+</rss>
