@@ -1,5 +1,5 @@
 ---
-title: Getting Started with Language Modules
+title: Language Modules
 weight: 10
 ---
 
