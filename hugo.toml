@@ -9,7 +9,7 @@ metaDataFormat = "yaml"
 defaultContentLanguageInSubdir= true
 
 [params]
-  editURL = "https://github.com/untrustedmodders/plugify-website/tree/main/content"
+  editURL = "https://github.com/untrustedmodders/untrustedmodders.github.io/tree/main/content/"
   description = "Documentation for Plugify"
   author = "untrustedmodders"
   showVisitedLinks = true
@@ -27,7 +27,7 @@ home = [ "HTML", "RSS", "JSON"]
 
 [Languages]
 [Languages.en]
-title = "Documentation for Hugo Learn Theme"
+title = "Documentation for Plugify"
 weight = 1
 languageName = "English"
 landingPageURL = "/en"
