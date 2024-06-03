@@ -1,5 +1,5 @@
 ---
-title: Getting Started 
+title: Getting Started with Plugins
 weight: 5
 ---
 
