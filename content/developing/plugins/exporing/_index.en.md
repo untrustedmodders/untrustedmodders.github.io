@@ -217,7 +217,7 @@ Here's an example template that combines these elements:
     }
   ],
   "retType": {
-    "type": "void"
+    "type": "int32"
   }
 }
 ```
@@ -229,8 +229,9 @@ How it will look like on plugin's side:
 ```c++
 using Example_Callback_Function = std::string(*)(void*, const std::string&, int32_t);
 extern "C" 
-PLUGIN_API void Example_Function(float p1, double& p2, Example_Callback_Function p4) {
+PLUGIN_API int32_t Example_Function(float p1, double& p2, Example_Callback_Function p4) {
 	// ... implementation
+	return 0;
 }
 ```
 {{% /tab %}}
@@ -242,9 +243,10 @@ namespace CSharpTest
     {
 		delegate string Example_Callback_Function(UIntPtr p1, string p2, int p3);
 	
-	    public static void Example_Function(float p1, ref double p2, Example_Callback_Function p4)
+	    public static int Example_Function(float p1, ref double p2, Example_Callback_Function p4)
         {
 			// ... implementation
+			return 0;
         }
 	}
 }
@@ -254,15 +256,16 @@ namespace CSharpTest
 ```python
 def Example_Function(p1, p2, p3)
 	# ... implementation
-	return [None, p2] // ref parameter go to return tuple
+	return [0, p2] // ref parameter go to return tuple
 ```
 {{% /tab %}}
 {{% tab name="go" %}}
 ```go
 //export Example_Function
-func Example_Function(p1 float32, p2 *float64, p3 uintptr) string {
+func Example_Function(p1 float32, p2 *float64, p3 uintptr) int32 {
 	// ... implementation
-	// use 'cgo' to call function pointer yourself
+	// use 'cgo' to call function pointer yourself with marshaling using 'plugify.h' functions
+	return 0
 }
 ```
 {{% /tab %}}
@@ -356,7 +359,7 @@ var globalString []string= []string{
 //export Example_Function
 func Example_Function(p1 int8, p2 []float64, p3 C.Vector3) []string {
 	// ... implementation
-	return globalString
+	return globalString # making sure that outputed data will be valid
 	
 }
 ```
