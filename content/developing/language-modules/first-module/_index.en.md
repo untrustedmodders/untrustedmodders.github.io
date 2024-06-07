@@ -26,25 +26,23 @@ Below is an example of a `.pmodule` configuration file:
     "updateURL": "https://raw.githubusercontent.com/untrustedmodders/cpp-lang-module/main/cpp-lang-module.json",
     "supportedPlatforms": [],
     "forceLoad": false
-}```
-
+}
+```
 ## Explanation of Configuration Options
 
-- **fileVersion**: The version number of the configuration file format.
-- **version**: The version number of the language module.
-- **versionName**: A human-readable version name, such as "1.0".
-- **friendlyName**: A user-friendly name for the language module.
-- **language**: The programming language supported by this module (e.g., "cpp" for C++).
-- **description**: A brief description or overview of the language module.
-- **createdBy**: The creator or author of the language module.
-- **createdByURL**: The URL linking to the creator's profile or information.
-- **docsURL**: The URL linking to the documentation for the language module.
-- **downloadURL**: The URL for downloading the language module, typically a release package or ZIP file.
-- **updateURL**: The URL for checking and fetching updates for the language module.
-- **supportedPlatforms**: An array listing the platforms supported by the language module.
-- **forceLoad**: A boolean indicating whether the language module should be forcibly loaded by the core.
-
-#pragma once
+- **`fileVersion`**: The version number of the configuration file format.
+- **`version`**: The version number of the language module.
+- **`versionName`**: A human-readable version name, such as "1.0".
+- **`friendlyName`**: A user-friendly name for the language module.
+- **`language`**: The programming language supported by this module (e.g., "cpp" for C++).
+- **`description`**: A brief description or overview of the language module.
+- **`createdBy`**: The creator or author of the language module.
+- **`createdByURL`**: The URL linking to the creator's profile or information.
+- **`docsURL`**: The URL linking to the documentation for the language module.
+- **`downloadURL`**: The URL for downloading the language module, typically a release package or ZIP file.
+- **`updateURL`**: The URL for checking and fetching updates for the language module.
+- **`supportedPlatforms`**: An array listing the platforms supported by the language module.
+- **`forceLoad`**: A boolean indicating whether the language module should be forcibly loaded by the core.
 
 ## ILanguageModule Interface
 The ILanguageModule interface defines the methods that should be implemented by user-written language modules. Below is an overview of the interface:
@@ -100,8 +98,7 @@ namespace plugify {
          */
         virtual void OnMethodExport(const IPlugin& plugin) = 0;
     };
-
-} // namespace plugify
+}
 ```
 
 Follow these steps to create a language module:
