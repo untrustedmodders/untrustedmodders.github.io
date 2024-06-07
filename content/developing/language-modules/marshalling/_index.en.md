@@ -74,14 +74,15 @@ int main() {
 
 	// Generate the JIT function (C Calling Convention)
 	void* methodAddr = function.GetJitFunc(method, &Callback, reinterpret_cast<void*>(func));
-}```
+}
+```
 
 ## Benefits of Using
 The plugify-function library provides several benefits:
 
->> **Dynamic Function Generation**: Allows the creation of functions at runtime, making it flexible and adaptable to various use cases.
->> **Interoperability**: Facilitates communication between different programming languages within the Plugify framework.
->> **Simplified Integration**: Provides a straightforward API for generating and using dynamic functions, reducing the complexity of marshalling types.
+1. **`Dynamic Function Generation`**: Allows the creation of functions at runtime, making it flexible and adaptable to various use cases.
+2. **`Interoperability`**: Facilitates communication between different programming languages within the Plugify framework.
+3. **`Simplified Integration`**: Provides a straightforward API for generating and using dynamic functions, reducing the complexity of marshalling types.
 
 By leveraging the plugify-function library, language modules can efficiently manage function calls and ensure seamless integration within the Plugify ecosystem.
 
