@@ -22,12 +22,12 @@ Below is an example demonstrating how to use the `plugify-function` library to g
  * @param hidden If true, return will be passed as the first argument.
  * @return Pointer to the generated function.
  */
-void* GetJitFunc(IMethod method, FuncCallback callback, MemAddr data, HiddenParam hidden);
+void* GetJitFunc(MethodRef method, FuncCallback callback, MemAddr data, HiddenParam hidden);
 ```
 
 The FuncCallback type is defined as follows:
 ```cpp
-using FuncCallback = void(*)(IMethod method, MemAddr data, const Parameters* params, uint8_t count, const ReturnValue* ret);
+using FuncCallback = void(*)(MethodRef method, MemAddr data, const Parameters* params, uint8_t count, const ReturnValue* ret);
 ```
 
 Here is a step-by-step guide on how to use the Function class:
@@ -50,7 +50,7 @@ Before calling `GetJitFunc`, ensure that the method object passed as an argument
 
 3. ***Implementation of Callback Function***: This function should be responsible for converting types and calling the original function. 
 ```cpp
-void Callback(plugify::IMethod method, plugify::MemAddr data, const plugify::Parameters* params, uint8_t count, const plugify::ReturnValue* ret) {
+void Callback(plugify::MethodRef method, plugify::MemAddr data, const plugify::Parameters* params, uint8_t count, const plugify::ReturnValue* ret) {
     // Implementation of the callback function
 }
 ```
@@ -60,7 +60,7 @@ void Callback(plugify::IMethod method, plugify::MemAddr data, const plugify::Par
 Below is a more detailed example demonstrating the entire process:
 ```cpp
 // Define the callback function
-void Callback(plugify::IMethod method, plugify::MemAddr data, const plugify::Parameters* params, uint8_t count, const plugify::ReturnValue* ret) {
+void Callback(plugify::MethodRef method, plugify::MemAddr data, const plugify::Parameters* params, uint8_t count, const plugify::ReturnValue* ret) {
     // Implementation of the callback function
 }
 
@@ -69,7 +69,7 @@ int main() {
 	plugify::Function function(jitRuntime);
 
 	// Define the method and function pointers
-	plugify::IMethod method;  // Assume this is properly initialized from plugify core
+	plugify::MethodRef method;  // Assume this is properly initialized from plugify core
 	void* func = /* function pointer to be used or any other data */;
 
 	// Generate the JIT function (C Calling Convention)
