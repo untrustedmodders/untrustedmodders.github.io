@@ -19,15 +19,15 @@ Below is an example demonstrating how to use the `plugify-function` library to g
  * @param method Reference to the method.
  * @param callback Callback function.
  * @param data User data.
- * @param obj If true, return will be passed as the first argument.
+ * @param hidden If true, return will be passed as the first argument.
  * @return Pointer to the generated function.
  */
-void* GetJitFunc(const Method& method, FuncCallback callback, void* data = nullptr, bool obj = true);
+void* GetJitFunc(IMethod method, FuncCallback callback, MemAddr data, HiddenParam hidden);
 ```
 
 The FuncCallback type is defined as follows:
 ```cpp
-using FuncCallback = void(*)(const plugify::Method* method, void* data, const plugify::Parameters* params, uint8_t count, const plugify::ReturnValue* ret);
+using FuncCallback = void(*)(IMethod method, MemAddr data, const Parameters* params, uint8_t count, const ReturnValue* ret);
 ```
 
 Here is a step-by-step guide on how to use the Function class:
@@ -42,7 +42,7 @@ The function will be deallocated when it goes out of scope. Ensure that the `Fun
 
 2. **Generate the Function**: Use the GetJitFunc method to get the address of the dynamically generated function.
 ```cpp
-void* methodAddr = function.GetJitFunc(method, &Callback, reinterpret_cast<void*>(func));
+void* methodAddr = function.GetJitFunc(method, &Callback, funcAddress);
 ```
 {{% notice note %}}
 Before calling `GetJitFunc`, ensure that the method object passed as an argument is valid and will be valid. Also, correctly represents the method for which you want to generate a callback function.
@@ -50,7 +50,7 @@ Before calling `GetJitFunc`, ensure that the method object passed as an argument
 
 3. ***Implementation of Callback Function***: This function should be responsible for converting types and calling the original function. 
 ```cpp
-void Callback(const plugify::Method* method, void* data, const plugify::Parameters* params, uint8_t count, const plugify::ReturnValue* ret) {
+void Callback(plugify::IMethod method, plugify::MemAddr data, const plugify::Parameters* params, uint8_t count, const plugify::ReturnValue* ret) {
     // Implementation of the callback function
 }
 ```
@@ -60,7 +60,7 @@ void Callback(const plugify::Method* method, void* data, const plugify::Paramete
 Below is a more detailed example demonstrating the entire process:
 ```cpp
 // Define the callback function
-void Callback(const Method* method, void* data, const Parameters* params, uint8_t count, const ReturnValue* ret) {
+void Callback(plugify::IMethod method, plugify::MemAddr data, const plugify::Parameters* params, uint8_t count, const plugify::ReturnValue* ret) {
     // Implementation of the callback function
 }
 
@@ -69,11 +69,11 @@ int main() {
 	plugify::Function function(jitRuntime);
 
 	// Define the method and function pointers
-	plugify::Method method;  // Assume this is properly initialized
+	plugify::IMethod method;  // Assume this is properly initialized from plugify core
 	void* func = /* function pointer to be used or any other data */;
 
 	// Generate the JIT function (C Calling Convention)
-	void* methodAddr = function.GetJitFunc(method, &Callback, reinterpret_cast<void*>(func));
+	void* methodAddr = function.GetJitFunc(method, &Callback, func);
 }
 ```
 
