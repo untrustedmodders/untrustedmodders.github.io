@@ -13,7 +13,7 @@ This guide will walk you through the installation process for Plugify on your CS
 ## Installation Steps
 
 1. **Download Plugify:**
-   Download the latest version of CS2-Plugify from our download page [here](https://github.com/untrustedmodders/cs2-plugify).
+   Download the latest version of MMS2-Plugify from our download page [here](https://github.com/untrustedmodders/mms2-plugify).
 
 2. **Extract Plugify:**
    Extract the downloaded archive into your server’s game folder. For example, if your server’s game folder is located at `../my_server/game/csgo`, extract the files there.

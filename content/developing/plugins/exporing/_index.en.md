@@ -36,7 +36,7 @@ The following lists how the types are exposed to the C++ API.
 | float                  | float    | true  |
 | double                 | double   | true  |
 | void*                  | function | false |
-| std::string            | string   | true  |
+| plg::string            | string   | true  |
 | std::vector<bool>      | bool*    | true  |
 | std::vector<char>      | char8*   | true  |
 | std::vector<char16_t>  | char16*  | true  |
@@ -52,10 +52,11 @@ The following lists how the types are exposed to the C++ API.
 | std::vector<uintptr_t> | ptr32*   | true  |
 | std::vector<float>     | float*   | true  |
 | std::vector<double>    | double*  | true  |
-| vector2                | vec2     | true  |
-| vector3                | vec3     | true  |
-| vector4                | vec4     | true  |
-| matrix4x4              | mat4x4   | true  |
+| std::vector<string>    | string*  | true  |
+| plg::vec2              | vec2     | true  |
+| plg::vec3              | vec3     | true  |
+| plg::vec4              | vec4     | true  |
+| plg::mat4x4            | mat4x4   | true  |
 
 ## Exported Functions
 
@@ -374,12 +375,11 @@ reference type. With setting "ref" parameter to true.
 So if you have a type listed as "int32", you should use
 "int32_t&" in your implementation. 
 
-### Arrays and Strings
+### Objects
 Arrays of any type must be described with a std::vector<>& and the
-strings should be pass by std::string&. 
+strings should be pass by plg::string&. Pod structures should be only passed by reference.
 
 ### Return
 In x86-x64 calling conventions, which determine how function arguments are passed. 
 For pod structures or objects returned by value, the caller must allocate memory 
 for the return value and pass a pointer to it as the first argument.
-	

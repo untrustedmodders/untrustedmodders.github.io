@@ -93,7 +93,7 @@ Here's the representation of dependency in JSON format along with descriptions f
 
 ```json
 {
-    "name": "dynohook",
+    "name": "polyhook",
     "optional": false,
     "supportedPlatforms": ["windows", "linux"],
     "requestedVersion": 2
