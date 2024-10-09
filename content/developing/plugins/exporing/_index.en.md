@@ -17,46 +17,46 @@ The use of the exporting function system is not the only way to enable communica
 
 The following lists how the types are exposed to the C++ API.
 
-| Type                   | Alias    | Ref ? |
-|------------------------|----------|-------|
-| void                   | void     | false |
-| bool                   | bool     | true  |
-| char                   | char8    | true  |
-| char16_t               | char16   | true  |
-| int8_t                 | int8     | true  |
-| int16_t                | int16    | true  |
-| int32_t                | int32    | true  |
-| int64_t                | int64    | true  |
-| uint8_t                | uint8    | true  |
-| uint16_t               | uint16   | true  |
-| uint32_t               | uint32   | true  |
-| uint64_t               | uint64   | true  |
-| uintptr_t              | ptr64    | true  |
-| uintptr_t              | ptr32    | true  |
-| float                  | float    | true  |
-| double                 | double   | true  |
-| void*                  | function | false |
-| plg::string            | string   | true  |
-| std::vector<bool>      | bool*    | true  |
-| std::vector<char>      | char8*   | true  |
-| std::vector<char16_t>  | char16*  | true  |
-| std::vector<int8_t>    | int8*    | true  |
-| std::vector<int16_t>   | int16*   | true  |
-| std::vector<int32_t>   | int32*   | true  |
-| std::vector<int64_t>   | int64*   | true  |
-| std::vector<uint8_t>   | uint8*   | true  |
-| std::vector<uint16_t>  | uint16*  | true  |
-| std::vector<uint32_t>  | uint32*  | true  |
-| std::vector<uint64_t>  | uint64*  | true  |
-| std::vector<uintptr_t> | ptr64*   | true  |
-| std::vector<uintptr_t> | ptr32*   | true  |
-| std::vector<float>     | float*   | true  |
-| std::vector<double>    | double*  | true  |
-| std::vector<string>    | string*  | true  |
-| plg::vec2              | vec2     | true  |
-| plg::vec3              | vec3     | true  |
-| plg::vec4              | vec4     | true  |
-| plg::mat4x4            | mat4x4   | true  |
+| Type                       | Alias    | Ref ? |
+|----------------------------|----------|-------|
+| void                       | void     | false |
+| bool                       | bool     | true  |
+| char                       | char8    | true  |
+| char16_t                   | char16   | true  |
+| int8_t                     | int8     | true  |
+| int16_t                    | int16    | true  |
+| int32_t                    | int32    | true  |
+| int64_t                    | int64    | true  |
+| uint8_t                    | uint8    | true  |
+| uint16_t                   | uint16   | true  |
+| uint32_t                   | uint32   | true  |
+| uint64_t                   | uint64   | true  |
+| uintptr_t                  | ptr64    | true  |
+| uintptr_t                  | ptr32    | true  |
+| float                      | float    | true  |
+| double                     | double   | true  |
+| void*                      | function | false |
+| plg::string                | string   | true  |
+| std::vector\<bool\>        | bool*    | true  |
+| std::vector\<char\>        | char8*   | true  |
+| std::vector\<char16_t\>    | char16*  | true  |
+| std::vector\<int8_t\>      | int8*    | true  |
+| std::vector\<int16_t\>     | int16*   | true  |
+| std::vector\<int32_t\>     | int32*   | true  |
+| std::vector\<int64_t\>     | int64*   | true  |
+| std::vector\<uint8_t\>     | uint8*   | true  |
+| std::vector\<uint16_t\>    | uint16*  | true  |
+| std::vector\<uint32_t\>    | uint32*  | true  |
+| std::vector\<uint64_t\>    | uint64*  | true  |
+| std::vector\<uintptr_t\>   | ptr64*   | true  |
+| std::vector\<uintptr_t\>   | ptr32*   | true  |
+| std::vector\<float\>       | float*   | true  |
+| std::vector\<double\>      | double*  | true  |
+| std::vector\<plg::string\> | string*  | true  |
+| plg::vec2                  | vec2     | true  |
+| plg::vec3                  | vec3     | true  |
+| plg::vec4                  | vec4     | true  |
+| plg::mat4x4                | mat4x4   | true  |
 
 ## Exported Functions
 
