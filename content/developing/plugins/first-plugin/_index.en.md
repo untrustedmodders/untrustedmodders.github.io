@@ -122,7 +122,8 @@ Write the source code for your plugin. This will depend on the language module s
 {{< tabs >}}
 {{% tab name="c++" %}}
 ```c++
-#include <plugify/cpp_plugin.h>
+#include <plugify/cpp_plugin.hpp>
+#include <plugify/string.hpp>
 #include <plugin_export.h>
 #include <iostream>
 
@@ -136,7 +137,7 @@ public:
 		std::cout << "Example End!" << std::endl;
 	}
 
-	void MakePrint(int count, const std::string& message) {
+	void MakePrint(int count, const plg::string& message) {
 		for (int i = 0; i < count; ++i) {
 			std::cout << message << std::endl;
 		}

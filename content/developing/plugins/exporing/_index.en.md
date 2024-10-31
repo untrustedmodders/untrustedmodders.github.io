@@ -6,11 +6,11 @@ weight: 15
 In the Plugify ecosystem, functions can be exported to be accessible by other plugins. Typically, to export a function, it should be static in most cases. This approach ensures that the function can be called without instantiating an object, which simplifies integration and usage across different parts of the system.
 However, some language modules, such as C# or Python, offer more flexibility and allow you to export member functions of the main Plugin class. This means that in these languages, you can export functions that are part of a class instance, providing greater flexibility and enabling more complex interactions within your plugin.
 For languages that compile into dynamic link libraries (DLLs), such as C++ or C#, exported functions should be marked to be visible for exporting in the DLL. This is often achieved using specific compiler directives or attributes that indicate which functions should be accessible externally. Ensuring that functions are correctly marked for export is crucial for proper functionality within the Plugify framework.
-In most cases, language modules use native basic types that directly map to C types. However, language modules might have marshaling function wrappers to convert object types like `std::vector` or `std::string` to native language types. These wrappers facilitate the conversion and ensure seamless integration and interaction with the plugin system.
+In most cases, language modules use native basic types that directly map to C types. However, language modules might have marshaling function wrappers to convert object types like `plg::vector` or `plg::string` to native language types. These wrappers facilitate the conversion and ensure seamless integration and interaction with the plugin system.
 When exporting functions, ensure that you follow the conventions and requirements of the specific language module you are using. Properly documented and accessible exported functions can significantly enhance the interoperability and functionality of your plugins within the Plugify ecosystem.
 
 {{% notice info %}}
-The use of the exporting function system is not the only way to enable communication between plugins. Some language modules, such as Python and C#, allow direct communication between plugins if they use the same language module. For example, C# plugins loaded by Mono into one domain can easily use each other's data. You just need to compile plugins where you use other compiled binaries as references. This capability can significantly simplify interactions and data sharing between plugins written in the same language.
+The use of the exporting function system is not the only way to enable communication between plugins. Some language modules, such as Python and C#, allow direct communication between plugins if they use the same language module. For example, C# plugins loaded by Mono/.NET into one domain can easily use each other's data. You just need to compile plugins where you use other compiled binaries as references. This capability can significantly simplify interactions and data sharing between plugins written in the same language.
 {{% /notice %}}
 
 ## Basic Type mapping
@@ -37,22 +37,22 @@ The following lists how the types are exposed to the C++ API.
 | double                     | double   | true  |
 | void*                      | function | false |
 | plg::string                | string   | true  |
-| std::vector\<bool\>        | bool*    | true  |
-| std::vector\<char\>        | char8*   | true  |
-| std::vector\<char16_t\>    | char16*  | true  |
-| std::vector\<int8_t\>      | int8*    | true  |
-| std::vector\<int16_t\>     | int16*   | true  |
-| std::vector\<int32_t\>     | int32*   | true  |
-| std::vector\<int64_t\>     | int64*   | true  |
-| std::vector\<uint8_t\>     | uint8*   | true  |
-| std::vector\<uint16_t\>    | uint16*  | true  |
-| std::vector\<uint32_t\>    | uint32*  | true  |
-| std::vector\<uint64_t\>    | uint64*  | true  |
-| std::vector\<uintptr_t\>   | ptr64*   | true  |
-| std::vector\<uintptr_t\>   | ptr32*   | true  |
-| std::vector\<float\>       | float*   | true  |
-| std::vector\<double\>      | double*  | true  |
-| std::vector\<plg::string\> | string*  | true  |
+| plg::vector\<bool\>        | bool*    | true  |
+| plg::vector\<char\>        | char8*   | true  |
+| plg::vector\<char16_t\>    | char16*  | true  |
+| plg::vector\<int8_t\>      | int8*    | true  |
+| plg::vector\<int16_t\>     | int16*   | true  |
+| plg::vector\<int32_t\>     | int32*   | true  |
+| plg::vector\<int64_t\>     | int64*   | true  |
+| plg::vector\<uint8_t\>     | uint8*   | true  |
+| plg::vector\<uint16_t\>    | uint16*  | true  |
+| plg::vector\<uint32_t\>    | uint32*  | true  |
+| plg::vector\<uint64_t\>    | uint64*  | true  |
+| plg::vector\<uintptr_t\>   | ptr64*   | true  |
+| plg::vector\<uintptr_t\>   | ptr32*   | true  |
+| plg::vector\<float\>       | float*   | true  |
+| plg::vector\<double\>      | double*  | true  |
+| plg::vector\<plg::string\> | string*  | true  |
 | plg::vec2                  | vec2     | true  |
 | plg::vec3                  | vec3     | true  |
 | plg::vec4                  | vec4     | true  |
@@ -117,9 +117,8 @@ How it will look like on plugin's side:
 {{% tab name="c++" %}}
 ```c++
 extern "C" 
-PLUGIN_API void Example_Function(std::string& ret, void* p1, const std::string& p2, int32_t p3, std::vector<uint8_t>& p4) {
-	// ... implementation
-	std::construct_at<>(*ret, "Example_String");
+PLUGIN_API plg::string Example_Function(void* p1, const plg::string& p2, int32_t p3, plg::vector<uint8_t>& p4) {
+    return "Example_String";
 }
 ```
 {{% /tab %}}
@@ -228,7 +227,7 @@ How it will look like on plugin's side:
 {{< tabs >}}
 {{% tab name="c++" %}}
 ```c++
-using Example_Callback_Function = std::string(*)(void*, const std::string&, int32_t);
+using Example_Callback_Function = plg::string(*)(void*, const plg::string&, int32_t);
 extern "C" 
 PLUGIN_API int32_t Example_Function(float p1, double& p2, Example_Callback_Function p4) {
 	// ... implementation
@@ -240,15 +239,15 @@ PLUGIN_API int32_t Example_Function(float p1, double& p2, Example_Callback_Funct
 ```c#
 namespace CSharpTest
 {
-    public class ExportClass
-    {
+	public class ExportClass
+	{
 		delegate string Example_Callback_Function(UIntPtr p1, string p2, int p3);
 	
-	    public static int Example_Function(float p1, ref double p2, Example_Callback_Function p4)
-        {
+		public static int Example_Function(float p1, ref double p2, Example_Callback_Function p4)
+		{
 			// ... implementation
 			return 0;
-        }
+		}
 	}
 }
 ```
@@ -322,9 +321,8 @@ How it will look like on plugin's side:
 {{% tab name="c++" %}}
 ```c++
 extern "C" 
-PLUGIN_API void Example_Function(std::vector<std::string>& ret, char p1, const std::vector<double>& p2, const plugify::Vector3& p4) {
-	// ... implementation
-	std::construct_at<>(*ret, std::vector<std::string>{"Example_String1", "Example_String2", "Example_String3"});
+PLUGIN_API plg::vector<plg::string> Example_Function(char p1, const plg::vector<double>& p2, const plugify::Vector3& p4) {
+	return {"Example_String1", "Example_String2", "Example_String3"};
 }
 ```
 {{% /tab %}}
@@ -332,13 +330,13 @@ PLUGIN_API void Example_Function(std::vector<std::string>& ret, char p1, const s
 ```c#
 namespace CSharpTest
 {
-    public class ExportClass
-    {
-	    public static string[] Example_Function(char p1, double[] p2, Vector3 p4)
-        {
+	public class ExportClass
+	{
+		public static string[] Example_Function(char p1, double[] p2, Vector3 p4)
+		{
 			// ... implementation
 			return string[]{"Example_String1", "Example_String2", "Example_String3"};
-        }
+		}
 	}
 }
 ```
@@ -369,17 +367,55 @@ func Example_Function(p1 int8, p2 []float64, p3 C.Vector3) []string {
 
 ---
 
-### Pointers
-For ref and out paramaters you'll use the corresponding
-reference type. With setting "ref" parameter to true.
-So if you have a type listed as "int32", you should use
-"int32_t&" in your implementation. 
+### Parameter and Return Type Conventions
 
-### Objects
-Arrays of any type must be described with a std::vector<>& and the
-strings should be pass by plg::string&. Pod structures should be only passed by reference.
+To maintain consistency and adhere to the standard C calling conventions, all array, string, and POD (Plain Old Data) types in the API must be passed and returned in specific ways. This ensures compatibility with C linkage and minimizes issues with type handling across the boundary between C and C++.
 
-### Return
-In x86-x64 calling conventions, which determine how function arguments are passed. 
-For pod structures or objects returned by value, the caller must allocate memory 
-for the return value and pass a pointer to it as the first argument.
+1. Arrays:  
+   All arrays, regardless of type, must be represented by `plg::vector<T>&` when passed to functions. Using `plg::vector<T>&` allows for flexible array handling without requiring explicit size information, which can be cumbersome to manage in C.
+
+2. Strings:  
+   For string data, use `plg::string&` as the parameter type. This ensures efficient reference passing and avoids unnecessary copies.
+
+3. Structures:  
+   POD types should also be passed by reference only. This includes structs and classes containing only trivial data (i.e., no non-trivial constructors, destructors, or member functions), ensuring efficient memory handling and minimal overhead.
+
+4. Primitive Values (e.g., `int`, `float`, `double`):  
+   Primitive values can be passed either by value or by reference. Passing by value is efficient and straightforward for small data types, while passing by reference can be beneficial for larger primitive types or when modification of the original value is required. Could be enabled by setting "ref" parameter to true.
+
+Return Value Conventions
+
+For compatibility with the standard C calling conventions, **all arrays, strings, and POD structures should be returned by value**. This allows the API to manage memory allocation and cleanup consistently, providing a simplified and efficient interface for users accessing the library from C.
+
+Summary Table
+
+| Type             | Parameter Passing Convention | Return Convention      |
+|------------------|------------------------------|------------------------|
+| Arrays           | `plg::vector<T>&`            | By value (standard C/) |
+| Strings          | `plg::string&`               | By value (standard C)  |
+| POD Structures   | Only by reference            | By value (standard C)  |
+| Primitive Values | By value or by reference     | By value (standard C)  |
+
+By adhering to these conventions, you can ensure efficient usage of the API and compatibility across C and C++ code.
+
+### Return Workaround
+You can use C linkage (to skip mangling/simplify symbol names) on C++-specific objects and types, but the environment referencing those symbols needs to be specified such that it can make sense of those objects. As our linking environment is also C++, this should not be a problem, assuming we use binary-compatible versions of the C++ `"plg"` library on "both sides". However, directly returning C++ objects from extern "C" functions can produce warnings, as C functions do not expect to see complex C++ objects by value. To address this, we employ a workaround by creating C-style structs that mirror the internal structure of the C++ objects and return those from the extern "C" functions instead. This avoids the warnings without suppressing them.
+
+Here is an example to illustrate this approach:
+```cpp
+extern "C" PLUGIN_API plg::vec Example_FunctionReturnObject(char p1, const plg::vector<double>& p2, const plugify::Vector3& p4) {
+	// Create a C-style struct that represents the internal structure of the C++ object.
+	plg::vec ret;
+
+	// Use `std::construct_at` to construct a `plg::vector<plg::string>` in the memory allocated for `ret`.
+	std::construct_at(reinterpret_cast<plg::vector<plg::string>*>(&ret),
+		plg::vector<plg::string>{"Example_String1", "Example_String2", "Example_String3"});
+
+	return ret;
+}
+```
+
+The caller must **allocate memory for the return value** and pass a pointer to this memory as the first/hidden argument of the function. This is typically handled by passing the pointer via:
+
+- The **first argument** in Intel-based architectures, or
+- The **X8 register** in ARM-based architectures.

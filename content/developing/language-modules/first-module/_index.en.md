@@ -145,7 +145,7 @@ Create a `.pmodule` file in the root directory of your language module project. 
 
 ### 5. Implement Marshaling Wrappers (if needed)
 
-For many language modules, it might be necessary to create marshaling function wrappers to convert object types (e.g., `std::vector`, `std::string`) to the native types of the language. This ensures seamless integration and interaction with the plugin system. Read more about it (here)[en/developing/language-modules/marshalling].
+For many language modules, it might be necessary to create marshaling function wrappers to convert object types (e.g., `plg::vector`, `plg::string`) to the native types of the language. This ensures seamless integration and interaction with the plugin system. Read more about it (here)[en/developing/language-modules/marshalling].
 
 ### 6. Package Your Language Module
 
