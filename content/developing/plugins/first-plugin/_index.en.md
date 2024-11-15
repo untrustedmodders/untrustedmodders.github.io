@@ -137,11 +137,6 @@ public:
 		std::cout << "Example End!" << std::endl;
 	}
 
-	void MakePrint(int count, const plg::string& message) {
-		for (int i = 0; i < count; ++i) {
-			std::cout << message << std::endl;
-		}
-	}
 } g_examplePlugin;
 
 EXPOSE_PLUGIN(PLUGIN_API, &g_examplePlugin)
@@ -172,9 +167,7 @@ namespace ExamplePlugin
 {{% /tab %}}
 {{% tab name="python" %}}
 ```python
-from plugify.plugin import Plugin, PluginInfo
-
-__plugin__ = PluginInfo('ExamplePlugin')
+from plugify.plugin import Plugin
 
 class ExamplePlugin(Plugin):
 	def plugin_start(self):

@@ -391,7 +391,7 @@ Summary Table
 
 | Type             | Parameter Passing Convention | Return Convention      |
 |------------------|------------------------------|------------------------|
-| Arrays           | `plg::vector<T>&`            | By value (standard C/) |
+| Arrays           | `plg::vector<T>&`            | By value (standard C)  |
 | Strings          | `plg::string&`               | By value (standard C)  |
 | POD Structures   | Only by reference            | By value (standard C)  |
 | Primitive Values | By value or by reference     | By value (standard C)  |
