@@ -142,7 +142,7 @@ public:
 EXPOSE_PLUGIN(PLUGIN_API, &g_examplePlugin)
 ```
 {{% /tab %}}
-{{% tab name="c#" %}}
+{{% tab name=".net" %}}
 ```c#
 using System;
 using System.IO;
@@ -213,7 +213,7 @@ cmake ..
 cmake --build .
 ```
 {{% /tab %}}
-{{% tab name="c#" %}}
+{{% tab name=".net" %}}
 ```sh
 csc -target:library -out:ExamplePlugin.dll -reference:plugify/Plugify.dll ExamplePlugin.cs
 ```

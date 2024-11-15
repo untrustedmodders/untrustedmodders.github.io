@@ -122,7 +122,7 @@ PLUGIN_API plg::string Example_Function(void* p1, const plg::string& p2, int32_t
 }
 ```
 {{% /tab %}}
-{{% tab name="c#" %}}
+{{% tab name=".net" %}}
 ```c#
 namespace CSharpTest
 {
@@ -235,7 +235,7 @@ PLUGIN_API int32_t Example_Function(float p1, double& p2, Example_Callback_Funct
 }
 ```
 {{% /tab %}}
-{{% tab name="c#" %}}
+{{% tab name=".net" %}}
 ```c#
 namespace CSharpTest
 {
@@ -326,7 +326,7 @@ PLUGIN_API plg::vector<plg::string> Example_Function(char p1, const plg::vector<
 }
 ```
 {{% /tab %}}
-{{% tab name="c#" %}}
+{{% tab name=".net" %}}
 ```c#
 namespace CSharpTest
 {
