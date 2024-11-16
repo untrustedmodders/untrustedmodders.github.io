@@ -12,6 +12,7 @@ defaultContentLanguageInSubdir= true
   editURL = "https://github.com/untrustedmodders/untrustedmodders.github.io/tree/main/content/"
   description = "Documentation for Plugify"
   author = "untrustedmodders"
+  favicon = true
   showVisitedLinks = true
   disableBreadcrumb = false
   disableNextPrev = false
@@ -45,9 +46,9 @@ url = "https://discord.gg/rX9TMmpang"
 weight = 11
 
 [[Languages.en.menu.shortcuts]]
-name = "<i class='fas fa-fw fa-bookmark'></i> Documentation"
+name = "<i class='fas fa-fw fa-bookmark'></i> Generator"
 identifier = "hugodoc"
-url = "https://docs.plugify.dev/"
+url = "https://untrustedmodders.github.io/plugify-generator"
 weight = 20
 
 [[Languages.en.menu.shortcuts]]
