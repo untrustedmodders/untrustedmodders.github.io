@@ -7,6 +7,4 @@ chapter: true
 
 ### Chapter 3
 
-# Contributing
-
 This section will guide you through a contributing suggestions.

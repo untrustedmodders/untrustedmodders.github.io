@@ -7,6 +7,4 @@ chapter: true
 
 ### Chapter 2
 
-# Developing
-
 This section will guide you through a developing process.
