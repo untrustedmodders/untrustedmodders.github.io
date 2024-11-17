@@ -37,22 +37,22 @@ The following lists how the types are exposed to the C++ API.
 | double                     | double   | true  |
 | void*                      | function | false |
 | plg::string                | string   | true  |
-| plg::vector\<bool\>        | bool*    | true  |
-| plg::vector\<char\>        | char8*   | true  |
-| plg::vector\<char16_t\>    | char16*  | true  |
-| plg::vector\<int8_t\>      | int8*    | true  |
-| plg::vector\<int16_t\>     | int16*   | true  |
-| plg::vector\<int32_t\>     | int32*   | true  |
-| plg::vector\<int64_t\>     | int64*   | true  |
-| plg::vector\<uint8_t\>     | uint8*   | true  |
-| plg::vector\<uint16_t\>    | uint16*  | true  |
-| plg::vector\<uint32_t\>    | uint32*  | true  |
-| plg::vector\<uint64_t\>    | uint64*  | true  |
-| plg::vector\<uintptr_t\>   | ptr64*   | true  |
-| plg::vector\<uintptr_t\>   | ptr32*   | true  |
-| plg::vector\<float\>       | float*   | true  |
-| plg::vector\<double\>      | double*  | true  |
-| plg::vector\<plg::string\> | string*  | true  |
+| plg::vector\<bool\>        | bool[]   | true  |
+| plg::vector\<char\>        | char8[]  | true  |
+| plg::vector\<char16_t\>    | char16[] | true  |
+| plg::vector\<int8_t\>      | int8[]   | true  |
+| plg::vector\<int16_t\>     | int16[]  | true  |
+| plg::vector\<int32_t\>     | int32[]  | true  |
+| plg::vector\<int64_t\>     | int64[]  | true  |
+| plg::vector\<uint8_t\>     | uint8[]  | true  |
+| plg::vector\<uint16_t\>    | uint16[] | true  |
+| plg::vector\<uint32_t\>    | uint32[] | true  |
+| plg::vector\<uint64_t\>    | uint64[] | true  |
+| plg::vector\<uintptr_t\>   | ptr64[]  | true  |
+| plg::vector\<uintptr_t\>   | ptr32[]  | true  |
+| plg::vector\<float\>       | float[]  | true  |
+| plg::vector\<double\>      | double[] | true  |
+| plg::vector\<plg::string\> | string[] | true  |
 | plg::vec2                  | vec2     | true  |
 | plg::vec3                  | vec3     | true  |
 | plg::vec4                  | vec4     | true  |
@@ -75,7 +75,7 @@ The following lists how the types are exposed to the C++ API.
         - **Type:** int32
         - **Name:** param3
     - Parameter 4:
-        - **Type:** int8*
+        - **Type:** int8[]
         - **Name:** param4
         - **Reference:** true
 - **Return Type:** string
@@ -100,7 +100,7 @@ Here's an example template that combines these elements:
       "name": "param3"
     },
     {
-      "type": "int8*",
+      "type": "int8[]",
       "name": "param4",
       "ref": true
     }
@@ -280,13 +280,13 @@ func Example_Function(p1 float32, p2 *float64, p3 uintptr) int32 {
         - **Type:** char8
         - **Name:** param1
     - Parameter 2:
-        - **Type:** double*
+        - **Type:** double[]
         - **Name:** param2
         - **Reference:** true
     - Parameter 3:
         - **Type:** vec3
         - **Name:** param3
-- **Return Type:** string*
+- **Return Type:** string[]
 
 Here's an example template that combines these elements:
 
@@ -300,7 +300,7 @@ Here's an example template that combines these elements:
       "name": "param1"
     },
     {
-      "type": "double*",
+      "type": "double[]",
       "name": "param2",
       "ref": "true"
     },
@@ -310,7 +310,7 @@ Here's an example template that combines these elements:
     }
   ],
   "retType": {
-    "type": "string*"
+    "type": "string[]"
   }
 }
 ```
