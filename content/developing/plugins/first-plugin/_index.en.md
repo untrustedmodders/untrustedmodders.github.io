@@ -152,12 +152,12 @@ namespace ExamplePlugin
 {
 	public class SamplePlugin : Plugin
 	{
-		void OnStart()
+		void OnPluginStart()
 		{
 			Console.Write($"{Name}: OnStart\n");
 		}
 
-		void OnEnd()
+		void OnPluginEnd()
 		{
 			Console.Write($"{Name}: OnEnd\n");
 		}
