@@ -35,7 +35,7 @@ Additionally, each plugin should be located in separate folder inside the `plugi
     >        * plugin_name2.py
     >     * plugin_name2.pplugin
 	
-## Example .pplugin File
+## The Plugin Manifest
 
 Below is an example of a `.pplugin` file:
 
@@ -230,7 +230,77 @@ go build -buildmode=c-shared -o go_example_plugin.dll main.go
 {{% /tab %}}
 {{< /tabs >}}
 
-### 3. Create the .pplugin Configuration File
+Easy right? But what about adding functionality from other plugins? 
+
+{{< tabs >}}
+{{% tab name="c++" %}}
+```c++
+#include <plugify/cpp_plugin.hpp>
+#include <plugin_export.h>
+#include <pps/s2sdk.hpp>
+
+class ExamplePlugin final : public plg::IPluginEntry {
+public:
+	using ResultType = s2sdk::ResultType;
+
+	void OnPluginStart() final {
+		s2sdk::AddConsoleCommand("print", "print information", 0, CommandCallback);
+	}
+
+	static ResultType CommandCallback(int32_t caller, int32_t ctx, const plg::vector<plg::string>& args) {
+		s2sdk::PrintToServer("print command executed");
+		return ResultType::Continue;
+	}
+} g_examplePlugin;
+
+EXPOSE_PLUGIN(PLUGIN_API, &g_examplePlugin)
+```
+{{% /tab %}}
+{{% tab name=".net" %}}
+```c#
+using System;
+using Plugify;
+using s2sdk;
+using static s2sdk.s2sdk;
+
+namespace ExamplePlugin
+{
+	public class SamplePlugin : Plugin
+	{
+		void OnPluginStart()
+		{
+			AddConsoleCommand("print", "print information", 0, CommandCallback);
+		}
+
+		private ResultType CommandCallback(int caller, int ctx, string[] args)
+		{
+			PrintToServer("print command executed");
+			return ResultType.Continue;
+		}
+	}
+}
+```
+{{% /tab %}}
+{{% tab name="python" %}}
+```python
+from plugify.plugin import Plugin
+from plugify import pps
+from functools import partial
+
+
+class ExamplePlugin(Plugin):
+    def plugin_start(self):
+        pps.s2sdk.AddConsoleCommand('print', 'print information', 0, partial(self.command_callback))
+
+    def command_callback(self, caller, ctx, args):
+        pps.s2sdk.PrintToServer('print command executed')
+        return pps.s2sdk.ResultType.Continue
+```
+{{% /tab %}}
+{{< /tabs >}}
+
+
+### 3. Create the Plugin Manifest File
 
 Create a `.pplugin` file in the root directory of your plugin project. Use the example provided above as a template, and modify the values to suit your plugin.
 

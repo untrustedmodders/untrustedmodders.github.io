@@ -7,7 +7,7 @@ weight: 5
 
 Creating a language module for the Plugify system involves defining a configuration file and ensuring your module integrates seamlessly with the Plugify core. Each language module should have a configuration file named `.pmodule`. This file contains essential information that the Plugify core uses to load and manage language modules. The `.pmodule` file is a JSON configuration file with a simple key-value structure. It provides crucial details about the language module, allowing seamless integration into the Plugify framework.
 
-## Example .pmodule File
+## The Module Manifest
 
 Below is an example of a `.pmodule` configuration file:
 
@@ -97,6 +97,20 @@ namespace plugify {
          * @param plugin Reference to the plugin exporting a method.
          */
         virtual void OnMethodExport(PluginRef plugin) = 0;
+		
+        /**
+         * @brief Handle actions to be performed on each game frame.
+         *
+         * This method is called once per game frame and allows the language module
+         * to perform periodic updates or processing required during the game loop.
+         */
+        virtual void OnGameFrame() = 0;
+        
+        /**
+         * @brief Determine if language module is build with debugging mode.
+         * @return True if the assembly is build with debugging, false otherwise.
+         */
+        virtual bool IsDebugBuild() = 0;
     };
 }
 ```
@@ -139,7 +153,7 @@ cmake --build .
 
 Write the source code for your language module. This code should include the logic required to load, manage, and execute plugins written in the supported language. Ensure that your module can interact with the Plugify core and other plugins as needed.
 
-### 4. Create the .pmodule Configuration File
+### 4. Create the Module Manifest File
 
 Create a `.pmodule` file in the root directory of your language module project. Use the example provided above as a template, and modify the values to suit your module.
 
