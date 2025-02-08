@@ -1,8 +1,8 @@
 export default defineAppConfig({
   shadcnDocs: {
     site: {
-      name: 'plugify',
-      description: 'A Modern C++ Plugin and Package Manager with Multi-Language Support. Customizable. Compatible. Open Source.',
+      name: 'shadcn-docs-nuxt',
+      description: 'Beautifully designed Nuxt Content template built with shadcn-vue. Customizable. Compatible. Open Source.',
     },
     theme: {
       customizable: true,
@@ -11,46 +11,16 @@ export default defineAppConfig({
     },
     header: {
       title: 'shadcn-docs-starter',
-      showTitle: false,
+      showTitle: true,
       darkModeToggle: true,
       logo: {
-        light: '/plg-logo-tex-white.svg',
-        dark: '/plg-logo-text.svg',
+        light: '/logo.svg',
+        dark: '/logo-dark.svg',
       },
-      nav: [{
-        title: 'Docs',
-        links: [{
-          title: 'Getting Started',
-          to: '/getting-started',
-          description: 'Start building your document with shadcn-docs-nuxt',
-          icon: 'lucide:rocket',
-        }, {
-          title: 'Components',
-          to: '/components/prose',
-          description: 'Explore available UI components and usage examples.',
-          icon: 'lucide:box',
-        }, {
-          title: 'API',
-          to: '/api/configuration/shadcn-docs',
-          description: 'Discover the configurations and exposed APIs.',
-          target: '_self',
-          icon: 'lucide:code',
-        }],
-      }, 
-      {
-        title: 'Generator',
-        to: 'https://untrustedmodders.github.io/plugify-generator',
-        target: '_self',
-        showLinkIcon: true,
-      }],
+      nav: [],
       links: [{
-        icon: 'simple-icons:github',
-        to: 'https://github.com/untrustedmodders/',
-        target: '_blank',
-      },
-      {
-        icon: 'simple-icons:discord',
-        to: 'https://discord.gg/untrustedmodders',
+        icon: 'lucide:github',
+        to: 'https://github.com/ZTL-UwU/shadcn-docs-nuxt',
         target: '_blank',
       }],
     },
@@ -63,10 +33,10 @@ export default defineAppConfig({
       showTitle: true,
     },
     footer: {
-      credits: `© untrustedmodders 2023-${new Date().getFullYear()}`,
+      credits: 'Copyright © 2024',
       links: [{
-        icon: 'favicon:github',
-        to: 'https://github.com/untrustedmodders',
+        icon: 'lucide:github',
+        to: 'https://github.com/ZTL-UwU/shadcn-docs-nuxt',
         target: '_blank',
       }],
     },
@@ -76,12 +46,12 @@ export default defineAppConfig({
       links: [{
         title: 'Star on GitHub',
         icon: 'lucide:star',
-        to: 'https://github.com/untrustedmodders/plugify',
+        to: 'https://github.com/ZTL-UwU/shadcn-docs-nuxt',
         target: '_blank',
       }, {
         title: 'Create Issues',
         icon: 'lucide:circle-dot',
-        to: 'https://github.com/untrustedmodders/plugify/issues',
+        to: 'https://github.com/ZTL-UwU/shadcn-docs-nuxt/issues',
         target: '_blank',
       }],
     },
