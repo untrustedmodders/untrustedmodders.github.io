@@ -65,7 +65,7 @@ export default defineAppConfig({
     footer: {
       credits: `© untrustedmodders 2023-${new Date().getFullYear()}`,
       links: [{
-        icon: 'favicon:github',
+        icon: 'lucide:github',
         to: 'https://github.com/untrustedmodders',
         target: '_blank',
       }],
