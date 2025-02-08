@@ -14,8 +14,8 @@ export default defineAppConfig({
       showTitle: false,
       darkModeToggle: true,
       logo: {
-        light: '/plg-logo-text-white.svg',
-        dark: '/plg-logo-text.svg',
+        light: '/plg-logo-text.svg',
+        dark: '/plg-logo-text-white.svg',
       },
       nav: [{
         title: 'Docs',
@@ -44,12 +44,12 @@ export default defineAppConfig({
         showLinkIcon: true,
       }],
       links: [{
-        icon: 'lucide:github',
+        icon: 'simple-icons:github',
         to: 'https://github.com/untrustedmodders/',
         target: '_blank',
       },
       {
-        icon: 'lucide:gamepad-2',
+        icon: 'simple-icons:discord',
         to: 'https://discord.gg/untrustedmodders',
         target: '_blank',
       }],
@@ -65,7 +65,7 @@ export default defineAppConfig({
     footer: {
       credits: `© untrustedmodders 2023-${new Date().getFullYear()}`,
       links: [{
-        icon: 'lucide:github',
+        icon: 'simple-icons:github',
         to: 'https://github.com/untrustedmodders',
         target: '_blank',
       }],
