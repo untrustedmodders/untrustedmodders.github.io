@@ -7,7 +7,7 @@ There are several areas in Plugify where you can contribute, and we appreciate e
 
 When creating a pull request, please always provide a reason for the changes you made. We will then review, discuss, and merge or close it.
 
-If you successfully contribute to Plugify, we will gladly add you to our [credits page](/en/general/credits/) (if you want).
+If you successfully contribute to Plugify, we will gladly add you to our [credits page](/general/credits/) (if you want).
 
 ## Contributing to the Source Code
 
