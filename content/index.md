@@ -27,6 +27,70 @@ Welcome to Plugify
 A Modern C++ Plugin Manager with Multi-Language Support. :br Customizable. Compatible. Open Source.
 ::
 
+### Language Modules Quickstarts
+::card-group
+::card
+---
+title: Python
+icon: vscode-icons:file-type-python
+to: /languages/python/quick
+target: _blank
+---
+Learn how to create a plugin using Python, export and import methods, and integrate plugins written in different languages within Plugify.
+::
+
+
+::card
+---
+title: C++
+icon: vscode-icons:file-type-cpp3
+to: /languages/cpp/quick
+target: _blank
+---
+Learn how to create a plugin using C++, export and import methods, and integrate plugins written in different languages within Plugify.
+::
+
+::card
+---
+title: C#
+icon: vscode-icons:file-type-csharp2
+to: /languages/csharp/quick
+target: _blank
+---
+Learn how to create a plugin using C#, export and import methods, and integrate plugins written in different languages within Plugify.
+::
+
+::card
+---
+title: JavaScript
+icon: vscode-icons:file-type-js-official
+to: /languages/javascript/quick
+target: _blank
+---
+Learn how to create a plugin using JavaScript, export and import methods, and integrate plugins written in different languages within Plugify.
+::
+
+::card
+---
+title: Golang
+icon: vscode-icons:file-type-go
+to: /languages/golang/quick
+target: _blank
+---
+Learn how to create a plugin using Golang, export and import methods, and integrate plugins written in different languages within Plugify.
+::
+
+::card
+---
+title: Dlang
+icon: vscode-icons:file-type-dlang
+to: /languages/dlang/quick
+target: _blank
+---
+Learn how to create a plugin using Dlang, export and import methods, and integrate plugins written in different languages within Plugify.
+::
+::
+
 ### Getting Started
 
 ::card-group
@@ -94,69 +158,6 @@ Launch Counter-Strike2 or Deadlock with Plugify injected, allowing you to run an
 ::
 ::
 
-### Language Modules Quickstarts
-::card-group
-::card
----
-title: C++
-icon: vscode-icons:file-type-cpp3
-to: https://nuxt.com/docs/api/components/client-only
-target: _blank
----
-Learn how to create a plugin using C++, export and import methods, and integrate plugins written in different languages within Plugify.
-::
-
-::card
----
-title: C#
-icon: vscode-icons:file-type-csharp2
-to: https://nuxt.com/docs/api/composables/use-app-config
-target: _blank
----
-Learn how to create a plugin using C#, export and import methods, and integrate plugins written in different languages within Plugify.
-::
-
-::card
----
-title: JavaScript
-icon: vscode-icons:file-type-js-official
-to: https://nuxt.com/docs/api/composables/use-app-config
-target: _blank
----
-Learn how to create a plugin using JavaScript, export and import methods, and integrate plugins written in different languages within Plugify.
-::
-
-::card
----
-title: Python
-icon: vscode-icons:file-type-python
-to: https://nuxt.com/docs/api/utils/dollarfetch
-target: _blank
----
-Learn how to create a plugin using Python, export and import methods, and integrate plugins written in different languages within Plugify.
-::
-
-::card
----
-title: Golang
-icon: vscode-icons:file-type-go
-to: https://nuxt.com/docs/api/commands/add
-target: _blank
----
-Learn how to create a plugin using Golang, export and import methods, and integrate plugins written in different languages within Plugify.
-::
-
-::card
----
-title: Dlang
-icon: vscode-icons:file-type-dlang
-to: https://nuxt.com/docs/api/commands/add
-target: _blank
----
-Learn how to create a plugin using Dlang, export and import methods, and integrate plugins written in different languages within Plugify.
-::
-::
-
 
 ### Additional Tutorials
 ::card-group
@@ -164,7 +165,7 @@ Learn how to create a plugin using Dlang, export and import methods, and integra
 ---
 title: Module Development
 icon: lucide:package-plus
-to: https://nuxt.com/docs/api/composables/use-app-config
+to: /developing/contributing/first-module
 target: _blank
 ---
 Learn how to create new language modules for Plugify, enabling seamless plugin development in various languages.
@@ -173,7 +174,7 @@ Learn how to create new language modules for Plugify, enabling seamless plugin d
 ---
 title: Runtime Marshalling
 icon: lucide:rotate-3d
-to: https://nuxt.com/docs/api/composables/use-app-config
+to: /developing/marshalling
 target: _blank
 ---
 Discover efficient techniques for inter-language communication, ensuring smooth data exchange between plugins.
