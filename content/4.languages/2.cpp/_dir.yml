@@ -1,0 +1,4 @@
+title: C++
+icon: vscode-icons:file-type-cpp3
+navigation.redirect: /languages/cpp
+collapse: true
