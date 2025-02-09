@@ -33,7 +33,7 @@ A Modern C++ Plugin Manager with Multi-Language Support. :br Customizable. Compa
 ::card
 ---
 title: Features
-icon: lucide:table-properties
+icon: lucide:table-of-contents
 to: https://nuxt.com/docs/api/composables/use-app-config
 target: _blank
 ---
@@ -48,6 +48,26 @@ to: https://nuxt.com/docs/api/composables/use-app-config
 target: _blank
 ---
 An overview of Plugify's architecture and product principles.
+::
+
+::card
+---
+title: Instalation
+icon: lucide:codesandbox
+to: https://nuxt.com/docs/api/composables/use-app-config
+target: _blank
+---
+TODO
+::
+
+::card
+---
+title: Building and Integrating
+icon: lucide:codesandbox
+to: https://nuxt.com/docs/api/composables/use-app-config
+target: _blank
+---
+TODO
 ::
 ::
 
@@ -138,4 +158,24 @@ Learn how to create a plugin using Dlang, export and import methods, and integra
 ::
 
 
-### Module tutorials
+### Additional Tutorials
+::card-group
+::card
+---
+title: Module Development
+icon: lucide:package-plus
+to: https://nuxt.com/docs/api/composables/use-app-config
+target: _blank
+---
+Learn how to create new language modules for Plugify, enabling seamless plugin development in various languages.
+::
+::card
+---
+title: Runtime Marshalling
+icon: lucide:rotate-3d
+to: https://nuxt.com/docs/api/composables/use-app-config
+target: _blank
+---
+Discover efficient techniques for inter-language communication, ensuring smooth data exchange between plugins.
+::
+::
