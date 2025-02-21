@@ -1,6 +1,3 @@
-title: Language modules
-icon: material-symbols:code
+title: Languages
+icon: lucide:code
 navigation.redirect: /languages/languages
-
-sidebar:
-  style: group

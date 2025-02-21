@@ -1,0 +1,4 @@
+title: Standalone Launcher
+icon: lucide:play-circle
+navigation.redirect: /use-cases/standalone-launcher/introduction
+collapse: true

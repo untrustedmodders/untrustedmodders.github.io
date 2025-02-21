@@ -1,0 +1,4 @@
+title: Metamod Plugin
+icon: lucide:gamepad
+navigation.redirect: /use-cases/modding-csdeadlock/introduction
+collapse: true

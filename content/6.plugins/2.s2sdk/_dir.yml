@@ -1,0 +1,4 @@
+title: S2SDK Plugin
+icon: lucide:package
+navigation.redirect: /plugins/s2sdk/features
+collapse: true
