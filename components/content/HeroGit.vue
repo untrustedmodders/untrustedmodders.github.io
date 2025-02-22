@@ -72,7 +72,7 @@ const props = defineProps<{
 }>();
 defineSlots();
 
-interface GitHubRelease {
+type GitHubRelease = {
   name: string;
   tag: string;
   url: string;

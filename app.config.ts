@@ -3,6 +3,9 @@ export default defineAppConfig({
     site: {
       name: 'plugify',
       description: 'A Modern C++ Plugin and Package Manager with Multi-Language Support. Customizable. Compatible. Open Source.',
+      ogImage: '/hero.png',
+      ogImageComponent: 'ShadcnDocs',
+      ogImageColor: 'light',
     },
     theme: {
       customizable: true,
@@ -67,6 +70,13 @@ export default defineAppConfig({
     main: {
       breadCrumb: true,
       showTitle: true,
+      editLink: {
+        enable: true,
+        pattern: 'https://github.com/untrustedmodders/untrustedmodders.github.io/tree/main/content/:path',
+        text: 'Edit this page on GitHub',
+        icon: 'lucide:square-pen',
+        placement: ['docsFooter', 'toc'],
+      },
     },
     footer: {
       credits: `© untrustedmodders 2023-${new Date().getFullYear()}`,

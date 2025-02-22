@@ -120,7 +120,7 @@ Discover the **key features** that make Plugify a powerful tool for plugin devel
 ---
 title: Architecture
 description: 
-icon: lucide:component
+icon: lucide:layers
 to: /introduction/architecture
 target: _blank
 ---
@@ -156,7 +156,7 @@ Learn how to **build and integrate** Plugify into your own projects.
 ---
 title: Metamod Plugin
 description: 
-icon: lucide:toy-brick
+icon: lucide:square-m
 to: /use-cases/metamod-plugin
 target: _blank
 ---
@@ -167,7 +167,7 @@ Integrate Plugify as a **Metamod plugin** for Source2, enabling seamless in-game
 ---
 title: Standalone Launcher
 description: 
-icon: lucide:file-cog
+icon: lucide:play-circle
 to: /use-cases/standalone-launcher
 target: _blank
 ---
