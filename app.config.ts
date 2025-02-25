@@ -23,27 +23,33 @@ export default defineAppConfig({
       nav: [{
         title: 'Docs',
         links: [{
-          title: 'Getting Started',
-          to: '/getting-started/introduction',
-          description: 'Setup your first project with plugify.',
-          icon: 'lucide:rocket',
+          title: 'Introduction',
+          to: '/introduction',
+          description: 'Learn about Plugify, its purpose, and key features.',
+          icon: 'lucide:rocket'
         }, {
-          title: 'Language Modules',
+          title: 'Essentials',
+          to: '/overview',
+          description: 'A high-level overview of Plugify\'s core components.',
+          icon: 'lucide:package'
+        }, {
+          title: 'Use Cases',
+          to: '/use-cases',
+          description: 'Explore real-world applications and scenarios for Plugify.',
+          target: '_self',
+          icon: 'lucide:briefcase'
+        }, {
+          title: 'Languages',
           to: '/languages',
-          description: 'Quick start with the language modules.',
-          icon: 'lucide:box',
-        }, {
-          title: 'For developers',
-          to: '/developing/architecture',
-          description: 'Write your first plugins & contribute to plugify.',
+          description: 'See supported programming languages and compatibility details.',
           target: '_self',
-          icon: 'lucide:code',
+          icon: 'lucide:code'
         }, {
-          title: 'SDK',
-          to: '/games/source2/cs2',
-          description: 'Discover the configurations and exposed APIs.',
+          title: 'Developer Guides',
+          to: '/developer-guides',
+          description: 'Step-by-step guides for developers integrating Plugify.',
           target: '_self',
-          icon: 'lucide:gamepad-2',
+          icon: 'lucide:hammer'
         }],
       },
       {
@@ -53,13 +59,12 @@ export default defineAppConfig({
         showLinkIcon: true,
       }],
       links: [{
-        icon: 'simple-icons:github',
-        to: 'https://github.com/untrustedmodders/',
-        target: '_blank',
-      },
-      {
         icon: 'simple-icons:discord',
         to: 'https://discord.gg/untrustedmodders',
+        target: '_blank',
+      }, {
+        icon: 'simple-icons:github',
+        to: 'https://github.com/untrustedmodders/',
         target: '_blank',
       }],
     },
@@ -79,8 +84,12 @@ export default defineAppConfig({
       },
     },
     footer: {
-      credits: `© untrustedmodders 2023-${new Date().getFullYear()}`,
+      credits: `Copyright © 2023-${new Date().getFullYear()} Plugify - MIT License`,
       links: [{
+        icon: 'simple-icons:discord',
+        to: 'https://discord.gg/untrustedmodders',
+        target: '_blank',
+      }, {
         icon: 'simple-icons:github',
         to: 'https://github.com/untrustedmodders',
         target: '_blank',
@@ -98,6 +107,11 @@ export default defineAppConfig({
         title: 'Create Issues',
         icon: 'lucide:circle-dot',
         to: 'https://github.com/untrustedmodders/plugify/issues',
+        target: '_blank',
+      }, {
+        title: 'Become a Sponsor',
+        icon: 'lucide:hand-heart',
+        to: 'https://github.com/orgs/untrustedmodders/sponsoring',
         target: '_blank',
       }],
     },

@@ -16,7 +16,7 @@ announcement:
   target: _blank
 actions:
   - name: Documentation
-    to: /introduction/overview
+    to: /introduction/quick-start
     target: _blank
   - name: GitHub
     variant: outline
@@ -183,7 +183,7 @@ Launch **Counter-Strike 2** or **Deadlock** with Plugify injected, allowing you 
 title: Module Development
 description: 
 icon: lucide:package-plus
-to: /developer-guide/writing-language-module
+to: /developer-guides/writing-language-module
 target: _blank
 ---
 **Extend Plugify** by creating new language modules. Support your favorite programming language today!
@@ -194,7 +194,7 @@ target: _blank
 title: Runtime Marshalling
 description: 
 icon: lucide:rotate-3d
-to: /developer-guide/runtime-marshalling
+to: /developer-guides/runtime-marshalling
 target: _blank
 ---
 **Optimize inter-language communication** with efficient marshalling techniques.
@@ -228,7 +228,7 @@ Explore **real-world projects** using Plugify and see how others are leveraging 
 title: Contribute to Plugify
 description: 
 icon: lucide:github
-to: /developer-guide/contributing
+to: /developer-guides/contributing
 target: _blank
 ---
 Help improve Plugify by contributing to the **open-source project**. Learn how to get started.
