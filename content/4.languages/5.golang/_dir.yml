@@ -1,4 +1,4 @@
 title: GoLang
 icon: vscode-icons:file-type-go
-navigation.redirect: /languages/golang/quick
+navigation.redirect: /languages/golang/quick-start
 collapse: true

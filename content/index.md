@@ -40,7 +40,7 @@ A **Modern C++ Plugin Manager** with **Multi-Language Support**. :br
 title: Python
 description: 
 icon: vscode-icons:file-type-python
-to: /languages/python/quick
+to: /languages/python/quick-start
 target: _blank
 ---
 Build **scriptable plugins** with Python. Perfect for rapid prototyping and integrating with existing Python libraries.
@@ -51,7 +51,7 @@ Build **scriptable plugins** with Python. Perfect for rapid prototyping and inte
 title: C++
 description: 
 icon: vscode-icons:file-type-cpp3
-to: /languages/cpp/quick
+to: /languages/cpp/quick-start
 target: _blank
 ---
 Leverage **native performance** with C++. Ideal for high-performance plugins and game modding.
@@ -62,7 +62,7 @@ Leverage **native performance** with C++. Ideal for high-performance plugins and
 title: C#
 description: 
 icon: vscode-icons:file-type-csharp2
-to: /languages/csharp/quick
+to: /languages/csharp/quick-start
 target: _blank
 ---
 Create **cross-platform plugins** with C#. Seamlessly integrate with .NET and Mono frameworks.
@@ -73,7 +73,7 @@ Create **cross-platform plugins** with C#. Seamlessly integrate with .NET and Mo
 title: JavaScript
 description: 
 icon: vscode-icons:file-type-js-official
-to: /languages/javascript/quick
+to: /languages/javascript/quick-start
 target: _blank
 ---
 Build **dynamic plugins** with JavaScript. Harness the power of the V8 engine for scripting and automation.
@@ -84,7 +84,7 @@ Build **dynamic plugins** with JavaScript. Harness the power of the V8 engine fo
 title: Golang
 description: 
 icon: vscode-icons:file-type-go
-to: /languages/golang/quick
+to: /languages/golang/quick-start
 target: _blank
 ---
 Develop **efficient and concurrent plugins** with Go. Perfect for scalable and high-performance applications.
@@ -95,7 +95,7 @@ Develop **efficient and concurrent plugins** with Go. Perfect for scalable and h
 title: Dlang
 description: 
 icon: vscode-icons:file-type-dlang
-to: /languages/dlang/quick
+to: /languages/dlang/quick-start
 target: _blank
 ---
 Explore **high-performance systems programming** with Dlang. Ideal for low-level plugin development.
