@@ -1,4 +1,4 @@
 title: Config System
 icon: lucide:settings-2
-navigation.redirect: /plugins/configs/features
+navigation.redirect: /plugins/config-system/features
 collapse: true
