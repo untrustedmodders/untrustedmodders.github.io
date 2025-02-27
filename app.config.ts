@@ -24,37 +24,37 @@ export default defineAppConfig({
         title: 'Docs',
         links: [{
           title: 'Introduction',
-          to: '/introduction',
+          to: '/introduction/quick-start',
           description: 'Learn about Plugify, its purpose, and key features.',
           icon: 'lucide:rocket'
         }, {
           title: 'Essentials',
-          to: '/overview',
+          to: '/overview/installation',
           description: 'A high-level overview of Plugify\'s core components.',
           icon: 'lucide:package'
         }, {
           title: 'Use Cases',
-          to: '/use-cases',
+          to: '/use-cases/integrations',
           description: 'Explore real-world applications and scenarios for Plugify.',
           target: '_self',
           icon: 'lucide:briefcase'
         }, {
           title: 'Languages',
-          to: '/languages',
+          to: '/languages/languages',
           description: 'See supported programming languages and compatibility details.',
           target: '_self',
           icon: 'lucide:code'
         }, {
           title: 'Developer Guides',
-          to: '/developer-guides',
+          to: '/developer-guides/writing-language-module',
           description: 'Step-by-step guides for developers integrating Plugify.',
           target: '_self',
           icon: 'lucide:hammer'
         }],
       },
       {
-        title: 'Generator',
-        to: 'https://untrustedmodders.github.io/plugify-generator',
+        title: 'API Hub',
+        to: 'https://untrustedmodders.github.io/plugify-hubapi/',
         target: '_self',
         showLinkIcon: true,
       }],
