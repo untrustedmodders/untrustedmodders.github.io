@@ -29,7 +29,7 @@ export default defineAppConfig({
           icon: 'lucide:rocket'
         }, {
           title: 'Essentials',
-          to: '/overview/installation',
+          to: '/essentials/installation',
           description: 'A high-level overview of Plugify\'s core components.',
           icon: 'lucide:package'
         }, {
