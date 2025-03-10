@@ -54,7 +54,7 @@ export default defineAppConfig({
       },
       {
         title: 'API Hub',
-        to: 'https://untrustedmodders.github.io/plugify-hubapi/',
+        to: 'https://api.plugify.net/',
         target: '_self',
         showLinkIcon: true,
       }],
