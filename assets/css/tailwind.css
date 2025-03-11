@@ -90,4 +90,5 @@
 /* Dirty hack to fix issue on static site */
 main {
   grid-auto-flow: column;
+  gap: 10px;
 }
