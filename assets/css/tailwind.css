@@ -86,3 +86,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Dirty hack to fix issue on static site */
+main {
+  grid-auto-flow: column;
+}
