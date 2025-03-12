@@ -8,6 +8,9 @@ export default defineNuxtConfig({
   ],
   nitro: {
     static: true,
+    prerender: {
+      routes: ['/sitemap.xml', 'robots.txt']
+    }
   },
   compatibilityDate: '2024-07-06',
   content: {
