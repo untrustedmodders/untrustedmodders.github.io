@@ -13,6 +13,7 @@ export default defineNuxtConfig({
     }
   },
   site: {
+    url: 'https://plugify.net', 
     name: 'Plugify - A Modern C++ Plugin and Package Manager with Multi-Language Support. Customizable. Compatible. Open Source.'
   },
   compatibilityDate: '2024-07-06',
