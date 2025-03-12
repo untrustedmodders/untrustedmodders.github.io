@@ -2,6 +2,10 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   extends: ['shadcn-docs-nuxt'],
+  modules: [
+	'@nuxtjs/sitemap',
+	'@nuxtjs/robots'
+  ],
   nitro: {
     static: true,
   },
