@@ -9,8 +9,11 @@ export default defineNuxtConfig({
   nitro: {
     static: true,
     prerender: {
-      routes: ['/sitemap.xml', 'robots.txt']
+      routes: ['/sitemap.xml', '/robots.txt']
     }
+  },
+  site: {
+    name: 'Plugify - A Modern C++ Plugin and Package Manager with Multi-Language Support. Customizable. Compatible. Open Source.'
   },
   compatibilityDate: '2024-07-06',
   content: {
