@@ -68,6 +68,24 @@ export default defineAppConfig({
         target: '_blank',
       }],
     },
+    i18n: {
+      baseUrl: 'https://plugify.net',
+      detectBrowserLanguage: false,
+      strategy: 'prefix_except_default',
+      defaultLocale: 'en',
+      locales: [
+        {
+          code: 'en',
+          name: 'English',
+          language: 'en-US',
+        },
+        {
+          code: 'ru',
+          name: 'Русский',
+          language: 'ru-RU',
+        },
+      ],
+    },
     aside: {
       useLevel: true,
       collapse: false,
