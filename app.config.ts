@@ -69,7 +69,7 @@ export default defineAppConfig({
       }],
     },
     i18n: {
-      baseUrl: 'https://plugify.net',
+      baseUrl: 'https://plugify.net/',
       detectBrowserLanguage: false,
       strategy: 'prefix_except_default',
       defaultLocale: 'en',
