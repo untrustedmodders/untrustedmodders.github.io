@@ -92,6 +92,17 @@ target: _blank
 
 ::card
 ---
+title: Lua
+description: 
+icon: vscode-icons:file-type-lua
+to: /languages/lua/quick-start
+target: _blank
+---
+Разрабатывайте **легкие и встраиваемые скрипты** с Lua. Идеально подходит для игровых скриптов и разработки плагинов.
+::
+
+::card
+---
 title: Dlang
 description: 
 icon: vscode-icons:file-type-dlang
@@ -99,6 +110,15 @@ to: /languages/dlang/quick-start
 target: _blank
 ---
 Изучите **высокопроизводительное системное программирование** на Dlang. Идеально для низкоуровневой разработки плагинов.
+::
+
+::card
+---
+title: Не смогли найти нужный вам модуль?
+icon: lucide:code
+to: /developer-guides/writing-language-module
+---
+Внесите свой вклад, создав свой собственный языковой модуль!
 ::
 ::
 

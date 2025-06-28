@@ -3,8 +3,8 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   extends: ['shadcn-docs-nuxt'],
   modules: [
-	'@nuxtjs/sitemap',
-	'@nuxtjs/robots'
+    '@nuxtjs/sitemap',
+    '@nuxtjs/robots'
   ],
   nitro: {
     static: true,
@@ -16,6 +16,21 @@ export default defineNuxtConfig({
     url: 'https://plugify.net', 
     name: 'Plugify - A Modern C++ Plugin and Package Manager with Multi-Language Support. Customizable. Compatible. Open Source.'
   },
+  i18n: { 
+    defaultLocale: 'en', 
+    locales: [ 
+      { 
+        code: 'en', 
+        name: 'English', 
+        language: 'en-US', 
+      },
+      { 
+        code: 'ru', 
+        name: 'Russian', 
+        language: 'ru-RU', 
+      }, 
+    ], 
+  }, 
   compatibilityDate: '2024-07-06',
   content: {
     documentDriven: true,

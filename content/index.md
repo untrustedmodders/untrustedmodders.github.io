@@ -92,6 +92,17 @@ Develop **efficient and concurrent plugins** with Go. Perfect for scalable and h
 
 ::card
 ---
+title: Lua
+description: 
+icon: vscode-icons:file-type-lua
+to: /languages/lua/quick-start
+target: _blank
+---
+Explore **lightweight and embeddable scripting** with Lua. Ideal for game scripting and plugin development.
+::
+
+::card
+---
 title: Dlang
 description: 
 icon: vscode-icons:file-type-dlang
@@ -99,6 +110,15 @@ to: /languages/dlang/quick-start
 target: _blank
 ---
 Explore **high-performance systems programming** with Dlang. Ideal for low-level plugin development.
+::
+
+::card
+---
+title: Couldn't find the module you need?
+icon: lucide:code
+to: /developer-guides/writing-language-module
+---
+Contribute by creating your own language module!
 ::
 ::
 
