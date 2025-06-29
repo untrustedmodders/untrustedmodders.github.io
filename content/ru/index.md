@@ -117,6 +117,7 @@ target: _blank
 title: Не смогли найти нужный вам модуль?
 icon: lucide:code
 to: /developer-guides/writing-language-module
+target: _blank
 ---
 Внесите свой вклад, создав свой собственный языковой модуль!
 ::

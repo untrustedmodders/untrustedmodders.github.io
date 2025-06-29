@@ -9,7 +9,8 @@ export default defineNuxtConfig({
   nitro: {
     static: true,
     prerender: {
-      routes: ['/sitemap.xml', '/robots.txt']
+      routes: ['/sitemap.xml', '/robots.txt'],
+      ignore: ['/ru/sitemap.xml']
     }
   },
   site: {
@@ -30,8 +31,12 @@ export default defineNuxtConfig({
         language: 'ru-RU', 
       }, 
     ], 
-  }, 
-  compatibilityDate: '2024-07-06',
+  },
+  sitemap: {
+	hostname: 'https://plugify.net',
+	i18n: true
+  },
+  compatibilityDate: '2024-29-06',
   content: {
     documentDriven: true,
     highlight: {
