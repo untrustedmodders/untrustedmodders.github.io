@@ -16,7 +16,7 @@ announcement:
   target: _blank
 actions:
   - name: Документация
-    to: /introduction/quick-start
+    to: /ru/introduction/quick-start
     target: _blank
   - name: GitHub
     variant: outline
@@ -40,7 +40,7 @@ actions:
 title: Python
 description: 
 icon: vscode-icons:file-type-python
-to: /languages/python/quick-start
+to: /ru/languages/python/quick-start
 target: _blank
 ---
 Создавайте **скриптовые плагины** на Python. Идеально подходит для быстрого прототипирования и интеграции с существующими библиотеками Python.
@@ -51,7 +51,7 @@ target: _blank
 title: C++
 description: 
 icon: vscode-icons:file-type-cpp3
-to: /languages/cpp/quick-start
+to: /ru/languages/cpp/quick-start
 target: _blank
 ---
 Используйте **нативную производительность** C++. Идеально для высокопроизводительных плагинов и моддинга игр.
@@ -62,7 +62,7 @@ target: _blank
 title: C#
 description: 
 icon: vscode-icons:file-type-csharp2
-to: /languages/csharp/quick-start
+to: /ru/languages/csharp/quick-start
 target: _blank
 ---
 Создавайте **кроссплатформенные плагины** на C#. Легко интегрируется с .NET и Mono.
@@ -73,7 +73,7 @@ target: _blank
 title: JavaScript
 description: 
 icon: vscode-icons:file-type-js-official
-to: /languages/javascript/quick-start
+to: /ru/languages/javascript/quick-start
 target: _blank
 ---
 Разрабатывайте **динамичные плагины** на JavaScript. Используйте мощь V8 для скриптинга и автоматизации.
@@ -84,7 +84,7 @@ target: _blank
 title: Golang
 description: 
 icon: vscode-icons:file-type-go
-to: /languages/golang/quick-start
+to: /ru/languages/golang/quick-start
 target: _blank
 ---
 Создавайте **эффективные и многопоточные плагины** на Go. Отличный выбор для масштабируемых и высокопроизводительных приложений.
@@ -95,7 +95,7 @@ target: _blank
 title: Lua
 description: 
 icon: vscode-icons:file-type-lua
-to: /languages/lua/quick-start
+to: /ru/languages/lua/quick-start
 target: _blank
 ---
 Разрабатывайте **легкие и встраиваемые скрипты** с Lua. Идеально подходит для игровых скриптов и разработки плагинов.
@@ -106,7 +106,7 @@ target: _blank
 title: Dlang
 description: 
 icon: vscode-icons:file-type-dlang
-to: /languages/dlang/quick-start
+to: /ru/languages/dlang/quick-start
 target: _blank
 ---
 Изучите **высокопроизводительное системное программирование** на Dlang. Идеально для низкоуровневой разработки плагинов.
@@ -116,7 +116,7 @@ target: _blank
 ---
 title: Не смогли найти нужный вам модуль?
 icon: lucide:code
-to: /developer-guides/writing-language-module
+to: /ru/developer-guides/writing-language-module
 target: _blank
 ---
 Внесите свой вклад, создав свой собственный языковой модуль!
@@ -131,7 +131,7 @@ target: _blank
 title: Возможности
 description: 
 icon: lucide:sparkles
-to: /introduction/features
+to: /ru/introduction/features
 target: _blank
 ---
 Узнайте о **ключевых возможностях** Plugify, делающих его мощным инструментом для разработки плагинов.
@@ -142,7 +142,7 @@ target: _blank
 title: Архитектура
 description: 
 icon: lucide:layers
-to: /introduction/architecture
+to: /ru/introduction/architecture
 target: _blank
 ---
 Познакомьтесь с **высокоуровневым обзором** архитектуры Plugify.
@@ -153,7 +153,7 @@ target: _blank
 title: Установка
 description: 
 icon: lucide:download
-to: /essentials/installation
+to: /ru/essentials/installation
 target: _blank
 ---
 Начните работу с Plugify, следуя **руководству по установке** для вашей платформы.
@@ -164,7 +164,7 @@ target: _blank
 title: Разработка и интеграция
 description: 
 icon: lucide:wrench
-to: /essentials/integrating
+to: /ru/essentials/integrating
 target: _blank
 ---
 Узнайте, как **разрабатывать и интегрировать** Plugify в ваши проекты.
@@ -178,7 +178,7 @@ target: _blank
 title: Плагин Metamod
 description: 
 icon: lucide:square-m
-to: /use-cases/metamod-plugin
+to: /ru/use-cases/metamod-plugin
 target: _blank
 ---
 Интегрируйте Plugify как **плагин Metamod** для Source2, обеспечивая бесшовное выполнение плагинов в игре.
@@ -189,7 +189,7 @@ target: _blank
 title: Автономный лаунчер
 description: 
 icon: lucide:play-circle
-to: /use-cases/standalone-launcher
+to: /ru/use-cases/standalone-launcher
 target: _blank
 ---
 Запускайте **Counter-Strike 2** или **Deadlock** с Plugify, позволяя легко управлять плагинами.
@@ -204,7 +204,7 @@ target: _blank
 title: Разработка модулей
 description: 
 icon: lucide:package-plus
-to: /developer-guides/writing-language-module
+to: /ru/developer-guides/writing-language-module
 target: _blank
 ---
 **Расширяйте Plugify**, создавая новые языковые модули. Добавьте поддержку вашего любимого языка программирования!
@@ -215,7 +215,7 @@ target: _blank
 title: Маршаллинг во время выполнения
 description: 
 icon: lucide:rotate-3d
-to: /developer-guides/runtime-marshalling
+to: /ru/developer-guides/runtime-marshalling
 target: _blank
 ---
 **Оптимизируйте межъязыковое взаимодействие** с эффективными методами маршаллинга.
@@ -229,7 +229,7 @@ target: _blank
 title: Сообщество и поддержка
 description: 
 icon: lucide:message-circle
-to: /community-support/join-community
+to: /ru/community-support/join-community
 target: _blank
 ---
 Присоединяйтесь к сообществу Plugify на **Discord** и получайте помощь от разработчиков и участников проекта.
@@ -239,7 +239,7 @@ target: _blank
 title: Примеры и кейсы
 description: 
 icon: lucide:eye
-to: /community-support/showcase
+to: /ru/community-support/showcase
 target: _blank
 ---
 Ознакомьтесь с **реальными проектами**, использующими Plugify, и узнайте, как другие применяют его возможности.
@@ -249,7 +249,7 @@ target: _blank
 title: Внесите вклад в Plugify
 description: 
 icon: lucide:github
-to: /developer-guides/contributing
+to: /ru/developer-guides/contributing
 target: _blank
 ---
 Помогите улучшить Plugify, **участвуя в разработке**. Узнайте, как начать.
@@ -259,7 +259,7 @@ target: _blank
 title: Часто задаваемые вопросы
 description: 
 icon: lucide:help-circle
-to: /introduction/faq
+to: /ru/introduction/faq
 target: _blank
 ---
 Найдите ответы на **часто задаваемые вопросы** о Plugify.
