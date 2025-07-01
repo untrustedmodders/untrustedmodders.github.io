@@ -106,7 +106,7 @@ target: _blank
 title: Dlang
 description: 
 icon: vscode-icons:file-type-dlang
-to: /ru/languages/dlang/quick-start
+to: /languages/dlang/quick-start
 target: _blank
 ---
 Изучите **высокопроизводительное системное программирование** на Dlang. Идеально для низкоуровневой разработки плагинов.
