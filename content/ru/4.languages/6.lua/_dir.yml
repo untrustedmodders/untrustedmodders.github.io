@@ -1,0 +1,4 @@
+title: Lua
+icon: vscode-icons:file-type-lua
+navigation.redirect: /ru/languages/lua/quick-start
+collapse: true

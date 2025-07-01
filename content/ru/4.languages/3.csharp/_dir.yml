@@ -1,0 +1,4 @@
+title: C#
+icon: vscode-icons:file-type-csharp2
+navigation.redirect: /ru/languages/csharp/quick-start
+collapse: true

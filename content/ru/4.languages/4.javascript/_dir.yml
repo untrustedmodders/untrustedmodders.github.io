@@ -1,0 +1,4 @@
+title: JavaScript
+icon: vscode-icons:file-type-js
+navigation.redirect: /ru/languages/javascript/quick-start
+collapse: true
