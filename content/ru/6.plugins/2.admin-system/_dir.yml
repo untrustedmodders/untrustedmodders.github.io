@@ -1,0 +1,4 @@
+title: Admin System
+icon: lucide:shield-check
+navigation.redirect: /ru/plugins/admin-system/features
+collapse: true
