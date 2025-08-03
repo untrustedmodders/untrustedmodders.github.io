@@ -279,8 +279,24 @@ export default defineI18nConfig(() => ({
       'Search documentation...': 'Поиск в документации...',
       'No results found.': 'Ничего не найдено.',
 
+      // Header nav
+      'Introduction': 'Введение',
+      'Learn about Plugify, its purpose, and key features.': 'Узнайте о Plugify, его назначении и ключевых функциях.',
+      'Essentials': 'Основы',
+      'A high-level overview of Plugify\'s core components.': 'Общий обзор основных компонентов Plugify.',
+      'Use Cases': 'Примеры',
+      'Explore real-world applications and scenarios for Plugify.': 'Изучите реальные примеры использования и сценарии Plugify.',
+      'Languages': 'Языки',
+      'See supported programming languages and compatibility details.': 'Посмотрите поддерживаемые языки программирования и детали совместимости.',
+      'Developer Guides': 'Руководства разработчика',
+      'Step-by-step guides for developers integrating Plugify.': 'Пошаговые руководства для разработчиков по интеграции Plugify.',
+
       // TOC
       'On This Page': 'На этой странице',
+      'Star on GitHub': 'Поставьте звезду на GitHub',
+      'Create Issues': 'Создайте обращение',
+      'Become a Sponsor': 'Станьте спонсором',
+      'Edit this page on GitHub': 'Редактировать на GitHub',
 
       // Search command
       'Light': 'Светлая',
