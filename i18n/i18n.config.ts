@@ -280,15 +280,15 @@ export default defineI18nConfig(() => ({
       'No results found.': 'Ничего не найдено.',
 
       // Header nav
-      'Introduction': 'Введение',
+      'Introduction': 'Начало',
       'Learn about Plugify, its purpose, and key features.': 'Узнайте о Plugify, его назначении и ключевых функциях.',
-      'Essentials': 'Основы',
+      'Essentials': 'Использование',
       'A high-level overview of Plugify\'s core components.': 'Общий обзор основных компонентов Plugify.',
-      'Use Cases': 'Примеры',
+      'Use Cases': 'Примеры интеграции',
       'Explore real-world applications and scenarios for Plugify.': 'Изучите реальные примеры использования и сценарии Plugify.',
       'Languages': 'Языки',
       'See supported programming languages and compatibility details.': 'Посмотрите поддерживаемые языки программирования и детали совместимости.',
-      'Developer Guides': 'Руководства разработчика',
+      'Developer Guides': 'Для разработчиков',
       'Step-by-step guides for developers integrating Plugify.': 'Пошаговые руководства для разработчиков по интеграции Plugify.',
 
       // TOC
