@@ -20,53 +20,113 @@ export default defineAppConfig({
         light: '/plg-logo-text.svg',
         dark: '/plg-logo-text-white.svg',
       },
-      nav: [{
-        title: 'Docs',
-        links: [{
-          title: 'Introduction',
-          to: '/introduction/quick-start',
-          description: 'Learn about Plugify, its purpose, and key features.',
-          icon: 'lucide:rocket'
-        }, {
-          title: 'Essentials',
-          to: '/essentials/installation',
-          description: 'A high-level overview of Plugify\'s core components.',
-          icon: 'lucide:package'
-        }, {
-          title: 'Use Cases',
-          to: '/use-cases/integrations',
-          description: 'Explore real-world applications and scenarios for Plugify.',
+      nav: [
+        {
+          title: 'Docs',
+          links: [
+            {
+              title: 'Introduction',
+              to: '/introduction/quick-start',
+              description: 'Learn about Plugify, its purpose, and key features.',
+              icon: 'lucide:rocket'
+            }, {
+              title: 'Essentials',
+              to: '/essentials/installation',
+              description: 'A high-level overview of Plugify\'s core components.',
+              icon: 'lucide:package'
+            }, {
+              title: 'Use Cases',
+              to: '/use-cases/integrations',
+              description: 'Explore real-world applications and scenarios for Plugify.',
+              target: '_self',
+              icon: 'lucide:briefcase'
+            }, {
+              title: 'Languages',
+              to: '/languages/languages',
+              description: 'See supported programming languages and compatibility details.',
+              target: '_self',
+              icon: 'lucide:code'
+            }, {
+              title: 'Developer Guides',
+              to: '/developer-guides/writing-language-module',
+              description: 'Step-by-step guides for developers integrating Plugify.',
+              target: '_self',
+              icon: 'lucide:hammer'
+            }
+          ],
+        },
+        {
+          title: 'S2SDK Guides',
+          links: [
+            {
+              title: 'Console Commands',
+              to: '/plugins/s2sdk/guides/console-commands',
+              description: 'How to add a new console command.',
+              target: '_self',
+              icon: 'lucide:terminal-square'
+            },
+            {
+              title: 'Console Variables',
+              to: '/plugins/s2sdk/guides/console-variables',
+              description: 'How to read & write console variables (ConVars).',
+              target: '_self',
+              icon: 'lucide:sliders'
+            },
+            {
+              title: 'Game Events',
+              to: '/plugins/s2sdk/guides/game-events',
+              description: 'How to listen to Source 2 style game events.',
+              target: '_self',
+              icon: 'lucide:radio'
+            },
+            {
+              title: 'Global Listeners',
+              to: '/plugins/s2sdk/guides/global-listeners',
+              description: 'How to subscribe to CounterStrikeSharp global listeners.',
+              target: '_self',
+              icon: 'lucide:ear'
+            },
+            {
+              title: 'Entity Schemas',
+              to: '/plugins/s2sdk/guides/entity-schemas',
+              description: 'How to read and modify Source 2 entity schemas and network state.',
+              target: '_self',
+              icon: 'lucide:cog'
+            },
+            {
+              title: 'User Messages',
+              to: '/plugins/s2sdk/guides/user-messages',
+              description: 'How to send and receive protobuf user messages between server and clients.',
+              target: '_self',
+              icon: 'lucide:message-square'
+            },
+            {
+              title: 'CS_Script Integration',
+              to: '/plugins/s2sdk/guides/cs_script-integration',
+              description: 'How to integrate Valve\'s CS_Script system with Plugify plugins.',
+              target: '_self',
+              icon: 'lucide:code-xml'
+            }
+          ]
+        },
+        {
+          title: 'API Hub',
+          to: 'https://api.plugify.net/',
           target: '_self',
-          icon: 'lucide:briefcase'
+          showLinkIcon: true,
+        }
+      ],
+      links: [
+        {
+          icon: 'simple-icons:discord',
+          to: 'https://discord.gg/rX9TMmpang',
+          target: '_blank',
         }, {
-          title: 'Languages',
-          to: '/languages/languages',
-          description: 'See supported programming languages and compatibility details.',
-          target: '_self',
-          icon: 'lucide:code'
-        }, {
-          title: 'Developer Guides',
-          to: '/developer-guides/writing-language-module',
-          description: 'Step-by-step guides for developers integrating Plugify.',
-          target: '_self',
-          icon: 'lucide:hammer'
-        }],
-      },
-      {
-        title: 'API Hub',
-        to: 'https://api.plugify.net/',
-        target: '_self',
-        showLinkIcon: true,
-      }],
-      links: [{
-        icon: 'simple-icons:discord',
-        to: 'https://discord.gg/rX9TMmpang',
-        target: '_blank',
-      }, {
-        icon: 'simple-icons:github',
-        to: 'https://github.com/untrustedmodders/',
-        target: '_blank',
-      }],
+          icon: 'simple-icons:github',
+          to: 'https://github.com/untrustedmodders/',
+          target: '_blank',
+        }
+      ],
     },
     i18n: {
       baseUrl: 'https://plugify.net/',

@@ -279,18 +279,6 @@ export default defineI18nConfig(() => ({
       'Search documentation...': 'Поиск в документации...',
       'No results found.': 'Ничего не найдено.',
 
-      // Header nav
-      'Introduction': 'Начало',
-      'Learn about Plugify, its purpose, and key features.': 'Узнайте о Plugify, его назначении и ключевых функциях.',
-      'Essentials': 'Использование',
-      'A high-level overview of Plugify\'s core components.': 'Общий обзор основных компонентов Plugify.',
-      'Use Cases': 'Примеры интеграции',
-      'Explore real-world applications and scenarios for Plugify.': 'Изучите реальные примеры использования и сценарии Plugify.',
-      'Languages': 'Языки',
-      'See supported programming languages and compatibility details.': 'Посмотрите поддерживаемые языки программирования и детали совместимости.',
-      'Developer Guides': 'Для разработчиков',
-      'Step-by-step guides for developers integrating Plugify.': 'Пошаговые руководства для разработчиков по интеграции Plugify.',
-
       // TOC
       'On This Page': 'На этой странице',
       'Star on GitHub': 'Поставьте звезду на GitHub',
@@ -333,6 +321,36 @@ export default defineI18nConfig(() => ({
 
       // Field
       'required': 'обязательно',
+
+      // Header nav
+      'Docs': 'Документация',
+      'Introduction': 'Начало',
+      'Learn about Plugify, its purpose, and key features.': 'Узнайте о Plugify, его назначении и ключевых функциях.',
+      'Essentials': 'Использование',
+      'A high-level overview of Plugify\'s core components.': 'Общий обзор основных компонентов Plugify.',
+      'Use Cases': 'Примеры интеграции',
+      'Explore real-world applications and scenarios for Plugify.': 'Изучите реальные примеры использования и сценарии Plugify.',
+      'Languages': 'Языки',
+      'See supported programming languages and compatibility details.': 'Посмотрите поддерживаемые языки программирования и детали совместимости.',
+      'Developer Guides': 'Для разработчиков',
+      'Step-by-step guides for developers integrating Plugify.': 'Пошаговые руководства для разработчиков по интеграции Plugify.',
+
+      // S2SDK Guides
+      'S2SDK Guides': 'Руководства S2SDK',
+      'Console Commands': 'Консольные команды',
+      'How to add a new console command.': 'Как добавить новую консольную команду.',
+      'Console Variables': 'Консольные переменные',
+      'How to read & write console variables (ConVars).': 'Как читать и изменять консольные переменные (ConVar).',
+      'Game Events': 'Игровые события',
+      'How to listen to Source 2 style game events.': 'Как обрабатывать игровые события в стиле Source 2.',
+      'Global Listeners': 'Глобальные слушатели',
+      'How to subscribe to CounterStrikeSharp global listeners.': 'Как подписаться на глобальные слушатели CounterStrikeSharp.',
+      'Entity Schemas': 'Схемы сущностей',
+      'How to read and modify Source 2 entity schemas and network state.': 'Как читать и изменять схемы сущностей и сетевое состояние Source 2.',
+      'User Messages': 'Пользовательские сообщения',
+      'How to send and receive protobuf user messages between server and clients.': 'Как отправлять и получать пользовательские сообщения Protobuf между сервером и клиентами.',
+      'CS_Script Integration': 'Интеграция с CS_Script',
+      'How to integrate Valve\'s CS_Script system with Plugify plugins.': 'Как интегрировать систему Valve CS_Script с плагинами Plugify.',
     },
 
     'ko': {
