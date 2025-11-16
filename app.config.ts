@@ -110,6 +110,12 @@ export default defineAppConfig({
           ]
         },
         {
+          title: 'Generator',
+          to: 'https://gen.plugify.net/',
+          target: '_self',
+          showLinkIcon: true,
+        },
+        {
           title: 'API Hub',
           to: 'https://api.plugify.net/',
           target: '_self',
