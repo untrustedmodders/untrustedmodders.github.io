@@ -103,6 +103,17 @@ Explore **lightweight and embeddable scripting** with Lua. Ideal for game script
 
 ::card
 ---
+title: Rust
+description: 
+icon: vscode-icons:file-type-rust
+to: /languages/rust/quick-start
+target: _blank
+---
+Explore **high-performance systems programming** with Rust. Ideal for low-level plugin development.
+::
+
+::card
+---
 title: Dlang
 description: 
 icon: vscode-icons:file-type-dlang

@@ -103,6 +103,17 @@ target: _blank
 
 ::card
 ---
+title: Rust
+description: 
+icon: vscode-icons:file-type-rust
+to: /ru/languages/dlang/rust-start
+target: _blank
+---
+Изучите **высокопроизводительное системное программирование** на Rust. Идеально для низкоуровневой разработки плагинов.
+::
+
+::card
+---
 title: Dlang
 description: 
 icon: vscode-icons:file-type-dlang
