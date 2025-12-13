@@ -122,7 +122,9 @@ target: _blank
 ---
 Explore **high-performance systems programming** with Dlang. Ideal for low-level plugin development.
 ::
+::
 
+::card-group{:cols="1"}
 ::card
 ---
 title: Couldn't find the module you need?

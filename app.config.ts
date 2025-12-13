@@ -217,6 +217,7 @@ export default defineAppConfig({
         'go': 'vscode-icons:file-type-go',
         'cs': 'vscode-icons:file-type-csharp2',
         'd': 'vscode-icons:file-type-dlang',
+        'rs': 'vscode-icons:file-type-rust',
         'so': 'vscode-icons:file-type-binary',
         'dll': 'vscode-icons:file-type-binary',
         'terminal': 'lucide:terminal',
