@@ -106,7 +106,7 @@ target: _blank
 title: Rust
 description: 
 icon: vscode-icons:file-type-rust
-to: /ru/languages/dlang/rust-start
+to: /ru/languages/rust/quick-start
 target: _blank
 ---
 Изучите **высокопроизводительное системное программирование** на Rust. Идеально для низкоуровневой разработки плагинов.
