@@ -30,7 +30,7 @@ Welcome to Plugify
 
 #description
 A **Modern C++ Plugin Manager** with **Multi-Language Support**. :br 
-**Customizable. Compatible. Open Source.** Build plugins in Python, C++, C#, JavaScript, Go, and more — all in one ecosystem.
+**Customizable. Compatible. Open Source.** Build plugins in C++, C#, Python, Go, Lua, D, Rust, JavaScript/TypeScript and more — all in one ecosystem.
 ::
 
 ### Language Modules Quickstarts
