@@ -36,7 +36,7 @@ export default defineNuxtConfig({
 	hostname: 'https://plugify.net',
 	i18n: true
   },
-  compatibilityDate: '2024-29-06',
+  compatibilityDate: '2025-12-26',
   content: {
     documentDriven: true,
     highlight: {
@@ -44,7 +44,7 @@ export default defineNuxtConfig({
         default: 'github-light',
         dark: 'github-dark',
       },
-      preload: ['json', 'js', 'ts', 'html', 'css', 'vue', 'diff', 'shell', 'markdown', 'yaml', 'bash', 'ini', 'python', 'cpp', 'csharp', 'go', 'cmake', 'lua', 'rs', 'd'],
+      preload: ['json', 'mermaid', 'xml', 'toml', 'js', 'ts', 'html', 'css', 'vue', 'diff', 'shell', 'markdown', 'yaml', 'bash', 'ini', 'python', 'cpp', 'csharp', 'go', 'cmake', 'lua', 'rs', 'd'],
     },
   },
 });
