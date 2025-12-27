@@ -336,7 +336,7 @@ export default defineI18nConfig(() => ({
       'Step-by-step guides for developers integrating Plugify.': 'Пошаговые руководства для разработчиков по интеграции Plugify.',
 
       // S2SDK Guides
-      'S2SDK Guides': 'Руководства S2SDK',
+      'S2SDK Guides': 'Мануалы S2SDK',
       'Console Commands': 'Консольные команды',
       'How to add a new console command.': 'Как добавить новую консольную команду.',
       'Console Variables': 'Консольные переменные',
