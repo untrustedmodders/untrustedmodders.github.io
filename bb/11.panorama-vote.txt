@@ -1,0 +1,787 @@
+
+[size=20][b]Обзор[/b][/size]
+
+Система голосования Panorama позволяет создавать пользовательские голосования Да/Нет, которые отображаются в интерфейсе CS2. Игроки могут голосовать с помощью встроенного игрового интерфейса, что делает процесс естественным и знакомым.
+
+[quote][b]Info:[/b] - Интеграция с нативным UI CS2
+[list]
+[*]Настраиваемые сообщения голосования и текст успеха/провала
+[*]Выборочное таргетирование игроков с использованием битовой маски
+[*]Обратные вызовы событий голосования (начало, голос, конец)
+[*]Пользовательская логика успеха/провала с подробной статистикой голосования
+[*]Автоматическая обработка тайм-аута[/quote]
+[/list]
+
+[size=20][b]Типы обратных вызовов[/b][/size]
+
+Система голосования использует два типа обратных вызовов:
+
+[size=16][b]YesNoVoteHandler[/b][/size]
+Вызывается для событий голосования (начало, индивидуальные голоса, конец):
+
+[code=csharp]void Handler(VoteAction action, int param1, int param2)[/code]
+
+[list]
+[*][b]VoteAction.Start[/b]: Голосование началось (param1 и param2 не используются)
+[*][b]VoteAction.Vote[/b]: Игрок проголосовал (param1 = слот клиента, param2 = выбор)
+[/list]
+  - [font=monospace]VOTE_OPTION1[/font] (0) = Да
+  - [font=monospace]VOTE_OPTION2[/font] (1) = Нет
+[list]
+[*][b]VoteAction.End[/b]: Голосование завершено (param1 = -1, param2 = VoteEndReason)
+[/list]
+
+[size=16][b]YesNoVoteResult[/b][/size]
+Вызывается в конце голосования для определения, прошло ли оно:
+
+[code=csharp]bool Result(int numVotes, int yesVotes, int noVotes, int numClients,
+            int[] clientInfoSlot, int[] clientInfoItem)[/code]
+
+[list]
+[*][b]Возвращает[/b]: [font=monospace]true[/font] для прохождения голосования, [font=monospace]false[/font] для провала
+[*][b]numVotes[/b]: Всего отдано голосов
+[*][b]yesVotes[/b]: Количество голосов "Да"
+[*][b]noVotes[/b]: Количество голосов "Нет"
+[*][b]numClients[/b]: Общее количество клиентов в пуле голосования
+[*][b]clientInfoSlot[/b]: Массив слотов игроков, которые проголосовали
+[*][b]clientInfoItem[/b]: Массив выборов голосования (соответствует clientInfoSlot)
+[/list]
+
+[size=20][b]Базовое создание голосования[/b][/size]
+
+Есть две основные функции для начала голосования:
+
+[list=1]
+[*][b][font=monospace]PanoramaSendYesNoVoteToAll[/font][/b] - Создает голосование для всех игроков
+[*][b][font=monospace]PanoramaSendYesNoVote[/font][/b] - Создает голосование для определенных игроков (используя битовую маску получателей)
+[/list]
+
+[size=16][b]Простое голосование для всех игроков[/b][/size]
+
+
+[code=csharp]using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class VoteExample : Plugin
+{
+    public void OnPluginStart()
+    {
+        // Создаем простое голосование для всех игроков
+        PanoramaSendYesNoVoteToAll(
+            duration: 30.0,
+            caller: VOTE_CALLER_SERVER,
+            voteTitle: "#SFUI_vote_passed",
+            detailStr: "Restart the match?",
+            votePassTitle: "#SFUI_vote_passed",
+            detailPassStr: "Match restarting",
+            failReason: 0,
+            result: OnVoteResult,
+            handler: OnVoteHandler
+        );
+    }
+
+    // Вызывается для определения, прошло ли голосование
+    private bool OnVoteResult(int numVotes, int yesVotes, int noVotes,
+                              int numClients, int[] clientInfoSlot, int[] clientInfoItem)
+    {
+        PrintToServer($"Vote finished: {yesVotes} Yes, {noVotes} No, " +
+                     $"{numVotes}/{numClients} voted\n");
+
+        // Простое большинство: более 50% голосов "Да"
+        return yesVotes > noVotes;
+    }
+
+    // Вызывается для событий голосования
+    private void OnVoteHandler(VoteAction action, int param1, int param2)
+    {
+        switch (action)
+        {
+            case VoteAction.Start:
+                PrintToServer("Vote started!\n");
+                break;
+
+            case VoteAction.Vote:
+                int clientSlot = param1;
+                int choice = param2;
+                string vote = choice == (int)CastVote.VOTE_OPTION1 ? "Yes" : "No";
+                PrintToServer($"Player {clientSlot} voted: {vote}\n");
+                break;
+
+            case VoteAction.End:
+                VoteEndReason reason = (VoteEndReason)param2;
+                PrintToServer($"Vote ended: {reason}\n");
+
+                // Выполнить действие на основе результата
+                // Примечание: Вызывается ПОСЛЕ того, как OnVoteResult определит успех/провал
+                break;
+        }
+    }
+}[/code]
+::
+::div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[code=cpp]#include <plugify/cpp_plugin.hpp>
+#include "s2sdk.hpp"
+
+using namespace s2sdk;
+
+class VoteExample : public plg::IPluginEntry {
+public:
+    void OnPluginStart() override {
+        PanoramaSendYesNoVoteToAll(
+            30.0,
+            VOTE_CALLER_SERVER,
+            "#SFUI_vote_passed",
+            "Restart the match?",
+            "#SFUI_vote_passed",
+            "Match restarting",
+            0,
+            // Result callback - определяет успех/провал
+            [](int numVotes, int yesVotes, int noVotes, int numClients,
+               const plg::vector<int>& clientInfoSlot,
+               const plg::vector<int>& clientInfoItem) -> bool {
+                PrintToServer(std::format("Vote: {} Yes, {} No, {}/{} voted\n",
+                             yesVotes, noVotes, numVotes, numClients).c_str());
+                return yesVotes > noVotes;  // Простое большинство
+            },
+            // Handler callback - события голосования
+            [](VoteAction action, int param1, int param2) {
+                switch (action) {
+                    case VoteAction::Start:
+                        PrintToServer("Vote started!\n");
+                        break;
+                    case VoteAction::Vote: {
+                        int clientSlot = param1;
+                        int choice = param2;
+                        const char* vote = choice == static_cast<int>(CastVote::VOTE_OPTION1)
+                                          ? "Yes" : "No";
+                        PrintToServer(std::format("Player {} voted: {}\n",
+                                     clientSlot, vote).c_str());
+                        break;
+                    }
+                    case VoteAction::End: {
+                        VoteEndReason reason = static_cast<VoteEndReason>(param2);
+                        PrintToServer("Vote ended\n");
+                        break;
+                    }
+                }
+            }
+        );
+    }
+};[/code]
+::
+::div{label="python" icon="vscode-icons:file-type-python"}
+[code=python]from plugify.plugin import Plugin
+from plugify.pps import s2sdk as s2
+
+class VoteExample(Plugin):
+    def plugin_start(self):
+        def on_vote_result(num_votes, yes_votes, no_votes, num_clients,
+                          client_info_slot, client_info_item):
+            s2.PrintToServer(f"Vote: {yes_votes} Yes, {no_votes} No, " +
+                           f"{num_votes}/{num_clients} voted\n")
+            return yes_votes > no_votes  # Простое большинство
+
+        def on_vote_handler(action, param1, param2):
+            if action == s2.VoteAction.Start:
+                s2.PrintToServer("Vote started!\n")
+            elif action == s2.VoteAction.Vote:
+                client_slot = param1
+                choice = param2
+                vote = "Yes" if choice == s2.CastVote.VOTE_OPTION1 else "No"
+                s2.PrintToServer(f"Player {client_slot} voted: {vote}\n")
+            elif action == s2.VoteAction.End:
+                reason = param2  # VoteEndReason
+                s2.PrintToServer(f"Vote ended: {reason}\n")
+
+        s2.PanoramaSendYesNoVoteToAll(
+            '''duration='''30.0,
+            '''caller='''s2.VOTE_CALLER_SERVER,
+            '''vote_title='''"#SFUI_vote_passed",
+            '''detail_str='''"Restart the match?",
+            '''vote_pass_title='''"#SFUI_vote_passed",
+            '''detail_pass_str='''"Match restarting",
+            '''fail_reason='''0,
+            '''result='''on_vote_result,
+            '''handler='''on_vote_handler
+        )[/code]
+::
+::div{label="go" icon="vscode-icons:file-type-go"}
+[code=go]package main
+
+import (
+    "fmt"
+    "s2sdk"
+    "github.com/untrustedmodders/go-plugify"
+)
+
+func init() {
+    plugify.OnPluginStart(func() {
+        // Result callback
+        onVoteResult := func(numVotes, yesVotes, noVotes, numClients int,
+                            clientInfoSlot, clientInfoItem []int) bool {
+            s2sdk.PrintToServer(fmt.Sprintf("Vote: %d Yes, %d No, %d/%d voted\n",
+                               yesVotes, noVotes, numVotes, numClients))
+            return yesVotes > noVotes
+        }
+
+        // Handler callback
+        onVoteHandler := func(action s2sdk.VoteAction, param1, param2 int) {
+            switch action {
+            case s2sdk.VoteActionStart:
+                s2sdk.PrintToServer("Vote started!\n")
+            case s2sdk.VoteActionVote:
+                clientSlot := param1
+                choice := param2
+                vote := "No"
+                if choice == int(s2sdk.VOTE_OPTION1) {
+                    vote = "Yes"
+                }
+                s2sdk.PrintToServer(fmt.Sprintf("Player %d voted: %s\n",
+                                   clientSlot, vote))
+            case s2sdk.VoteActionEnd:
+                reason := param2  // VoteEndReason
+                s2sdk.PrintToServer(fmt.Sprintf("Vote ended: %d\n", reason))
+            }
+        }
+
+        s2sdk.PanoramaSendYesNoVoteToAll(
+            30.0,
+            s2sdk.VOTE_CALLER_SERVER,
+            "#SFUI_vote_passed",
+            "Restart the match?",
+            "#SFUI_vote_passed",
+            "Match restarting",
+            0,
+            onVoteResult,
+            onVoteHandler,
+        )
+    })
+}[/code]
+::
+::div{label="js" icon="vscode-icons:file-type-js-official"}
+[code=js]import { Plugin } from 'plugify';
+import { s2 } from ':s2sdk';
+
+export class VoteExample extends Plugin {
+    pluginStart() {
+        s2.PanoramaSendYesNoVoteToAll(
+            30.0,
+            s2.VOTE_CALLER_SERVER,
+            "#SFUI_vote_passed",
+            "Restart the match?",
+            "#SFUI_vote_passed",
+            "Match restarting",
+            0,
+            // Result callback
+            (numVotes, yesVotes, noVotes, numClients,
+             clientInfoSlot, clientInfoItem) => {
+                s2.PrintToServer([font=monospace]Vote: ${yesVotes} Yes, ${noVotes} No, [/font] +
+                               [font=monospace]${numVotes}/${numClients} voted\n[/font]);
+                return yesVotes > noVotes;
+            },
+            // Handler callback
+            (action, param1, param2) => {
+                if (action === s2.VoteAction.Start) {
+                    s2.PrintToServer("Vote started!\n");
+                } else if (action === s2.VoteAction.Vote) {
+                    const clientSlot = param1;
+                    const choice = param2;
+                    const vote = choice === s2.CastVote.VOTE_OPTION1 ? "Yes" : "No";
+                    s2.PrintToServer([font=monospace]Player ${clientSlot} voted: ${vote}\n[/font]);
+                } else if (action === s2.VoteAction.End) {
+                    const reason = param2;
+                    s2.PrintToServer([font=monospace]Vote ended: ${reason}\n[/font]);
+                }
+            }
+        );
+    }
+}[/code]
+::
+::div{label="lua" icon="vscode-icons:file-type-lua"}
+[code=lua]local plugify = require 'plugify'
+local Plugin = plugify.Plugin
+local s2 = require 's2sdk'
+
+local VoteExample = {}
+setmetatable(VoteExample, { __index = Plugin })
+
+function VoteExample:plugin_start()
+    local function on_vote_result(num_votes, yes_votes, no_votes, num_clients,
+                                  client_info_slot, client_info_item)
+        s2:PrintToServer(string.format("Vote: %d Yes, %d No, %d/%d voted\n",
+                        yes_votes, no_votes, num_votes, num_clients))
+        return yes_votes > no_votes
+    end
+
+    local function on_vote_handler(action, param1, param2)
+        if action == s2.VoteAction.Start then
+            s2:PrintToServer("Vote started!\n")
+        elseif action == s2.VoteAction.Vote then
+            local client_slot = param1
+            local choice = param2
+            local vote = choice == s2.CastVote.VOTE_OPTION1 and "Yes" or "No"
+            s2:PrintToServer(string.format("Player %d voted: %s\n",
+                            client_slot, vote))
+        elseif action == s2.VoteAction.End then
+            local reason = param2
+            s2:PrintToServer(string.format("Vote ended: %d\n", reason))
+        end
+    end
+
+    s2:PanoramaSendYesNoVoteToAll(
+        30.0,
+        s2.VOTE_CALLER_SERVER,
+        "#SFUI_vote_passed",
+        "Restart the match?",
+        "#SFUI_vote_passed",
+        "Match restarting",
+        0,
+        on_vote_result,
+        on_vote_handler
+    )
+end
+
+local M = {}
+M.VoteExample = VoteExample
+return M[/code]
+::
+::
+
+[size=20][b]Перечисления[/b][/size]
+
+[size=16][b]CastVote[/b][/size]
+Значения выбора голосования, используемые в обратных вызовах:
+
+| Значение | Описание |
+|-------|-------------|
+| [font=monospace]VOTE_OPTION1[/font] (0) | Голос "Да" |
+| [font=monospace]VOTE_OPTION2[/font] (1) | Голос "Нет" |
+| [font=monospace]VOTE_NOTINCLUDED[/font] (-1) | Игрок не включен в голосование |
+| [font=monospace]VOTE_UNCAST[/font] (5) | Игрок не проголосовал |
+
+[size=16][b]VoteAction[/b][/size]
+События, передаваемые в обратный вызов обработчика:
+
+| Значение | Описание | param1 | param2 |
+|-------|-------------|--------|--------|
+| [font=monospace]Start[/font] | Голосование началось | не используется | не используется |
+| [font=monospace]Vote[/font] | Игрок проголосовал | слот клиента | выбор голоса (CastVote) |
+| [font=monospace]End[/font] | Голосование завершено | -1 | VoteEndReason |
+
+[size=16][b]VoteEndReason[/b][/size]
+Причины завершения голосования:
+
+| Значение | Описание |
+|-------|-------------|
+| [font=monospace]AllVotes[/font] | Все возможные голоса были отданы |
+| [font=monospace]TimeUp[/font] | Время голосования истекло |
+| [font=monospace]Cancelled[/font] | Голосование было отменено вручную |
+
+[size=20][b]Битовая маска получателей (Выборочное голосование)[/b][/size]
+
+Чтобы создать голосование для определенных игроков, используйте [font=monospace]PanoramaSendYesNoVote[/font] с [b]битовой маской получателей[/b]. Каждый бит в [font=monospace]uint64[/font] представляет слот игрока:
+
+[list]
+[*][b]Бит 0[/b] (значение 1) = Слот игрока 0
+[*][b]Бит 1[/b] (значение 2) = Слот игрока 1
+[*][b]Бит 2[/b] (значение 4) = Слот игрока 2
+[*][b]Бит N[/b] (значение 2^N) = Слот игрока N
+[/list]
+
+[quote][b]Info:[/b] [b]Построение битовой маски:[/b] Установите бит N в 1, чтобы включить слот игрока N в голосование. Значение получателей - это сумма всех включенных битовых значений игроков.[/quote]
+
+[size=16][b]Создание битовой маски получателей[/b][/size]
+
+
+[code=csharp]// Включить определенных игроков по слотам
+public ulong BuildRecipients(int[] playerSlots)
+{
+    ulong recipients = 0;
+    foreach (int slot in playerSlots)
+    {
+        if (slot >= 0 && slot < 64)
+        {
+            recipients |= (1UL << slot);
+        }
+    }
+    return recipients;
+}
+
+// Примеры:
+// Только игрок в слоте 0
+ulong player0Only = 1UL << 0;  // = 1
+
+// Только игрок в слоте 5
+ulong player5Only = 1UL << 5;  // = 32
+
+// Игроки 0, 1 и 2
+ulong players012 = (1UL << 0) | (1UL << 1) | (1UL << 2);  // = 7
+
+// Использование в голосовании
+int[] targetPlayers = { 0, 2, 5 };
+ulong recipients = BuildRecipients(targetPlayers);
+
+PanoramaSendYesNoVote(
+    duration: 30.0,
+    caller: VOTE_CALLER_SERVER,
+    voteTitle: "#SFUI_vote_passed",
+    detailStr: "Kick player?",
+    votePassTitle: "#SFUI_vote_passed",
+    detailPassStr: "Player kicked",
+    failReason: 0,
+    recipients: recipients,
+    result: OnVoteResult,
+    handler: OnVoteHandler
+);[/code]
+::
+::div{label="python" icon="vscode-icons:file-type-python"}
+[code=python]def build_recipients(player_slots):
+    """Создать битовую маску получателей из списка слотов игроков"""
+    recipients = 0
+    for slot in player_slots:
+        if 0 <= slot < 64:
+            recipients |= (1 << slot)
+    return recipients
+
+[size=24][b]Примеры:[/b][/size]
+player_0_only = 1 << 0  # = 1
+player_5_only = 1 << 5  # = 32
+players_012 = (1 << 0) | (1 << 1) | (1 << 2)  # = 7
+
+[size=24][b]Использование в голосовании[/b][/size]
+target_players = [0, 2, 5]
+recipients = build_recipients(target_players)
+
+s2.PanoramaSendYesNoVote(
+    '''duration='''30.0,
+    '''caller='''s2.VOTE_CALLER_SERVER,
+    '''vote_title='''"#SFUI_vote_passed",
+    '''detail_str='''"Kick player?",
+    '''vote_pass_title='''"#SFUI_vote_passed",
+    '''detail_pass_str='''"Player kicked",
+    '''fail_reason='''0,
+    '''recipients='''recipients,
+    '''result='''on_vote_result,
+    '''handler='''on_vote_handler
+)[/code]
+::
+::
+
+[size=20][b]Пользовательская логика прохождения голосования[/b][/size]
+
+Обратный вызов [font=monospace]result[/font] позволяет реализовать пользовательскую логику для определения прохождения голосования:
+
+[code=csharp]// Требуется 60% голосов "Да"
+private bool OnVoteResult(int numVotes, int yesVotes, int noVotes,
+                          int numClients, int[] clientInfoSlot, int[] clientInfoItem)
+{
+    if (numVotes == 0) return false;
+
+    double yesPercent = (double)yesVotes / numVotes * 100.0;
+    bool passed = yesPercent >= 60.0;
+
+    PrintToServer($"Vote: {yesPercent:F1}% yes ({yesVotes}/{numVotes})\n");
+    return passed;
+}
+
+// Требуется большинство ВСЕХ клиентов (не только проголосовавших)
+private bool OnVoteResultStrict(int numVotes, int yesVotes, int noVotes,
+                                int numClients, int[] clientInfoSlot, int[] clientInfoItem)
+{
+    bool passed = yesVotes > (numClients / 2);
+    PrintToServer($"Vote: {yesVotes}/{numClients} clients voted yes\n");
+    return passed;
+}
+
+// Анализ индивидуальных голосов
+private bool OnVoteResultDetailed(int numVotes, int yesVotes, int noVotes,
+                                  int numClients, int[] clientInfoSlot, int[] clientInfoItem)
+{
+    PrintToServer("Vote details:\n");
+    for (int i = 0; i < clientInfoSlot.Length; i++)
+    {
+        int slot = clientInfoSlot[i];
+        int choice = clientInfoItem[i];
+        string vote = choice == (int)CastVote.VOTE_OPTION1 ? "Yes" : "No";
+        PrintToServer($"  Slot {slot}: {vote}\n");
+    }
+
+    return yesVotes > noVotes;
+}[/code]
+
+[size=20][b]Вспомогательные функции голосования[/b][/size]
+
+Система голосования предоставляет несколько утилитарных функций:
+
+[size=16][b]Проверка активного голосования[/b][/size]
+
+[code=csharp]bool isVoting = PanoramaIsVoteInProgress();
+if (isVoting)
+{
+    PrintToServer("A vote is currently active!\n");
+}[/code]
+
+[size=16][b]Удаление игрока из голосования[/b][/size]
+
+Удаляет игрока из текущего пула голосования (он больше не может голосовать):
+
+[code=csharp]PanoramaRemovePlayerFromVote(3);  // Удалить игрока в слоте 3[/code]
+
+[size=16][b]Проверка, находится ли игрок в пуле голосования[/b][/size]
+
+[code=csharp]int playerSlot = 5;
+if (PanoramaIsPlayerInVotePool(playerSlot))
+{
+    PrintToServer($"Player {playerSlot} can vote\n");
+}[/code]
+
+[size=16][b]Перерисовка UI голосования для игрока[/b][/size]
+
+Принудительно обновляет UI голосования для конкретного игрока:
+
+[code=csharp]bool success = PanoramaRedrawVoteToClient(playerSlot);[/code]
+
+[size=16][b]Ручное завершение голосования[/b][/size]
+
+[code=csharp]PanoramaEndVote(VoteEndReason.Cancelled);[/code]
+
+[size=20][b]Практические примеры[/b][/size]
+
+[size=16][b]Пример 1: Голосование за карту с ограничением по команде[/b][/size]
+
+Разрешить только контр-террористам голосовать за смену карты:
+
+[code=csharp]public void StartMapVote()
+{
+    // Создать битовую маску получателей только для команды CT
+    ulong recipients = 0;
+    for (int slot = 0; slot < 64; slot++)
+    {
+        int handle = PlayerSlotToEntHandle(slot);
+        if (handle == -1) continue;
+
+        int team = GetEntSchemaInt32(handle, "CBaseEntity", "m_iTeamNum", 0);
+        if (team == 3)  // 3 = Counter-Terrorist
+        {
+            recipients |= (1UL << slot);
+        }
+    }
+
+    if (recipients == 0)
+    {
+        PrintToServer("No CT players to vote!\n");
+        return;
+    }
+
+    PanoramaSendYesNoVote(
+        duration: 30.0,
+        caller: VOTE_CALLER_SERVER,
+        voteTitle: "#SFUI_vote_passed",
+        detailStr: "Change map to de_dust2?",
+        votePassTitle: "#SFUI_vote_passed",
+        detailPassStr: "Changing map to de_dust2",
+        failReason: 0,
+        recipients: recipients,
+        result: (numVotes, yesVotes, noVotes, numClients, slots, items) =>
+        {
+            return yesVotes > noVotes;
+        },
+        handler: (action, param1, param2) =>
+        {
+            if (action == VoteAction.End)
+            {
+                // Проверить, прошло ли голосование (определяется обратным вызовом result)
+                // Выполнить смену карты при необходимости
+                ServerCommand("changelevel de_dust2");
+            }
+        }
+    );
+}[/code]
+
+[size=16][b]Пример 2: Отслеживание прогресса голосования[/b][/size]
+
+[code=csharp]private int totalYesVotes = 0;
+private int totalNoVotes = 0;
+
+public void StartTrackedVote()
+{
+    totalYesVotes = 0;
+    totalNoVotes = 0;
+
+    PanoramaSendYesNoVoteToAll(
+        duration: 30.0,
+        caller: VOTE_CALLER_SERVER,
+        voteTitle: "#SFUI_vote_passed",
+        detailStr: "Restart the match?",
+        votePassTitle: "#SFUI_vote_passed",
+        detailPassStr: "Match restarting",
+        failReason: 0,
+        result: (numVotes, yesVotes, noVotes, numClients, slots, items) =>
+        {
+            PrintToServer($"Final: {yesVotes} Yes, {noVotes} No\n");
+            return yesVotes > (numClients / 2);  // Большинство всех клиентов
+        },
+        handler: (action, param1, param2) =>
+        {
+            switch (action)
+            {
+                case VoteAction.Start:
+                    PrintToChatAll("Vote started: Restart match?");
+                    break;
+
+                case VoteAction.Vote:
+                    int choice = param2;
+                    if (choice == (int)CastVote.VOTE_OPTION1)
+                        totalYesVotes++;
+                    else if (choice == (int)CastVote.VOTE_OPTION2)
+                        totalNoVotes++;
+
+                    PrintToChatAll($"Current: {totalYesVotes} Yes, {totalNoVotes} No");
+                    break;
+
+                case VoteAction.End:
+                    VoteEndReason reason = (VoteEndReason)param2;
+                    PrintToChatAll($"Vote ended: {reason}");
+                    break;
+            }
+        }
+    );
+}[/code]
+
+[size=16][b]Пример 3: Голосование за кик, инициированное игроком[/b][/size]
+
+[code=csharp]public void StartKickVote(int callerSlot, int targetSlot)
+{
+    if (PanoramaIsVoteInProgress())
+    {
+        PrintToChat(callerSlot, "A vote is already in progress!");
+        return;
+    }
+
+    int targetHandle = PlayerSlotToEntHandle(targetSlot);
+    string targetName = GetPlayerName(targetHandle);
+
+    PanoramaSendYesNoVoteToAll(
+        duration: 30.0,
+        caller: callerSlot,
+        voteTitle: "#SFUI_vote_kick_player",
+        detailStr: targetName,
+        votePassTitle: "#SFUI_vote_passed",
+        detailPassStr: $"Kicking {targetName}",
+        failReason: 0,
+        result: (numVotes, yesVotes, noVotes, numClients, slots, items) =>
+        {
+            // Требуется 60% голосов "Да"
+            return numVotes > 0 && ((double)yesVotes / numVotes) >= 0.6;
+        },
+        handler: (action, param1, param2) =>
+        {
+            if (action == VoteAction.Start)
+            {
+                // Удалить цель из пула голосования
+                PanoramaRemovePlayerFromVote(targetSlot);
+                PrintToChatAll($"Vote: Kick {targetName}?");
+            }
+            else if (action == VoteAction.End)
+            {
+                VoteEndReason reason = (VoteEndReason)param2;
+                if (reason != VoteEndReason.Cancelled)
+                {
+                    // Кикнуть игрока, если голосование прошло (определяется обратным вызовом result)
+                    ServerCommand($"kickid {targetSlot}");
+                }
+            }
+        }
+    );
+}[/code]
+
+[size=20][b]Строки перевода[/b][/size]
+
+Система голосования использует встроенные строки перевода CS2. Распространенные включают:
+
+| Строка перевода | Описание |
+|--------------------|-------------|
+| [font=monospace]#SFUI_vote_passed[/font] | Сообщение о прохождении голосования |
+| [font=monospace]#SFUI_vote_failed[/font] | Сообщение о провале голосования |
+| [font=monospace]#SFUI_vote_kick_player[/font] | Голосование за кик игрока |
+| [font=monospace]#Panorama_vote[/font] | Общее сообщение голосования |
+
+[quote][b]Info:[/b] [b]Требование строк перевода:[/b] Используйте только строки перевода, начинающиеся с [font=monospace]#SFUI_vote[/font] или [font=monospace]#Panorama_vote[/font]. Другие строки могут некорректно отображаться в UI голосования.[/quote]
+
+[size=20][b]Справочник методов[/b][/size]
+
+[size=16][b]Запуск голосований[/b][/size]
+
+| Метод | Описание |
+|--------|-------------|
+| [font=monospace]PanoramaSendYesNoVoteToAll(duration, caller, voteTitle, detailStr, votePassTitle, detailPassStr, failReason, result, handler)[/font] | Начать голосование для всех игроков |
+| [font=monospace]PanoramaSendYesNoVote(duration, caller, voteTitle, detailStr, votePassTitle, detailPassStr, failReason, recipients, result, handler)[/font] | Начать голосование для определенных игроков (используя битовую маску) |
+
+#### Параметры
+
+[list]
+[*][b][font=monospace]duration[/font][/b] (double) - Максимальное время в секундах для голосования
+[*][b][font=monospace]caller[/font][/b] (int) - Слот игрока, который инициировал голосование, или [font=monospace]VOTE_CALLER_SERVER[/font] для голосований сервера
+[*][b][font=monospace]voteTitle[/font][/b] (string) - Строка перевода для сообщения голосования (например, [font=monospace]#SFUI_vote_passed[/font])
+[*][b][font=monospace]detailStr[/font][/b] (string) - Дополнительный текст деталей для голосования
+[*][b][font=monospace]votePassTitle[/font][/b] (string) - Строка перевода, показываемая при прохождении голосования
+[*][b][font=monospace]detailPassStr[/font][/b] (string) - Дополнительный текст деталей при прохождении голосования
+[*][b][font=monospace]failReason[/font][/b] (int) - Код причины провала голосования
+[*][b][font=monospace]recipients[/font][/b] (uint64) - Битовая маска слотов игроков, которые могут голосовать (только для [font=monospace]PanoramaSendYesNoVote[/font])
+[*][b][font=monospace]result[/font][/b] (обратный вызов YesNoVoteResult) - Функция, которая определяет, прошло ли голосование:
+[/list]
+  [font=monospace]`[/font]csharp
+  bool Result(int numVotes, int yesVotes, int noVotes, int numClients,
+              int[] clientInfoSlot, int[] clientInfoItem)
+  [font=monospace]`[/font]
+  - Возвращает [font=monospace]true[/font] для прохождения голосования, [font=monospace]false[/font] для провала
+  - [font=monospace]numVotes[/font]: Всего отдано голосов
+  - [font=monospace]yesVotes[/font]: Количество голосов "Да"
+  - [font=monospace]noVotes[/font]: Количество голосов "Нет"
+  - [font=monospace]numClients[/font]: Всего клиентов в пуле голосования
+  - [font=monospace]clientInfoSlot[/font]: Массив слотов игроков, которые проголосовали
+  - [font=monospace]clientInfoItem[/font]: Массив выборов голосования
+
+[list]
+[*][b][font=monospace]handler[/font][/b] (обратный вызов YesNoVoteHandler) - Функция, вызываемая для событий голосования:
+[/list]
+  [font=monospace]`[/font]csharp
+  void Handler(VoteAction action, int param1, int param2)
+  [font=monospace]`[/font]
+  - [font=monospace]action[/font]: Тип события (Start, Vote, End)
+  - [font=monospace]param1[/font]: Зависит от действия (слот клиента для Vote, -1 для End)
+  - [font=monospace]param2[/font]: Зависит от действия (выбор голоса для Vote, VoteEndReason для End)
+
+[size=16][b]Управление голосованием[/b][/size]
+
+| Метод | Описание |
+|--------|-------------|
+| [font=monospace]PanoramaIsVoteInProgress()[/font] | Возвращает [font=monospace]true[/font], если голосование в данный момент активно |
+| [font=monospace]PanoramaEndVote(VoteEndReason reason)[/font] | Вручную завершить текущее голосование с указанием причины |
+
+[size=16][b]Управление игроками[/b][/size]
+
+| Метод | Описание |
+|--------|-------------|
+| [font=monospace]PanoramaRemovePlayerFromVote(int playerSlot)[/font] | Удалить игрока из текущего пула голосования |
+| [font=monospace]PanoramaIsPlayerInVotePool(int playerSlot)[/font] | Проверить, может ли игрок голосовать в текущем голосовании |
+| [font=monospace]PanoramaRedrawVoteToClient(int playerSlot)[/font] | Принудительно обновить UI голосования для игрока |
+
+[size=20][b]Советы и лучшие практики[/b][/size]
+
+[list=1]
+[*][b]Проверяйте активные голосования[/b] - Всегда используйте [font=monospace]PanoramaIsVoteInProgress()[/font] перед началом нового голосования
+[*][b]Реализуйте пользовательскую логику прохождения[/b] - Используйте обратный вызов [font=monospace]result[/font] для определения, что означает "прохождение" для вашего голосования
+[*][b]Отслеживайте прогресс голосования[/b] - Используйте событие [font=monospace]VoteAction.Vote[/font] обратного вызова [font=monospace]handler[/font] для мониторинга голосов в реальном времени
+[*][b]Обрабатывайте отключения[/b] - Удаляйте отключившихся игроков с помощью [font=monospace]PanoramaRemovePlayerFromVote()[/font]
+[*][b]Используйте подходящую длительность[/b] - 20-30 секунд типично для большинства голосований
+[*][b]Проверяйте получателей[/b] - Убедитесь, что в битовой маске получателей есть хотя бы один игрок
+[*][b]Используйте строки перевода[/b] - Придерживайтесь строк [font=monospace]#SFUI_vote[/font] или [font=monospace]#Panorama_vote[/font] для правильной локализации
+[*][b]Удаляйте цели голосования[/b] - Не позволяйте игрокам, против которых голосуют, участвовать
+[*][b]Разделяйте логику[/b] - Используйте [font=monospace]result[/font] для логики прохождения/провала, [font=monospace]handler[/font] для событий и действий
+[*][b]Логируйте данные голосования[/b] - Используйте массивы [font=monospace]clientInfoSlot[/font] и [font=monospace]clientInfoItem[/font] для детального отслеживания голосов
+[/list]
+
+---
+
+С системой голосования Panorama вы можете создавать увлекательный демократичный игровой опыт, используя нативный UI CS2 для бесшовного взаимодействия с игроками!

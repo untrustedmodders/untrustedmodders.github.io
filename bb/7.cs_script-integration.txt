@@ -1,0 +1,273 @@
+
+[size=20][b]Обзор[/b][/size]
+
+Counter-Strike 2 включает [b]CS_Script[/b] (систему скриптов на базе JavaScript, которая предоставляет доступ к игровым сущностям, событиям и функциональности. Плагин s2sdk позволяет языковым модулям Plugify интегрироваться с CS_Script, предоставляя доступ к резолверу модулей Valve, что позволяет использовать плагины Plugify и систему CS_Script от Valve одновременно.
+
+Для получения дополнительной информации о системе CS_Script от Valve см.:
+[list]
+[*][url=https://developer.valvesoftware.com/wiki/Counter-Strike_2_Workshop_Tools/Scripting_API]Counter-Strike 2 Scripting API[/url]
+[*][url=https://developer.valvesoftware.com/wiki/Counter-Strike_2_Workshop_Tools/Scripting/Hello_Gordon]Hello Gordon Tutorial[/url]
+[/list]
+
+[size=20][b]Проблема синхронизации[/b][/size]
+
+При работе с CS_Script важно учитывать следующий момент:
+
+[list]
+[*][b]Плагины Plugify загружаются рано[/b] во время инициализации сервера
+[*][b]Модули CS_Script становятся доступны позже[/b] после создания объекта игровых правил
+[*][b]s2sdk создаёт сущность [font=monospace]point_script[/font][/b] когда скриптовая система Valve готова
+[/list]
+
+Это означает, что вы [b]не можете[/b] импортировать модули CS_Script в начале файла плагина:
+
+[code=js]// ❌ Это НЕ будет работать - CS_Script ещё недоступен
+import { Instance } from "cs_script/point_script";[/code]
+
+[size=20][b]Решение: динамические импорты[/b][/size]
+
+Вместо этого используйте слушатель [font=monospace]OnEntityCreated[/font] для определения момента создания сущности [font=monospace]point_script[/font], а затем динамически импортируйте модули CS_Script:
+
+[code=js]// ✅ Это работает - импорт после создания point_script
+import("cs_script/point_script").then(point_script => {
+    const { Instance } = point_script;
+    // Теперь вы можете использовать функциональность CS_Script
+});[/code]
+
+[size=20][b]Полный пример интеграции[/b][/size]
+
+
+[code=js]import { Plugin } from 'plugify';
+import * as s2sdk from ':s2sdk';
+
+export class SamplePlugin extends Plugin {
+    pluginStart() {
+        console.log("Plugin started - waiting for CS_Script...");
+        s2sdk.OnEntityCreated_Register(SamplePlugin.OnEntityCreated);
+    }
+
+    pluginEnd() {
+        s2sdk.OnEntityCreated_Unregister(SamplePlugin.OnEntityCreated);
+    }
+
+    static OnEntityCreated(entityHandle) {
+        const className = s2sdk.GetEntityClassname(entityHandle);
+
+        if (className === "point_script") {
+            console.log([font=monospace]point_script entity created [handle: ${entityHandle}][/font]);
+
+            // Небольшая задержка для полной инициализации CS_Script (необязательно)
+            setTimeout(() => {
+                // Динамический импорт модулей CS_Script
+                import("cs_script/point_script").then(point_script => {
+                    const { Instance } = point_script;
+
+                    console.log("✓ CS_Script system connected!");
+                    Instance.Msg("✓ CS_Script system connected from Plugify!");
+
+                    // Пример: настройка функции think
+                    Instance.SetThink(() => {
+                        Instance.Msg("Think function executing...");
+                        return Instance.GetGameTime() + 5.0; // Запуск каждые 5 секунд
+                    });
+                    Instance.SetNextThink(Instance.GetGameTime());
+
+                }).catch(error => {
+                    console.error("Failed to import CS_Script module:", error);
+                });
+            }, 100);
+        }
+    }
+}[/code]
+::
+::
+
+[size=20][b]Определение доступности CS_Script на других языках[/b][/size]
+
+Хотя полная интеграция с CS_Script специфична для JavaScript, другие языки могут определять момент, когда CS_Script становится доступным:
+
+
+[code=csharp]using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class Sample : Plugin
+{
+    public void OnPluginStart()
+    {
+        OnEntityCreated_Register(OnEntityCreatedCallback);
+    }
+
+    public void OnPluginEnd()
+    {
+        OnEntityCreated_Unregister(OnEntityCreatedCallback);
+    }
+
+    private static void OnEntityCreatedCallback(int entityHandle)
+    {
+        string className = GetEntityClassname(entityHandle);
+
+        if (className == "point_script")
+        {
+            PrintToServer("CS_Script system is now available!\n");
+            // Теперь вы можете взаимодействовать с сущностью point_script
+        }
+    }
+}[/code]
+::
+::div{label="python" icon="vscode-icons:file-type-python"}
+[code=python]from plugify.plugin import Plugin
+from plugify.pps import s2sdk as s2
+
+class Sample(Plugin):
+    def plugin_start(self):
+        s2.OnEntityCreated_Register(self.on_entity_created)
+
+    def plugin_end(self):
+        s2.OnEntityCreated_Unregister(self.on_entity_created)
+
+    @staticmethod
+    def on_entity_created(entity_handle):
+        class_name = s2.GetEntityClassname(entity_handle)
+
+        if class_name == "point_script":
+            s2.PrintToServer("CS_Script system is now available!\n")[/code]
+::
+::div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[code=cpp]#include <plugify/cpp_plugin.hpp>
+#include "s2sdk.hpp"
+
+using namespace s2sdk;
+
+class Sample : public plg::IPluginEntry {
+public:
+    void OnPluginStart() override {
+        OnEntityCreated_Register(OnEntityCreatedCallback);
+    }
+
+    void OnPluginEnd() override {
+        OnEntityCreated_Unregister(OnEntityCreatedCallback);
+    }
+
+private:
+    static void OnEntityCreatedCallback(int entityHandle) {
+        auto className = GetEntityClassname(entityHandle);
+
+        if (className == "point_script") {
+            PrintToServer("CS_Script system is now available!\n");
+        }
+    }
+};[/code]
+::
+::
+
+[size=20][b]Расширенное использование: гибридные плагины[/b][/size]
+
+Вы можете создавать мощные гибридные плагины, сочетающие многоязыковую поддержку Plugify с игровой интеграцией CS_Script:
+
+[code=js]import { Plugin } from 'plugify';
+import * as s2sdk from ':s2sdk';
+
+export class HybridPlugin extends Plugin {
+    static pulseReady = false;
+    static Instance = null;
+
+    pluginStart() {
+        // Регистрация хуков с использованием s2sdk
+        s2sdk.OnEntityCreated_Register(HybridPlugin.OnEntityCreated);
+        s2sdk.HookEvent("player_spawn", HybridPlugin.OnPlayerSpawn, s2sdk.HookMode.Post);
+    }
+
+    static OnEntityCreated(entityHandle) {
+        const className = s2sdk.GetEntityClassname(entityHandle);
+
+        if (className === "point_script") {
+            setTimeout(() => {
+                import("cs_script/point_script").then(point_script => {
+                    HybridPlugin.Instance = point_script.Instance;
+                    HybridPlugin.pulseReady = true;
+                    console.log("✓ Hybrid mode active!");
+                });
+            }, 100);
+        }
+    }
+
+    static OnPlayerSpawn(name, event, dontBroadcast) {
+        const userid = s2sdk.GetEventInt(event, "userid");
+
+        // Совместное использование s2sdk и CS_Script
+        if (HybridPlugin.pulseReady) {
+            HybridPlugin.Instance.Msg([font=monospace]Player spawned: ${userid}[/font]);
+        }
+
+        return s2sdk.ResultType.Continue;
+    }
+}[/code]
+
+[size=20][b]Важные замечания[/b][/size]
+
+[list]
+[*][b]Модуль Plugify V8[/b] предоставляет функции в стиле Node.js помимо базового JavaScript. См. [url=https://github.com/untrustedmodders/plugify-module-v8]официальную документацию модуля V8[/url] для подробностей.
+[/list]
+
+[list]
+[*][b]Всегда используйте динамические импорты[/b] для модулей CS_Script - статические импорты в начале файла не будут работать.
+[/list]
+
+[list]
+[*][b]Добавьте небольшую задержку[/b] (например, 100мс) после обнаружения [font=monospace]point_script[/font], чтобы убедиться в полной инициализации CS_Script.
+[/list]
+
+[list]
+[*][b]Обрабатывайте ошибки импорта[/b] корректно, используя [font=monospace].catch()[/font] для промисов импорта.
+[/list]
+
+[list]
+[*][b]Только плагины на JavaScript[/b] могут полностью интегрироваться с CS_Script, но другие языки могут определять момент его доступности.
+[/list]
+
+[list]
+[*][b]Сущность [font=monospace]point_script[/font][/b] автоматически создаётся s2sdk после создания объекта игровых правил.
+[/list]
+
+[size=20][b]Общие паттерны[/b][/size]
+
+[size=16][b]Ожидание CS_Script перед выполнением кода[/b][/size]
+
+[code=js]export class MyPlugin extends Plugin {
+    static waitForPulse(callback) {
+        const checkPulse = () => {
+            import("cs_script/point_script")
+                .then(point_script => callback(point_script.Instance))
+                .catch(() => setTimeout(checkPulse, 100));
+        };
+        checkPulse();
+    }
+
+    pluginStart() {
+        MyPlugin.waitForPulse((Instance) => {
+            console.log("CS_Script ready, executing plugin logic...");
+            Instance.Msg("Plugin initialized!");
+        });
+    }
+}[/code]
+
+[size=16][b]Использование нескольких модулей CS_Script[/b][/size]
+
+[code=js]static async loadPulseModules() {
+    try {
+        const [pointScript, entities, events] = await Promise.all([
+            import("cs_script/point_script"),
+            import("cs_script/entities"),
+            import("cs_script/events")
+        ]);
+
+        return {
+            Instance: pointScript.Instance,
+            entities: entities,
+            events: events
+        };
+    } catch (error) {
+        console.error("Failed to load CS_Script modules:", error);
+        return null;
+    }
+}[/code]

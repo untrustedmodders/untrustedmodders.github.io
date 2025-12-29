@@ -1,0 +1,784 @@
+
+[size=20][b]Понимание системы хендлов[/b][/size]
+
+Система хендлов является ключевой частью движка Source 2, которая обеспечивает [b]безопасные ссылки[/b] на игровые сущности. В отличие от обычных указателей, хендлы автоматически отслеживают валидность сущностей и предотвращают крэши от обращения к удаленным или невалидным объектам.
+
+[quote][b]Info:[/b] [b]Безопасность прежде всего[/b]: Хендлы намного безопаснее обычных указателей, потому что они проверяют существование сущности перед разрешением доступа. Это предотвращает крэши от ошибок use-after-free, часто встречающихся в моддинге игр.[/quote]
+
+[size=20][b]Зачем использовать хендлы?[/b][/size]
+
+Большая часть S2SDK требует работы с хендлами:
+[list]
+[*][b]Система схем[/b]: Чтение и запись свойств сущностей требует валидных хендлов сущностей
+[*][b]Методы сущностей[/b]: Методы [font=monospace]GetEntity[i]()[/font] и [font=monospace]SetEntity[/i]()[/font] требуют хендлы
+[*][b]Операции с клиентами[/b]: Функциональность, связанная с игроками, использует хендлы для безопасности
+[*][b]Постоянство[/b]: Хендлы остаются валидными между игровыми тиками, даже если сущности перемещаются в памяти
+[/list]
+
+[size=16][b]Хендлы vs Указатели vs Индексы[/b][/size]
+
+| Тип | Описание | Случай использования | Отслеживание валидности |
+|------|-------------|----------|-------------------|
+| [b]Хендл[/b] | Безопасная ссылка на сущность | Долгосрочное хранение, операции между тиками | ✅ Да |
+| [b]Указатель[/b] | Прямой адрес в памяти | Немедленные операции, один тик | ❌ Нет |
+| [b]Индекс[/b] | Индекс сущности в списке сущностей | Простая идентификация, сетевая передача | ⚠️ Частично |
+| [b]Слот игрока[/b] | Индекс для конкретного игрока (0-63) | Операции с клиентом/игроком | ⚠️ Частично |
+
+[quote][b]Info:[/b] [b]Слоты игроков[/b]: В CS-сообществе [font=monospace]playerSlot[/font] - очень знакомое понятие (значения 0-63 для игроков). Хотя большинство функциональности клиента использует слоты игроков, хендлы обеспечивают дополнительную безопасность при отслеживании сущностей между несколькими игровыми тиками.[/quote]
+
+[size=20][b]Типы идентификации сущностей[/b][/size]
+
+[size=16][b]1. Хендл сущности (рекомендуется)[/b][/size]
+[code=csharp]int entityHandle = EntIndexToEntHandle(entityIndex);
+
+// Хендлы остаются валидными, даже если сущность перемещается в памяти
+if (IsValidEntHandle(entityHandle))
+{
+    nint entity = EntHandleToEntPointer(entityHandle);
+    // Безопасно использовать указатель на сущность
+}[/code]
+
+[b]Когда использовать[/b]:
+[list]
+[*]Хранение ссылок на сущности между несколькими тиками
+[*]Долгосрочное отслеживание сущностей
+[*]Операции со схемами
+[/list]
+
+[size=16][b]2. Указатель на сущность[/b][/size]
+[code=csharp]nint entity = EntIndexToEntPointer(entityIndex);
+
+// Необходимо проверить перед использованием
+if (IsValidEntPointer(entity))
+{
+    // Использовать немедленно
+    string classname = GetEntityClassname(entity);
+}[/code]
+
+[b]Когда использовать[/b]:
+[list]
+[*]Немедленные операции в пределах одного тика
+[*]Критичный к производительности код
+[*]Когда вы уже проверили сущность
+[/list]
+
+[size=16][b]3. Индекс сущности[/b][/size]
+[code=csharp]int entityIndex = EntPointerToEntIndex(entity);
+
+// Индексы сущностей - это простые целые числа
+PrintToServer($"Entity index: {entityIndex}\n");[/code]
+
+[b]Когда использовать[/b]:
+[list]
+[*]Простая идентификация сущности
+[*]Сетевая передача и сериализация
+[*]Отладка и логирование
+[/list]
+
+[size=16][b]4. Слот игрока[/b][/size]
+[code=csharp]int playerSlot = EntPointerToPlayerSlot(entity);
+
+// Слоты игроков от 0 до 63 для игроков
+if (playerSlot >= 0 && playerSlot < 64)
+{
+    PrintToServer($"Player slot: {playerSlot}\n");
+}[/code]
+
+[b]Когда использовать[/b]:
+[list]
+[*]Операции, специфичные для игрока
+[*]Команды клиента и события
+[*]Знакомо CS-моддинг сообществу
+[/list]
+
+[size=20][b]Функции конвертации[/b][/size]
+
+S2SDK предоставляет комплексные функции конвертации между всеми типами идентификаторов:
+
+[size=16][b]Конвертация игроков[/b][/size]
+
+::code-group
+[font=monospace]`[/font]csharp [Сущность ↔ Слот игрока]
+// Указатель на сущность в слот игрока
+int playerSlot = EntPointerToPlayerSlot(entity);
+
+// Слот игрока в указатель на сущность
+nint entity = PlayerSlotToEntPointer(playerSlot);
+[code][/code]csharp [Слот игрока ↔ Хендл]
+// Слот игрока в хендл сущности
+int handle = PlayerSlotToEntHandle(playerSlot);
+
+// Хендл в слот игрока (конвертация через указатель)
+nint entity = EntHandleToEntPointer(handle);
+int playerSlot = EntPointerToPlayerSlot(entity);
+[code][/code]csharp [Слот игрока ↔ Клиент]
+// Слот игрока в указатель клиента
+nint clientPtr = PlayerSlotToClientPtr(playerSlot);
+
+// Указатель клиента в слот игрока
+int playerSlot = ClientPtrToPlayerSlot(clientPtr);
+
+// Слот игрока в индекс клиента
+int clientIndex = PlayerSlotToClientIndex(playerSlot);
+
+// Индекс клиента в слот игрока
+int playerSlot = ClientIndexToPlayerSlot(clientIndex);
+[code][/code]csharp [Сервисы игрока]
+// Сервисы игрока в слот игрока
+int playerSlot = PlayerServicesToPlayerSlot(playerServices);
+[code]::
+
+[size=16][b]Конвертация сущностей[/b][/size]
+
+::code-group[/code]csharp [Индекс ↔ Указатель]
+// Индекс сущности в указатель
+int entityIndex = 5;
+nint entity = EntIndexToEntPointer(entityIndex);
+
+// Указатель на сущность в индекс
+int index = EntPointerToEntIndex(entity);
+[code][/code]csharp [Указатель ↔ Хендл]
+// Указатель на сущность в хендл
+int handle = EntPointerToEntHandle(entity);
+
+// Хендл сущности в указатель
+nint entity = EntHandleToEntPointer(handle);
+[code][/code]csharp [Индекс ↔ Хендл]
+// Индекс сущности в хендл
+int handle = EntIndexToEntHandle(entityIndex);
+
+// Хендл сущности в индекс
+int index = EntHandleToEntIndex(handle);
+[code]::
+
+[size=20][b]Функции валидации[/b][/size]
+
+Всегда проверяйте сущности перед их использованием:
+
+[quote][b]Info:[/b] [b]Предупреждение о производительности[/b]: [font=monospace]IsValidEntPointer()[/font] [b]дорогостоящая операция[/b] - она выполняет полный поиск в системе сущностей. По возможности используйте [font=monospace]IsValidEntHandle()[/font] вместо неё. Хендлы проверяются намного быстрее![/quote]
+[/code]csharp
+// ✅ РЕКОМЕНДУЕТСЯ: Проверить хендл сущности (быстро)
+if (IsValidEntHandle(entityHandle))
+{
+    nint entity = EntHandleToEntPointer(entityHandle);
+    // Безопасно использовать
+}
+
+// ⚠️ ИЗБЕГАЙТЕ: Проверка указателя на сущность (дорого!)
+if (IsValidEntPointer(entity))
+{
+    // Безопасно использовать немедленно, но эта проверка медленная
+}
+
+// ✅ ЛУЧШЕ: Сначала конвертировать указатель в хендл, затем проверить
+int handle = EntPointerToEntHandle(entity);
+if (IsValidEntHandle(handle))
+{
+    // Намного быстрее
+}
+
+// Проверка слота игрока
+if (playerSlot >= 0 && playerSlot < 64)
+{
+    // ✅ ПРЕДПОЧТИТЕЛЬНО: Использовать хендл для проверки
+    int entityHandle = PlayerSlotToEntHandle(playerSlot);
+    if (IsValidEntHandle(entityHandle))
+    {
+        nint entity = EntHandleToEntPointer(entityHandle);
+        // Безопасно использовать
+    }
+}
+[code]
+[size=20][b]Функции проверки слота игрока[/b][/size]
+
+Для операций, специфичных для игрока, S2SDK предоставляет специализированные функции проверки, которые работают напрямую со слотами игроков. Они более удобны, чем проверка хендла, для проверки состояния подключения игрока:
+
+[quote][b]Info:[/b] [b]Специфично для игроков[/b]: Эти функции разработаны специально для слотов игроков (0-63) и проверяют состояние подключения/аутентификации, а не просто валидность сущности.[/quote]
+[/code]csharp
+// Проверить, валиден ли слот игрока и подключен ли игрок
+if (IsClientConnected(playerSlot))
+{
+    PrintToServer($"Player {playerSlot} is connected\n");
+}
+
+// Проверить, аутентифицирован ли игрок (аутентификация Steam завершена)
+if (IsClientAuthorized(playerSlot))
+{
+    PrintToServer($"Player {playerSlot} is authenticated\n");
+}
+
+// Проверить, полностью ли игрок вошел в игру
+if (IsClientInGame(playerSlot))
+{
+    PrintToServer($"Player {playerSlot} is in game\n");
+}
+
+// Проверить, жив ли игрок
+if (IsClientAlive(playerSlot))
+{
+    PrintToServer($"Player {playerSlot} is alive\n");
+}
+
+// Проверить, является ли клиент ботом
+if (IsFakeClient(playerSlot))
+{
+    PrintToServer($"Player {playerSlot} is a bot\n");
+}
+
+// Проверить, является ли клиент SourceTV
+if (IsClientSourceTV(playerSlot))
+{
+    PrintToServer($"Player {playerSlot} is SourceTV\n");
+}
+[code]
+[size=16][b]Состояния подключения игрока[/b][/size]
+
+Игроки проходят через несколько состояний подключения:
+
+[list=1]
+[*][b]Подключен[/b] ([font=monospace]IsClientConnected[/font]) - Игрок подключился к серверу
+[*][b]Авторизован[/b] ([font=monospace]IsClientAuthorized[/font]) - Аутентификация Steam завершена
+[*][b]В игре[/b] ([font=monospace]IsClientInGame[/font]) - Игрок полностью загрузился и вошел в игру
+[/list]
+
+::code-group[/code]csharp [Типичный паттерн проверки]
+public void DoSomethingWithPlayer(int playerSlot)
+{
+    // Базовая проверка
+    if (playerSlot < 0 || playerSlot >= 64)
+        return;
+
+    // Проверить, находится ли игрок в игре (наиболее частая проверка)
+    if (!IsClientInGame(playerSlot))
+    {
+        PrintToServer("Player not in game yet\n");
+        return;
+    }
+
+    // Теперь безопасно работать с игроком
+    int handle = PlayerSlotToEntHandle(playerSlot);
+    if (IsValidEntHandle(handle))
+    {
+        string name = GetClientName(playerSlot);
+        PrintToServer($"Player {name} is ready\n");
+    }
+}
+[code][/code]csharp [Проверка перед операциями]
+public void TeleportPlayer(int playerSlot, Vector3 position)
+{
+    // Убедиться, что игрок в игре и жив
+    if (!IsClientInGame(playerSlot) || !IsClientAlive(playerSlot))
+        return;
+
+    // Игнорировать ботов, если нужно
+    if (IsFakeClient(playerSlot))
+        return;
+
+    // Безопасно телепортировать
+    int handle = PlayerSlotToEntHandle(playerSlot);
+    SetEntityOrigin(handle, position);
+}
+[code][/code]csharp [Фильтр SourceTV]
+public void BroadcastToPlayers(string message)
+{
+    for (int i = 0; i < 64; i++)
+    {
+        // Пропустить, если не подключен
+        if (!IsClientConnected(i))
+            continue;
+
+        // Пропустить SourceTV
+        if (IsClientSourceTV(i))
+            continue;
+
+        // Отправить сообщение реальному игроку
+        PrintToChat(i, message);
+    }
+}
+[code]::
+
+[size=16][b]Когда использовать каждую функцию[/b][/size]
+
+| Функция | Случай использования |
+|----------|----------|
+| [font=monospace]IsClientConnected()[/font] | Проверить, занят ли слот игрока |
+| [font=monospace]IsClientAuthorized()[/font] | Проверить, завершена ли аутентификация Steam (для анти-чита, проверки админов) |
+| [font=monospace]IsClientInGame()[/font] | [b]Наиболее частая[/b] - Игрок полностью загружен и готов |
+| [font=monospace]IsClientAlive()[/font] | Проверить, жив ли игрок (не наблюдает/мертв) |
+| [font=monospace]IsFakeClient()[/font] | Определить ботов для специальной обработки |
+| [font=monospace]IsClientSourceTV()[/font] | Исключить бота SourceTV из операций с игроками |
+
+[quote][b]Info:[/b] [b]Совет[/b]: Для большинства игровых операций используйте [font=monospace]IsClientInGame()[/font] - это гарантирует, что игрок полностью загружен и готов к взаимодействию.[/quote]
+
+[size=20][b]Практические примеры[/b][/size]
+
+[size=16][b]Пример 1: Хранение ссылок на сущности[/b][/size]
+
+[/code]csharp
+using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class EntityTracker : Plugin
+{
+    // Хранить хендлы сущностей, а не указатели!
+    private Dictionary<int, int> trackedEntities = new Dictionary<int, int>();
+
+    public void OnPluginStart()
+    {
+        HookEvent("player_spawn", Event_OnPlayerSpawn, HookMode.Post);
+    }
+
+    public void Event_OnPlayerSpawn(string name, nint @event, bool dontBroadcast)
+    {
+        int playerSlot = GetEventInt(@event, "userid", 0);
+
+        // Получить хендл сущности (безопасно для долгосрочного хранения)
+        int entityHandle = PlayerSlotToEntHandle(playerSlot);
+
+        // Хранить хендл вместо указателя
+        trackedEntities[playerSlot] = entityHandle;
+
+        PrintToServer($"Tracking player {playerSlot} with handle {entityHandle}\n");
+    }
+
+    public void CheckTrackedEntities()
+    {
+        foreach (var kvp in trackedEntities.ToList())
+        {
+            int playerSlot = kvp.Key;
+            int entityHandle = kvp.Value;
+
+            // Проверить хендл перед использованием
+            if (IsValidEntHandle(entityHandle))
+            {
+                nint entity = EntHandleToEntPointer(entityHandle);
+                PrintToServer($"Player {playerSlot} is still valid\n");
+            }
+            else
+            {
+                // Сущность больше не существует, удалить из отслеживания
+                trackedEntities.Remove(playerSlot);
+                PrintToServer($"Player {playerSlot} disconnected, stopped tracking\n");
+            }
+        }
+    }
+}
+[code]::
+::
+
+[size=16][b]Пример 2: Работа со слотами игроков[/b][/size]
+
+[/code]csharp
+using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class PlayerManager : Plugin
+{
+    public void OnPluginStart()
+    {
+        AddConsoleCommand("player_info", "Show player information",
+            ConVarFlag.LinkedConcommand | ConVarFlag.Release,
+            Command_PlayerInfo, HookMode.Post);
+    }
+
+    public ResultType Command_PlayerInfo(int caller, CommandCallingContext context, string[] arguments)
+    {
+        if (caller == -1) return ResultType.Handled;
+
+        // caller это playerSlot (0-63)
+        PrintToServer($"Player Slot: {caller}\n");
+
+        // ✅ ПРЕДПОЧТИТЕЛЬНО: Сначала получить хендл для проверки и использования
+        int entityHandle = PlayerSlotToEntHandle(caller);
+        if (!IsValidEntHandle(entityHandle))
+        {
+            PrintToServer("Invalid player entity\n");
+            return ResultType.Handled;
+        }
+
+        // Получить другие представления
+        int entityIndex = EntHandleToEntIndex(entityHandle);
+        nint clientPtr = PlayerSlotToClientPtr(caller);
+        nint entity = EntHandleToEntPointer(entityHandle);
+
+        PrintToServer($"Entity Index: {entityIndex}\n");
+        PrintToServer($"Entity Handle: {entityHandle}\n");
+        PrintToServer($"Entity Ptr: 0x{entity:X}\n");
+        PrintToServer($"Client Ptr: 0x{clientPtr:X}\n");
+
+        // Получить свойства сущности используя хендл (SDK требует хендлы!)
+        string classname = GetEntityClassname(entityHandle);
+        PrintToServer($"Classname: {classname}\n");
+
+        return ResultType.Handled;
+    }
+}
+[code]::
+::
+
+[size=16][b]Пример 3: Безопасная итерация по сущностям[/b][/size]
+
+[/code]csharp
+using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class EntityManager : Plugin
+{
+    public void OnPluginStart()
+    {
+        AddConsoleCommand("list_entities", "List all entities",
+            ConVarFlag.LinkedConcommand | ConVarFlag.Release,
+            Command_ListEntities, HookMode.Post);
+    }
+
+    public ResultType Command_ListEntities(int caller, CommandCallingContext context, string[] arguments)
+    {
+        if (arguments.Length < 2)
+        {
+            PrintToServer("Usage: list_entities <classname>\n");
+            return ResultType.Handled;
+        }
+
+        string targetClass = arguments[1];
+        int count = 0;
+
+        // Итерация по всем сущностям
+        for (int i = 0; i < 2048; i++)
+        {
+            // Конвертировать индекс в хендл
+            int handle = EntIndexToEntHandle(i);
+
+            // Проверить перед использованием
+            if (!IsValidEntHandle(handle))
+                continue;
+
+            string classname = GetEntityClassname(handle);
+            if (classname.Contains(targetClass))
+            {
+                PrintToServer($"Found {classname} at index {i}, handle {handle}\n");
+                count++;
+            }
+        }
+
+        PrintToServer($"Found {count} entities matching '{targetClass}'\n");
+        return ResultType.Handled;
+    }
+}
+[code]::
+::
+
+[size=16][b]Пример 4: Паттерн валидации хендла[/b][/size]
+
+[/code]csharp
+using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class SafeEntityAccess : Plugin
+{
+    private int storedEntityHandle = -1;
+
+    public void StoreEntity(int playerSlot)
+    {
+        // Конвертировать слот игрока в хендл для хранения
+        storedEntityHandle = PlayerSlotToEntHandle(playerSlot);
+        PrintToServer($"Stored entity handle: {storedEntityHandle}\n");
+    }
+
+    public void AccessStoredEntity()
+    {
+        // Проверить хендл (быстро и эффективно)
+        if (!IsValidEntHandle(storedEntityHandle))
+        {
+            PrintToServer("Stored entity is no longer valid\n");
+            storedEntityHandle = -1;
+            return;
+        }
+
+        // Не нужна проверка IsValidEntPointer - проверки хендла достаточно!
+        // Использование IsValidEntPointer здесь было бы дорогостоящим и избыточным
+
+        // Использовать хендл напрямую с функциями SDK
+        string classname = GetEntityClassname(storedEntityHandle);
+        int health = GetEntityHealth(storedEntityHandle);
+
+        PrintToServer($"Entity {classname} has {health} health\n");
+    }
+
+    public void OnTick()
+    {
+        // Проверять сохраненную сущность каждый тик
+        AccessStoredEntity();
+    }
+}
+[code]::
+::
+
+[size=16][b]Пример 5: Конвертация между всеми типами[/b][/size]
+
+[/code]csharp
+using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class ConversionDemo : Plugin
+{
+    public void DemonstrateConversions(int playerSlot)
+    {
+        PrintToServer("=== Демонстрация конвертации сущностей ===\n");
+
+        // Начальная точка: слот игрока
+        PrintToServer($"Player Slot: {playerSlot}\n");
+
+        // 1. Слот игрока в хендл сущности (предпочтительно - проверить один раз!)
+        int entityHandle = PlayerSlotToEntHandle(playerSlot);
+        if (!IsValidEntHandle(entityHandle))
+        {
+            PrintToServer("Invalid entity\n");
+            return;
+        }
+
+        // 2. Получить другие представления из хендла
+        int entityIndex = EntHandleToEntIndex(entityHandle);
+        PrintToServer($"Entity Index: {entityIndex}\n");
+        PrintToServer($"Entity Handle: {entityHandle}\n");
+
+        // 3. Получить указатель из проверенного хендла (не нужно проверять указатель!)
+        nint entity = EntHandleToEntPointer(entityHandle);
+        PrintToServer($"Entity Pointer: 0x{entity:X}\n");
+
+        // 4. Слот игрока в указатель клиента
+        nint clientPtr = PlayerSlotToClientPtr(playerSlot);
+        PrintToServer($"Client Pointer: 0x{clientPtr:X}\n");
+
+        // 5. Слот игрока в индекс клиента
+        int clientIndex = PlayerSlotToClientIndex(playerSlot);
+        PrintToServer($"Client Index: {clientIndex}\n");
+
+        PrintToServer("\n=== Обратные конвертации ===\n");
+
+        // 6. Индекс сущности обратно в хендл
+        int handleFromIndex = EntIndexToEntHandle(entityIndex);
+        PrintToServer($"Index→Handle: {handleFromIndex}\n");
+
+        // 7. Хендл обратно в указатель
+        nint entityFromHandle = EntHandleToEntPointer(handleFromIndex);
+        PrintToServer($"Handle→Pointer: 0x{entityFromHandle:X}\n");
+
+        // 8. Указатель клиента обратно в слот игрока
+        int slotFromClient = ClientPtrToPlayerSlot(clientPtr);
+        PrintToServer($"ClientPtr→Slot: {slotFromClient}\n");
+
+        // 9. Индекс клиента обратно в слот игрока
+        int slotFromIndex = ClientIndexToPlayerSlot(clientIndex);
+        PrintToServer($"ClientIndex→Slot: {slotFromIndex}\n");
+
+        // Проверить, что все конвертации ведут обратно к тем же значениям
+        bool allMatch = (handleFromIndex == entityHandle) &&
+                       (entityFromHandle == entity) &&
+                       (slotFromClient == playerSlot) &&
+                       (slotFromIndex == playerSlot);
+
+        PrintToServer($"\nAll conversions match: {allMatch}\n");
+    }
+}
+[code]::
+::
+
+[size=20][b]Распространенные паттерны[/b][/size]
+
+[size=16][b]Паттерн 1: Хранить хендлы, использовать указатели[/b][/size]
+[/code]csharp
+// ✅ ХОРОШО: Хранить хендлы
+private int playerEntityHandle;
+
+public void SavePlayer(int playerSlot)
+{
+    playerEntityHandle = PlayerSlotToEntHandle(playerSlot);
+}
+
+public void UsePlayer()
+{
+    if (IsValidEntHandle(playerEntityHandle))
+    {
+        nint entity = EntHandleToEntPointer(playerEntityHandle);
+        // Использовать указатель на сущность немедленно
+    }
+}
+
+// ❌ ПЛОХО: Хранить указатели
+private nint playerEntity; // Может стать невалидным!
+
+public void SavePlayer(int playerSlot)
+{
+    playerEntity = PlayerSlotToEntPointer(playerSlot);
+    // Указатель может стать невалидным, если сущность удалена
+}
+[code]
+[size=16][b]Паттерн 2: Проверять перед использованием[/b][/size]
+[/code]csharp
+// ✅ ХОРОШО: Проверить хендл один раз
+int entityHandle = PlayerSlotToEntHandle(playerSlot);
+if (IsValidEntHandle(entityHandle))
+{
+    // Не нужно проверять указатель - проверки хендла достаточно
+    nint entity = EntHandleToEntPointer(entityHandle);
+    ProcessEntity(entity);
+}
+
+// ❌ ПЛОХО: Предполагать валидность
+int entityHandle = PlayerSlotToEntHandle(playerSlot);
+nint entity = EntHandleToEntPointer(entityHandle);
+ProcessEntity(entity); // Может крашнуться!
+
+// ⚠️ ИЗБЫТОЧНО: Двойная проверка
+int entityHandle = PlayerSlotToEntHandle(playerSlot);
+if (IsValidEntHandle(entityHandle))
+{
+    nint entity = EntHandleToEntPointer(entityHandle);
+    if (IsValidEntPointer(entity))  // Дорого и не нужно!
+    {
+        ProcessEntity(entity);
+    }
+}
+[code]
+[size=16][b]Паттерн 3: Использовать слоты игроков для игроков[/b][/size]
+[/code]csharp
+// ✅ ХОРОШО: Использовать слоты игроков для операций с игроками
+public void KickPlayer(int playerSlot)
+{
+    if (playerSlot < 0 || playerSlot >= 64)
+        return;
+
+    int handle = PlayerSlotToEntHandle(playerSlot);
+    if (IsValidEntHandle(handle))
+    {
+        // Кикнуть игрока используя знакомую концепцию playerSlot
+        ServerCommand($"kickid {playerSlot}");
+    }
+}
+
+// ✅ ТАКЖЕ ХОРОШО: Использовать хендлы при хранении ссылок
+private Dictionary<int, int> playerHandles = new Dictionary<int, int>();
+
+public void TrackPlayer(int playerSlot)
+{
+    playerHandles[playerSlot] = PlayerSlotToEntHandle(playerSlot);
+}
+[code]
+[size=20][b]Соображения производительности[/b][/size]
+
+[quote][b]Info:[/b] [b]Критично[/b]: [font=monospace]IsValidEntPointer()[/font] выполняет [b]полный поиск в системе сущностей[/b] и значительно дороже, чем [font=monospace]IsValidEntHandle()[/font]. Предпочитайте проверку хендла в критичном к производительности коде![/quote]
+
+[list=1]
+[*][b]Проверка указателя (дорого)[/b]: [font=monospace]IsValidEntPointer()[/font] делает полный поиск в системе сущностей. Избегайте в циклах или частых проверках.
+[/list]
+
+[list=1]
+[*][b]Проверка хендла (быстро)[/b]: [font=monospace]IsValidEntHandle()[/font] легковесна и эффективна. Предпочитайте это для проверки.
+[/list]
+
+[list=1]
+[*][b]Накладные расходы на конвертацию[/b]: Конвертация между типами имеет минимальные накладные расходы, но избегайте ненужных конвертаций в плотных циклах.
+[/list]
+
+[list=1]
+[*][b]Доступ через указатель[/b]: Прямой доступ через указатель самый быстрый, но безопасен только в пределах одного тика.
+[/list]
+
+[list=1]
+[*][b]Хранение хендлов[/b]: Хендлы - это просто целые числа (4 байта), очень эффективно для хранения.
+[/list]
+
+[size=16][b]Сравнение производительности[/b][/size]
+[/code]csharp
+// ⚠️ МЕДЛЕННО: Проверка 100 сущностей с IsValidEntPointer
+for (int i = 0; i < 100; i++)
+{
+    nint entity = EntIndexToEntPointer(i);
+    if (IsValidEntPointer(entity))  // Дорого!
+    {
+        ProcessEntity(entity);
+    }
+}
+
+// ✅ БЫСТРО: Проверка 100 сущностей с IsValidEntHandle
+for (int i = 0; i < 100; i++)
+{
+    int handle = EntIndexToEntHandle(i);
+    if (IsValidEntHandle(handle))  // Намного быстрее!
+    {
+        nint entity = EntHandleToEntPointer(handle);
+        ProcessEntity(entity);
+    }
+}
+[code]
+[size=20][b]Лучшие практики[/b][/size]
+
+[list=1]
+[*]✅ [b]Хранить хендлы[/b] для долгосрочных ссылок на сущности
+[*]✅ [b]Использовать указатели[/b] для немедленных операций в пределах одного тика
+[*]✅ [b]Проверять с помощью [font=monospace]IsValidEntHandle()[/font][/b] - это быстро и эффективно
+[*]✅ [b]Использовать слоты игроков[/b] для функциональности, специфичной для игрока (знакомо CS-сообществу)
+[*]✅ [b]Конвертировать указатель в хендл[/b] перед проверкой, если у вас есть только указатель
+[*]❌ [b]Не использовать [font=monospace]IsValidEntPointer()[/font][/b] в циклах или критичном к производительности коде - это дорого!
+[*]❌ [b]Не хранить указатели[/b] между тиками
+[*]❌ [b]Не предполагать, что хендлы всегда валидны[/b] - сущности могут быть удалены
+[*]❌ [b]Не делать двойную проверку[/b] и хендла, и указателя - проверки хендла достаточно
+[/list]
+
+[size=20][b]Распространенные невалидные значения хендлов[/b][/size]
+[/code]csharp
+// Эти константы указывают на невалидные/специальные хендлы:
+const int INVALID_EHANDLE_INDEX = -1;
+const int INVALID_ENTITY_INDEX = -1;
+const int INVALID_PLAYER_SLOT = -1;
+
+// Всегда проверяйте эти значения:
+if (entityHandle == INVALID_EHANDLE_INDEX)
+{
+    PrintToServer("Invalid handle\n");
+    return;
+}
+
+if (playerSlot < 0 || playerSlot >= 64)
+{
+    PrintToServer("Invalid player slot\n");
+    return;
+}
+[font=monospace]`[/font]
+
+[size=20][b]Устранение неполадок[/b][/size]
+
+[size=16][b]Хендл становится невалидным[/b][/size]
+[b]Проблема[/b]: Хендл был валидным, теперь возвращает false для [font=monospace]IsValidEntHandle()[/font]
+[b]Причина[/b]: Сущность была удалена из игры
+[b]Решение[/b]: Всегда проверяйте перед использованием, корректно обрабатывайте невалидный случай
+
+[size=16][b]Указатель становится невалидным между тиками[/b][/size]
+[b]Проблема[/b]: Указатель работал в прошлом тике, крашится в этом тике
+[b]Причина[/b]: Сущность переместилась в памяти или была удалена
+[b]Решение[/b]: Не хранить указатели, вместо этого использовать хендлы
+
+[size=16][b]Слот игрока вне диапазона[/b][/size]
+[b]Проблема[/b]: Слот игрока отрицательный или > 63
+[b]Причина[/b]: Сущность не является игроком, или игрок отключился
+[b]Решение[/b]: Проверять диапазон слота игрока перед использованием
+
+[size=16][b]Хендл в указатель возвращает Null[/b][/size]
+[b]Проблема[/b]: [font=monospace]EntHandleToEntPointer()[/font] возвращает null
+[b]Причина[/b]: Хендл невалиден или сущность была удалена
+[b]Решение[/b]: Сначала проверить с помощью [font=monospace]IsValidEntHandle()[/font]
+
+[size=20][b]Резюме[/b][/size]
+
+Система хендлов фундаментальна для безопасного моддинга Source 2:
+
+[list]
+[*][b]Хендлы[/b] обеспечивают безопасность и отслеживание валидности
+[*][b]Указатели[/b] обеспечивают производительность для немедленного использования
+[*][b]Индексы[/b] обеспечивают простую идентификацию
+[*][b]Слоты игроков[/b] обеспечивают знакомые операции, специфичные для игрока
+[/list]
+
+Используйте функции конвертации для перехода между представлениями по мере необходимости, всегда проверяйте перед использованием и предпочитайте хендлы для любого долгосрочного хранения.
+
+[quote][b]Info:[/b] [b]Запомните[/b]: Большая часть функциональности S2SDK (схемы, методы сущностей, операции с клиентами) требует хендлы. Освойте систему хендлов, чтобы писать безопасные плагины без крашей![/quote]

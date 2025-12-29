@@ -1,0 +1,332 @@
+
+[size=20][b]Обзор[/b][/size]
+
+События — это информационные уведомления, передаваемые между объектами на сервере. Многие из них также передаются с сервера клиенту. Они определены в .res файлах в папке hl2/resource и папках resource конкретных модов. Для базового списка см. [url=https://cs2.poggu.me/dumped-data/game-events/]Source2 Game Events[/url].
+
+Важно отметить несколько концепций о событиях:
+
+[list]
+[*]Они почти всегда информационные. То есть блокирование player_death не остановит смерть игрока. Это может заблокировать сообщение в HUD или консоли или что-то еще незначительное.
+[*]Они почти всегда используют userids вместо слотов клиентов.
+[*]То, что событие находится в файле ресурсов, не означает, что оно когда-либо вызывается или работает так, как вы ожидаете. Моды печально известны тем, что неправильно документируют функциональность своих событий.
+[/list]
+
+[quote][b]Info:[/b] [b]Новое[/b]: Класс [font=monospace]EventInfo[/font] предоставляет более чистый способ работы с игровыми событиями, с автоматическим управлением ресурсами и типизированными методами.[/quote]
+
+[size=20][b]Быстрый пример: Событие смерти игрока[/b][/size]
+
+[spoiler=С классами (рекомендуется)]
+[code=csharp]  public void RegisterEvents()
+  {
+      HookEvent("player_death", Event_PlayerDeath);
+  }
+
+  public static void Event_PlayerDeath(string name, nint @event, bool dontBroadcast)
+  {
+      EventInfo event = new EventInfo(@event);
+  
+      // Используйте типизированные методы на экземпляре EventInfo
+      int victim_id = event.GetInt("userid");
+      int attacker_id = event.GetInt("attacker");
+
+      int victim = victim_id + 1;
+      int attacker = attacker_id + 1;
+
+      /[i] CODE [/i]/
+  }
+  [font=monospace]`[/font]
+[/spoiler]
+
+[spoiler=Без классов][/code]csharp
+  public void RegisterEvents()
+  {
+      HookEvent("player_death", Event_PlayerDeath);
+  }
+
+  public static void Event_PlayerDeath(string name, nint event, bool dontBroadcast)
+  {
+      // Используйте функции с явным дескриптором события
+      int victim_id = GetEventInt(event, "userid");
+      int attacker_id = GetEventInt(event, "attacker");
+
+      int victim = victim_id + 1;
+      int attacker = attacker_id + 1;
+
+      /[i] CODE [/i]/
+  }
+  [code][/spoiler]
+[size=20][b]Добавление слушателя событий[/b][/size]
+
+Вы можете привязать слушатели событий в [font=monospace]OnPluginStart[/font] (или где угодно).
+
+[spoiler=c#][/code]csharp
+  using Plugify;
+  using static s2sdk.s2sdk;
+
+  public unsafe class Sample : Plugin
+  {
+      public void OnPluginStart()
+      {
+          HookEvent("player_death", (string name, nint event, bool dontBroadcast) =>
+          {
+              int userid = GetEventInt(event, "userid");
+              PrintToServer("event called.\n");
+              return ResultType.Continue;
+          }, HookMode.Post);
+      }
+  }
+  [code][/spoiler]
+
+[spoiler=c++][/code]cpp
+  #include <plg/plugin.hpp>
+  #include "s2sdk.hpp"
+
+  using namespace s2sdk;
+
+  class Sample : public plg::IPluginEntry {
+  public:
+      void OnPluginStart() override {
+          HookEvent("player_death", [](const plg::string& name, void* event, bool dontBroadcast) -> ResultType {
+                  int userid = GetEventInt(event, "userid");
+                  PrintToServer("event called.\n");
+                  return ResultType.Continue;
+              }, HookMode::Post);
+      }
+  }
+  [code][/spoiler]
+
+[spoiler=python][/code]python
+  from plugify.plugin import Plugin
+  from plugify.pps import s2sdk as s2
+
+  class Sample(Plugin):
+    def plugin_start(self):
+      s2.HookEvent("player_death", lambda name, event, dontBroadcast: (
+          ResultType.Continue
+          after (
+            userid := s2.GetEventInt(event, "userid"),
+                   s2.PrintToServer("event called.\n")
+            )[1]
+      ), s2.HookMode.Post)
+  [code][/spoiler]
+
+[spoiler=go][/code]go
+  package main
+
+  import (
+      "fmt"
+      "s2sdk"
+      "github.com/untrustedmodders/go-plugify"
+  )
+
+  func init() {
+      plugify.OnPluginStart(func() {
+          s2sdk.HookEvent("player_death", func(name string, event uintptr, dontBroadcast bool) {
+                  userid := s2sdk.GetEventInt(event, "userid");
+                  s2sdk.PrintToServer("event called.\n");
+                  return s2sdk.ResultType.Continue;
+              }, s2sdk.HookMode.Post)
+      })
+  }
+  [code][/spoiler]
+
+[spoiler=js][/code]js
+  import { Plugin } from 'plugify';
+  import { s2 } from ':s2sdk';
+
+  export class Sample extends Plugin {
+      pluginStart() {
+          s2.HookEvent("player_death", (name, event, dontBroadcast) => {
+                  const userid = s2.GetEventInt(event, "userid");
+                  s2.PrintToServer("event called.\n");
+                  return s2.ResultType.Continue;
+              }, s2.HookMode.Post);
+      }
+  }
+  [code][/spoiler]
+
+[spoiler=lua][/code]lua
+  local plugify = require 'plugify'
+  local Plugin = plugify.Plugin
+  local s2 = require 's2sdk'
+
+  local Sample = {}
+  setmetatable(Sample, { __index = Plugin })
+
+  function Sample:plugin_start()
+      s2:HookEvent("player_death", function(name, event, dontBroadcast)
+              local userid = s2:GetEventInt(event, "userid");
+              s2:PrintToServer("event called.\n");
+              return s2:ResultType.Continue;
+          end, s2.HookMode.Post)
+  end
+
+  local M = {}
+  M.Sample = Sample
+  return M
+  [code][/spoiler]
+[size=20][b]Доступ к параметрам событий[/b][/size]
+
+[spoiler=С классами (рекомендуется)]
+Доступ к параметрам событий с использованием типизированных методов на экземпляре EventInfo:
+  [font=monospace]`[/font]csharp
+  // Чтение параметров событий
+  int userid = event.GetInt("userid");
+  float damage = event.GetFloat("damage");
+  string weaponName = event.GetString("weapon");
+  bool headshot = event.GetBool("headshot");
+
+  // Получение ссылок на сущности
+  int playerController = event.GetPlayerController("userid");
+  int playerPawn = event.GetPlayerPawn("userid");
+  int entity = event.GetEntity("entityid");
+  [font=monospace]`[/font]
+
+  Установка параметров событий столь же проста:
+  [font=monospace]`[/font]csharp
+  // Установка параметров событий
+  event.SetInt("userid", 123);
+  event.SetFloat("damage", 50.0f);
+  event.SetString("weapon", "ak47");
+  event.SetBool("headshot", true);
+
+  // Установка ссылок на сущности
+  event.SetPlayerController("userid", controllerHandle);
+  event.SetEntity("entityid", entityHandle);
+  [font=monospace]`[/font]
+[/spoiler]
+
+[spoiler=Без классов]
+Доступ к параметрам событий с использованием явных функций с дескриптором события:
+  [font=monospace]`[/font]csharp
+  // Чтение параметров событий
+  int userid = GetEventInt(event, "userid");
+  float damage = GetEventFloat(event, "damage");
+  string weaponName = GetEventString(event, "weapon");
+  bool headshot = GetEventBool(event, "headshot");
+
+  // Получение ссылок на сущности
+  int playerController = GetEventPlayerController(event, "userid");
+  int playerPawn = GetEventPlayerPawn(event, "userid");
+  int entity = GetEventEntity(event, "entityid");
+  [font=monospace]`[/font]
+
+  Установка параметров событий требует явных вызовов функций:
+  [font=monospace]`[/font]csharp
+  // Установка параметров событий
+  SetEventInt(event, "userid", 123);
+  SetEventFloat(event, "damage", 50.0f);
+  SetEventString(event, "weapon", "ak47");
+  SetEventBool(event, "headshot", true);
+
+  // Установка ссылок на сущности
+  SetEventPlayerController(event, "userid", controllerHandle);
+  SetEventEntity(event, "entityid", entityHandle);
+  [font=monospace]`[/font]
+[/spoiler]
+[size=20][b]Создание и запуск событий[/b][/size]
+
+[spoiler=С классами (рекомендуется)]
+Создавайте и запускайте пользовательские события используя класс EventInfo:
+  [font=monospace]`[/font]csharp
+  // Создание нового события
+  using (var customEvent = new EventInfo("player_hurt"))
+  {
+      // Установка параметров события
+      customEvent.SetInt("userid", 1);
+      customEvent.SetInt("attacker", 2);
+      customEvent.SetInt("health", 50);
+      customEvent.SetString("weapon", "ak47");
+
+      // Запуск для всех игроков
+      customEvent.Fire();
+
+      // Или запуск для конкретного игрока
+      customEvent.FireToClient(playerSlot);
+  } // Автоматическая очистка
+  [font=monospace]`[/font]
+[/spoiler]
+
+[spoiler=Без классов]
+Создавайте и запускайте пользовательские события используя явные функции:
+  [font=monospace]`[/font]csharp
+  // Создание нового события
+  nint customEvent = CreateEvent("player_hurt");
+
+  // Установка параметров события
+  SetEventInt(customEvent, "userid", 1);
+  SetEventInt(customEvent, "attacker", 2);
+  SetEventInt(customEvent, "health", 50);
+  SetEventString(customEvent, "weapon", "ak47");
+
+  // Запуск для всех игроков
+  FireEvent(customEvent);
+
+  // Или запуск для конкретного игрока
+  FireEventToClient(customEvent, playerSlot);
+
+  // Примечание: Событие автоматически освобождается после запуска
+  [font=monospace]`[/font]
+[/spoiler]
+[size=20][b]Предотвращение трансляции[/b][/size]
+
+[spoiler=С классами (рекомендуется)]
+Предотвращение трансляции события клиентам:
+  [font=monospace]`[/font]csharp
+  event.SetBroadcast(false);
+  [font=monospace]`[/font]
+[/spoiler]
+
+[spoiler=Без классов]
+Предотвращение трансляции события клиентам:
+  [font=monospace]`[/font]csharp
+  SetEventBroadcast(event, false);
+  [font=monospace]`[/font]
+[/spoiler]
+[size=20][b]Отмена события[/b][/size]
+
+В хуке pre-события вы можете предотвратить передачу события другим плагинам, вернув [font=monospace]ResultType.Handled[/font] или [font=monospace]ResultType.Stop[/font].
+
+[spoiler=С классами (рекомендуется)][/code]csharp
+  public void OnPluginStart()
+  {
+      HookEvent("player_death", OnPlayerDeathPre, HookMode.Pre);
+  }
+
+  private static ResultType OnPlayerDeathPre(string name, nint @event, bool dontBroadcast)
+  {
+      EventInfo event = new EventInfo(@event);
+      int victim = event.GetInt("userid");
+
+      // Отмена события смерти для игроков-администраторов
+      if (IsPlayerAdmin(victim))
+      {
+          PrintToServer("Prevented admin death event\n");
+          return ResultType.Handled;
+      }
+
+      return ResultType.Continue;
+  }
+  [code][/spoiler]
+
+[spoiler=Без классов][/code]csharp
+  public void OnPluginStart()
+  {
+      HookEvent("player_death", OnPlayerDeathPre, HookMode.Pre);
+  }
+
+  private static ResultType OnPlayerDeathPre(string name, nint event, bool dontBroadcast)
+  {
+      int victim = GetEventInt(event, "userid");
+
+      // Отмена события смерти для игроков-администраторов
+      if (IsPlayerAdmin(victim))
+      {
+          PrintToServer("Prevented admin death event\n");
+          return ResultType.Handled;
+      }
+
+      return ResultType.Continue;
+  }
+  [font=monospace]`[/font]
+[/spoiler]

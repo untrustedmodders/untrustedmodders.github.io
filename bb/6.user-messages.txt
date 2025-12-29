@@ -1,0 +1,1299 @@
+
+[size=20][b]Понимание User Messages[/b][/size]
+
+User messages - это основной метод отправки пользовательских данных с сервера клиентам в Source 2. Они используют [b]Protocol Buffers (protobuf)[/b] для сериализации, обеспечивая структурированный и эффективный способ передачи игровой информации.
+
+Типичные случаи использования включают:
+[list]
+[*]Отображение HUD-элементов и уведомлений
+[*]Воспроизведение звуков или визуальных эффектов на клиентах
+[*]Отправка пользовательской информации о состоянии игры
+[*]Создание чат-сообщений и подсказок
+[*]Запуск событий на стороне клиента
+[/list]
+
+User messages работают аналогично реализации SourceMod, где protobuf заменяет старую систему bitbuffer для лучшей типобезопасности и гибкости.
+
+[quote][b]Info:[/b] [b]Новое[/b]: Класс [font=monospace]UserMessage[/font] обеспечивает автоматическое управление ресурсами и более чистый синтаксис для работы с user messages. Он гарантирует правильную очистку и предоставляет интуитивные методы![/quote]
+
+[size=20][b]Поиск определений сообщений[/b][/size]
+
+Вы можете найти определения protobuf-сообщений здесь:
+[list]
+[*][b]CS:GO Protobufs[/b]: [url=https://github.com/SteamDatabase/Protobufs/tree/master/csgo]SteamDatabase/Protobufs[/url]
+[*]Эти [font=monospace].proto[/font] файлы определяют доступные сообщения и их поля
+[*]Часто используемые сообщения включают [font=monospace]TextMsg[/font], [font=monospace]HintText[/font], [font=monospace]ShowMenu[/font], [font=monospace]Fade[/font] и многие другие
+[/list]
+
+Каждое определение сообщения показывает имя сообщения, ID и доступные поля с их типами.
+
+[size=20][b]Перехват User Messages[/b][/size]
+
+Вы можете перехватывать user messages до того, как они будут отправлены клиентам:
+
+
+[code=csharp]using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class Sample : Plugin
+{
+    public void OnPluginStart()
+    {
+        // Найти ID сообщения по имени
+        short msgId = UserMessageFindMessageIdByName("TextMsg");
+
+        // Перехватить сообщение в режиме Post
+        HookUserMessage(msgId, OnTextMessage, HookMode.Post);
+    }
+
+    public void OnPluginEnd()
+    {
+        short msgId = UserMessageFindMessageIdByName("TextMsg");
+        UnhookUserMessage(msgId, OnTextMessage, HookMode.Post);
+    }
+
+    private static void OnTextMessage(nint userMessage)
+    {
+        // Прочитать данные сообщения
+        string text = PbReadString(userMessage, "text", 0);
+        PrintToServer($"TextMsg intercepted: {text}\n");
+    }
+}[/code]
+::
+::div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[code=cpp]#include <plugify/cpp_plugin.hpp>
+#include "s2sdk.hpp"
+
+using namespace s2sdk;
+
+class Sample : public plg::IPluginEntry {
+private:
+    static ResultType OnTextMessage(void* userMessage) {
+        plg::string text = PbReadString(userMessage, "text", 0);
+        PrintToServer(std::format("TextMsg intercepted: {}\n", text.c_str()).c_str());
+        return ResultType.Continue;
+    }
+
+public:
+    void OnPluginStart() override {
+        int16_t msgId = UserMessageFindMessageIdByName("TextMsg");
+        HookUserMessage(msgId, OnTextMessage, HookMode::Post);
+    }
+
+    void OnPluginEnd() override {
+        int16_t msgId = UserMessageFindMessageIdByName("TextMsg");
+        UnhookUserMessage(msgId, OnTextMessage, HookMode::Post);
+    }
+};[/code]
+::
+::div{label="python" icon="vscode-icons:file-type-python"}
+[code=python]from plugify.plugin import Plugin
+from plugify.pps import s2sdk as s2
+
+class Sample(Plugin):
+    def plugin_start(self):
+        msg_id = s2.UserMessageFindMessageIdByName("TextMsg")
+        s2.HookUserMessage(msg_id, self.on_text_message, s2.HookMode.Post)
+
+    def plugin_end(self):
+        msg_id = s2.UserMessageFindMessageIdByName("TextMsg")
+        s2.UnhookUserMessage(msg_id, self.on_text_message, s2.HookMode.Post)
+
+    def on_text_message(self, user_message):
+        text = s2.PbReadString(user_message, "text", 0)
+        s2.PrintToServer(f"TextMsg intercepted: {text}\n")[/code]
+::
+::div{label="go" icon="vscode-icons:file-type-go"}
+[code=go]package main
+
+import (
+    "fmt"
+    "s2sdk"
+    "github.com/untrustedmodders/go-plugify"
+)
+
+func onTextMessage(userMessage uintptr) {
+    text := s2sdk.PbReadString(userMessage, "text", 0)
+    s2sdk.PrintToServer(fmt.Sprintf("TextMsg intercepted: %s\n", text))
+    return s2sdk.ResultType.Continue;
+}
+
+func init() {
+    plugify.OnPluginStart(func() {
+        msgId := s2sdk.UserMessageFindMessageIdByName("TextMsg")
+        s2sdk.HookUserMessage(msgId, onTextMessage, s2sdk.HookMode.Post)
+    })
+
+    plugify.OnPluginEnd(func() {
+        msgId := s2sdk.UserMessageFindMessageIdByName("TextMsg")
+        s2sdk.UnhookUserMessage(msgId, onTextMessage, s2sdk.HookMode.Post)
+    })
+}[/code]
+::
+::div{label="js" icon="vscode-icons:file-type-js-official"}
+[code=js]import { Plugin } from 'plugify';
+import { s2 } from ':s2sdk';
+
+export class Sample extends Plugin {
+    pluginStart() {
+        const msgId = s2.UserMessageFindMessageIdByName("TextMsg");
+        s2.HookUserMessage(msgId, this.onTextMessage, s2.HookMode.Post);
+    }
+
+    pluginEnd() {
+        const msgId = s2.UserMessageFindMessageIdByName("TextMsg");
+        s2.UnhookUserMessage(msgId, this.onTextMessage, s2.HookMode.Post);
+    }
+
+    onTextMessage(userMessage) {
+        const text = s2.PbReadString(userMessage, "text", 0);
+        s2.PrintToServer([font=monospace]TextMsg intercepted: ${text}\n[/font]);
+        return s2.ResultType.Continue;
+    }
+}[/code]
+::
+::div{label="lua" icon="vscode-icons:file-type-lua"}
+[code=lua]local plugify = require 'plugify'
+local Plugin = plugify.Plugin
+local s2 = require 's2sdk'
+
+local Sample = {}
+setmetatable(Sample, { __index = Plugin })
+
+function Sample:on_text_message(user_message)
+    local text = s2:PbReadString(user_message, "text", 0)
+    s2:PrintToServer(string.format("TextMsg intercepted: %s\n", text))
+     return s2:ResultType.Continue
+end
+
+function Sample:plugin_start()
+    local msg_id = s2:UserMessageFindMessageIdByName("TextMsg")
+    s2:HookUserMessage(msg_id, function(msg) self:on_text_message(msg) end, s2.HookMode.Post)
+end
+
+function Sample:plugin_end()
+    local msg_id = s2:UserMessageFindMessageIdByName("TextMsg")
+    s2:UnhookUserMessage(msg_id, function(msg) self:on_text_message(msg) end, s2.HookMode.Post)
+end
+
+local M = {}
+M.Sample = Sample
+return M[/code]
+::
+::
+
+[size=20][b]Создание и отправка User Messages[/b][/size]
+
+[spoiler=С классами (Рекомендуется)]
+Создавайте user messages используя класс [font=monospace]UserMessage[/font] с автоматической очисткой:
+  [code=csharp]  // Создать из имени сообщения (наиболее распространенный способ)
+  using (var msg = new UserMessage("TextMsg"))
+  {
+      // Установить получателей
+      msg.AddAllPlayers();
+
+      // Установить поля сообщения
+      msg.SetString("text", "Hello from server!");
+      msg.SetInt32("msg_dst", 4);  // HUD_PRINTTALK
+
+      // Отправить сообщение
+      msg.Send();
+  } // Автоматически уничтожается
+
+  // Или создать из ID сообщения
+  short msgId = UserMessage.FindMessageIdByName("TextMsg");
+  using (var msg = new UserMessage(msgId))
+  {
+      // Настроить и отправить...
+  }
+  [font=monospace]`[/font]
+[/spoiler]
+
+[spoiler=Без классов]
+Создавайте user messages используя явные функции:
+  [font=monospace]`[/font]csharp
+  // Метод 1: Из имени сообщения (наиболее распространенный)
+  nint msg = UserMessageCreateFromName("TextMsg");
+
+  // Метод 2: Из ID сообщения
+  short msgId = UserMessageFindMessageIdByName("TextMsg");
+  nint msg = UserMessageCreateFromId(msgId);
+
+  // Метод 3: Из serializable (продвинутый)
+  nint msg = UserMessageCreateFromSerializable(msgSerializable, message, recipientMask);
+
+  // Установить получателей (выберите один подход)
+  UserMessageAddAllPlayers(msg);  // Все игроки
+  // ИЛИ
+  UserMessageAddRecipient(msg, playerSlot);  // Один игрок
+  // ИЛИ
+  UserMessageSetRecipientMask(msg, customMask);  // Пользовательская маска
+
+  // Установить поля сообщения
+  PbSetString(msg, "text", "Hello from server!");
+  PbSetInt32(msg, "msg_dst", 4);  // HUD_PRINTTALK
+
+  // Отправить сообщение
+  UserMessageSend(msg);
+
+  // Очистить (ВАЖНО!)
+  UserMessageDestroy(msg);
+  [font=monospace]`[/font]
+[/spoiler]
+[size=20][b]Чтение и запись типов данных[/b][/size]
+
+User messages поддерживают различные типы данных. Вы можете использовать либо методы класса [font=monospace]UserMessage[/font] (рекомендуется), либо функции [font=monospace]PbRead[i][/font] и [font=monospace]PbSet[/i][/font]:
+
+[size=16][b]Целые числа[/b][/size]
+
+[spoiler=С классами (Рекомендуется)][/code]csharp
+  using (var msg = new UserMessage("TextMsg"))
+  {
+      // Записать целые числа
+      msg.SetInt32("fieldName", 42);
+      msg.SetInt64("bigField", 1000000L);
+      msg.SetUInt32("unsignedField", 99u);
+
+      // Прочитать целые числа (в callback-перехватчиках)
+      int value = msg.GetInt32("fieldName");
+      long bigValue = msg.GetInt64("bigField");
+      uint unsigned = msg.GetUInt32("unsignedField");
+  }
+  [code][/spoiler]
+
+[spoiler=Без классов][/code]csharp
+  // Чтение
+  int value = PbReadInt32(msg, "fieldName", 0);
+  long bigValue = PbReadInt64(msg, "fieldName", 0);
+  uint unsigned = PbReadUInt32(msg, "fieldName", 0);
+
+  // Запись
+  PbSetInt32(msg, "fieldName", 42);
+  PbSetInt64(msg, "fieldName", 1000000L);
+  PbSetUInt32(msg, "fieldName", 99u);
+  [code][/spoiler]
+[size=16][b]Числа с плавающей точкой[/b][/size]
+
+[spoiler=С классами (Рекомендуется)][/code]csharp
+  using (var msg = new UserMessage("CustomMsg"))
+  {
+      // Записать значения с плавающей точкой
+      msg.SetFloat("speed", 1.5f);
+      msg.SetDouble("precision", 3.14159);
+
+      // Прочитать значения с плавающей точкой (в callback-перехватчиках)
+      float speed = msg.GetFloat("speed");
+      double precision = msg.GetDouble("precision");
+  }
+  [code][/spoiler]
+
+[spoiler=Без классов][/code]csharp
+  // Чтение
+  float speed = PbReadFloat(msg, "speed", 0);
+  double precision = PbReadDouble(msg, "value", 0);
+
+  // Запись
+  PbSetFloat(msg, "speed", 1.5f);
+  PbSetDouble(msg, "value", 3.14159);
+  [code][/spoiler]
+[size=16][b]Булевы значения[/b][/size]
+
+[spoiler=С классами (Рекомендуется)][/code]csharp
+  using (var msg = new UserMessage("ShowMenu"))
+  {
+      // Записать булево значение
+      msg.SetBool("needmore", true);
+      msg.SetBool("active", false);
+
+      // Прочитать булево значение (в callback-перехватчиках)
+      bool isActive = msg.GetBool("active");
+  }
+  [code][/spoiler]
+
+[spoiler=Без классов][/code]csharp
+  // Чтение
+  bool isActive = PbReadBool(msg, "active", 0);
+
+  // Запись
+  PbSetBool(msg, "active", true);
+  [code][/spoiler]
+[size=16][b]Строки[/b][/size]
+
+[spoiler=С классами (Рекомендуется)][/code]csharp
+  using (var msg = new UserMessage("TextMsg"))
+  {
+      // Записать строку
+      msg.SetString("text", "Custom message");
+      msg.SetString("player_name", "John Doe");
+
+      // Прочитать строку (в callback-перехватчиках)
+      string text = msg.GetString("text");
+  }
+  [code][/spoiler]
+
+[spoiler=Без классов][/code]csharp
+  // Чтение
+  string text = PbReadString(msg, "text", 0);
+
+  // Запись
+  PbSetString(msg, "text", "Custom message");
+  [code][/spoiler]
+[size=16][b]Векторы и углы[/b][/size]
+
+[spoiler=С классами (Рекомендуется)][/code]csharp
+  using System.Numerics;
+
+  using (var msg = new UserMessage("CustomPositionMsg"))
+  {
+      // Записать 3D векторы
+      msg.SetVector3("origin", new Vector3(100, 200, 300));
+      msg.SetQAngle("angles", new Vector3(0, 90, 0));
+
+      // Записать 2D вектор
+      msg.SetVector2("pos", new Vector2(50, 100));
+
+      // Прочитать векторы (в callback-перехватчиках)
+      Vector3 position = msg.GetVector3("origin");
+      Vector3 angles = msg.GetQAngle("angles");
+      Vector2 pos2d = msg.GetVector2("pos");
+  }
+  [code][/spoiler]
+
+[spoiler=Без классов][/code]csharp
+  using System.Numerics;
+
+  // Прочитать 3D вектор
+  Vector3 position = PbReadVector3(msg, "origin", 0);
+  Vector3 angles = PbReadQAngle(msg, "angles", 0);
+
+  // Записать 3D вектор
+  PbSetVector3(msg, "origin", new Vector3(100, 200, 300));
+  PbSetQAngle(msg, "angles", new Vector3(0, 90, 0));
+
+  // Прочитать 2D вектор
+  Vector2 pos2d = PbReadVector2(msg, "pos", 0);
+
+  // Записать 2D вектор
+  PbSetVector2(msg, "pos", new Vector2(50, 100));
+  [code][/spoiler]
+[size=16][b]Перечисления[/b][/size]
+
+[spoiler=С классами (Рекомендуется)][/code]csharp
+  using (var msg = new UserMessage("CustomMsg"))
+  {
+      // Записать значение enum
+      msg.SetEnum("type", 2);
+      msg.SetEnum("state", (int)GameState.Running);
+
+      // Прочитать значение enum (в callback-перехватчиках)
+      int enumValue = msg.GetEnum("type");
+      GameState state = (GameState)msg.GetEnum("state");
+  }
+  [code][/spoiler]
+
+[spoiler=Без классов][/code]csharp
+  // Прочитать значение enum
+  int enumValue = PbReadEnum(msg, "type", 0);
+
+  // Записать значение enum
+  PbSetEnum(msg, "type", 2);
+  [code][/spoiler]
+[size=16][b]Цвета[/b][/size]
+
+[spoiler=С классами (Рекомендуется)][/code]csharp
+  using (var msg = new UserMessage("Fade"))
+  {
+      // Записать цвет (упакованный RGBA)
+      msg.SetColor("clr", 0xFF0000FF);  // Красный с полной альфой
+
+      // Создать цвет из компонентов
+      int r = 255, g = 128, b = 0, a = 255;
+      int color = (r << 24) | (g << 16) | (b << 8) | a;
+      msg.SetColor("clr", color);
+
+      // Прочитать цвет (в callback-перехватчиках)
+      int packedColor = msg.GetColor("clr");
+
+      // Извлечь компоненты
+      int red = (packedColor >> 24) & 0xFF;
+      int green = (packedColor >> 16) & 0xFF;
+      int blue = (packedColor >> 8) & 0xFF;
+      int alpha = packedColor & 0xFF;
+  }
+  [code][/spoiler]
+
+[spoiler=Без классов][/code]csharp
+  // Прочитать цвет (упакованный RGBA)
+  int color = PbReadColor(msg, "color", 0);
+
+  // Записать цвет
+  PbSetColor(msg, "color", 0xFF0000FF);  // Красный с полной альфой
+  [code][/spoiler]
+[size=20][b]Работа с повторяющимися полями[/b][/size]
+
+Некоторые protobuf-поля являются массивами (repeated fields):
+
+[spoiler=С классами (Рекомендуется)][/code]csharp
+  using (var msg = new UserMessage("CustomMsg"))
+  {
+      // Добавить значения в повторяющееся поле
+      msg.AddInt32("items", 10);
+      msg.AddInt32("items", 20);
+      msg.AddInt32("items", 30);
+      msg.AddString("names", "Player1");
+      msg.AddString("names", "Player2");
+
+      // Получить количество элементов в повторяющемся поле
+      int count = msg.GetRepeatedFieldCount("items");
+      PrintToServer($"Total items: {count}\n");
+
+      // Прочитать повторяющиеся значения
+      for (int i = 0; i < count; i++)
+      {
+          int value = msg.GetInt32("items", i);
+          PrintToServer($"Item[{i}] = {value}\n");
+      }
+
+      // Установить значение по конкретному индексу в повторяющемся поле
+      msg.SetRepeatedInt32("items", 0, 999);  // Установить индекс 0 в 999
+
+      // Удалить значение из повторяющегося поля
+      msg.RemoveRepeatedFieldValue("items", 0);  // Удалить индекс 0
+  }
+  [code][/spoiler]
+
+[spoiler=Без классов][/code]csharp
+  // Получить количество элементов в повторяющемся поле
+  int count = UserMessageGetRepeatedFieldCount(msg, "items");
+
+  // Прочитать повторяющиеся значения
+  for (int i = 0; i < count; i++)
+  {
+      int value = PbReadInt32(msg, "items", i);  // Примечание: индекс - третий параметр
+      PrintToServer($"Item[{i}] = {value}\n");
+  }
+
+  // Добавить значения в повторяющееся поле
+  PbAddInt32(msg, "items", 10);
+  PbAddInt32(msg, "items", 20);
+  PbAddString(msg, "names", "Player1");
+
+  // Установить значение по конкретному индексу в повторяющемся поле
+  PbSetRepeatedInt32(msg, "items", 0, 999);  // Установить индекс 0 в 999
+
+  // Удалить значение из повторяющегося поля
+  UserMessageRemoveRepeatedFieldValue(msg, "items", 0);  // Удалить индекс 0
+  [code][/spoiler]
+[size=20][b]Работа с вложенными сообщениями[/b][/size]
+
+Некоторые сообщения содержат вложенные поля сообщений:
+
+[spoiler=С классами (Рекомендуется)][/code]csharp
+  using (var msg = new UserMessage("ComplexMsg"))
+  {
+      // Получить вложенное сообщение
+      var nestedMsg = msg.GetMessage("nested_field");
+      if (nestedMsg != null)
+      {
+          // Прочитать из вложенного сообщения
+          int value = nestedMsg.GetInt32("value", 0);
+          string name = nestedMsg.GetString("name", 0);
+          PrintToServer($"Nested: {name} = {value}\n");
+      }
+
+      // Получить повторяющееся вложенное сообщение
+      int count = msg.GetRepeatedFieldCount("repeated_nested");
+      for (int i = 0; i < count; i++)
+      {
+          var repeatedMsg = msg.GetRepeatedMessage("repeated_nested", i);
+          if (repeatedMsg != null)
+          {
+              string name = repeatedMsg.GetString("name", 0);
+              int score = repeatedMsg.GetInt32("score", 0);
+              PrintToServer($"Player {i}: {name} - {score}\n");
+          }
+      }
+
+      // Добавить вложенное сообщение в повторяющееся поле
+      var newMsg = new UserMessage("PlayerInfo");
+      newMsg.SetString("name", "NewPlayer");
+      newMsg.SetInt32("score", 100);
+      msg.AddMessage("repeated_nested", newMsg);
+  }
+  [code][/spoiler]
+
+[spoiler=Без классов][/code]csharp
+  // Получить вложенное сообщение
+  nint nestedMsg = IntPtr.Zero;
+  if (UserMessageGetMessage(msg, "nested_field", nestedMsg))
+  {
+      // Прочитать из вложенного сообщения
+      int value = PbReadInt32(nestedMsg, "value", 0);
+  }
+
+  // Получить повторяющееся вложенное сообщение
+  nint repeatedMsg = IntPtr.Zero;
+  if (UserMessageGetRepeatedMessage(msg, "repeated_nested", 0, repeatedMsg))
+  {
+      // Прочитать из повторяющегося вложенного сообщения
+      string name = PbReadString(repeatedMsg, "name", 0);
+  }
+
+  // Добавить вложенное сообщение в повторяющееся поле
+  nint newMsg = IntPtr.Zero;  // Создать соответствующим образом
+  UserMessageAddMessage(msg, "repeated_nested", newMsg);
+  [code][/spoiler]
+[size=20][b]Управление получателями[/b][/size]
+
+Контролируйте, кто получает сообщение:
+
+[spoiler=С классами (Рекомендуется)][/code]csharp
+  using (var msg = new UserMessage("TextMsg"))
+  {
+      // Отправить всем игрокам
+      msg.AddAllPlayers();
+
+      // ИЛИ отправить конкретному игроку
+      msg.AddRecipient(playerSlot);
+
+      // ИЛИ отправить нескольким конкретным игрокам
+      msg.AddRecipient(0);  // Слот игрока 0
+      msg.AddRecipient(3);  // Слот игрока 3
+      msg.AddRecipient(7);  // Слот игрока 7
+
+      // ИЛИ использовать маску получателей (продвинутый)
+      ulong mask = 0x1F;  // Бинарная маска для первых 5 игроков
+      msg.SetRecipientMask(mask);
+
+      // Получить текущую маску получателей
+      ulong currentMask = msg.GetRecipientMask();
+      PrintToServer($"Recipient mask: 0x{currentMask:X}\n");
+
+      // Настроить поля сообщения...
+      msg.SetString("text", "Hello!");
+
+      // Отправить
+      msg.Send();
+  }
+  [code][/spoiler]
+
+[spoiler=Без классов][/code]csharp
+  // Отправить всем игрокам
+  UserMessageAddAllPlayers(msg);
+
+  // Отправить конкретному игроку
+  UserMessageAddRecipient(msg, playerSlot);
+
+  // Отправить нескольким конкретным игрокам
+  UserMessageAddRecipient(msg, 0);  // Слот игрока 0
+  UserMessageAddRecipient(msg, 3);  // Слот игрока 3
+  UserMessageAddRecipient(msg, 7);  // Слот игрока 7
+
+  // Использовать маску получателей (продвинутый)
+  ulong mask = 0x1F;  // Бинарная маска для первых 5 игроков
+  UserMessageSetRecipientMask(msg, mask);
+
+  // Получить текущую маску получателей
+  ulong currentMask = UserMessageGetRecipientMask(msg);
+  [code][/spoiler]
+[size=20][b]Практические примеры[/b][/size]
+
+[size=16][b]Пример 1: Отправка чат-сообщения всем игрокам[/b][/size]
+
+[/code]csharp
+using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class ChatMessage : Plugin
+{
+    public void OnPluginStart()
+    {
+        AddConsoleCommand("say_all", "Send message to all players",
+        ConVarFlag.LinkedConcommand | ConVarFlag.Release,
+        Command_SayAll, HookMode.Post);
+    }
+
+    public ResultType Command_SayAll(int caller, int context, string[] arguments)
+    {
+        if (arguments.Length < 2)
+        {
+            PrintToServer("Usage: say_all <message>\n");
+            return ResultType.Handled;
+        }
+
+        string message = string.Join(" ", arguments, 1, arguments.Length - 1);
+        SendChatMessage(message);
+
+        return ResultType.Handled;
+    }
+
+    private void SendChatMessage(string text)
+    {
+        // Блок using обеспечивает автоматическую очистку
+        using (var msg = new UserMessage("TextMsg"))
+        {
+            // Добавить всех игроков в качестве получателей
+            msg.AddAllPlayers();
+
+            // Установить поля сообщения
+            msg.SetString("text", text);
+            msg.SetInt32("msg_dst", 4);  // HUD_PRINTTALK (область чата)
+
+            // Отправить
+            msg.Send();
+
+            PrintToServer($"Sent chat message: {text}\n");
+        } // Автоматически уничтожается здесь
+    }
+}
+[code]::
+::div{label="Без классов" icon="lucide:code"}[/code]csharp
+using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class ChatMessage : Plugin
+{
+    public void OnPluginStart()
+    {
+        AddConsoleCommand("say_all", "Send message to all players",
+        ConVarFlag.LinkedConcommand | ConVarFlag.Release,
+        Command_SayAll, HookMode.Post);
+    }
+
+    public ResultType Command_SayAll(int caller, int context, string[] arguments)
+    {
+        if (arguments.Length < 2)
+        {
+            PrintToServer("Usage: say_all <message>\n");
+            return ResultType.Handled;
+        }
+
+        string message = string.Join(" ", arguments, 1, arguments.Length - 1);
+        SendChatMessage(message);
+
+        return ResultType.Handled;
+    }
+
+    private void SendChatMessage(string text)
+    {
+        nint msg = UserMessageCreateFromName("TextMsg");
+
+        // Добавить всех игроков в качестве получателей
+        UserMessageAddAllPlayers(msg);
+
+        // Установить поля сообщения
+        PbSetString(msg, "text", text);
+        PbSetInt32(msg, "msg_dst", 4);  // HUD_PRINTTALK (область чата)
+
+        // Отправить и очистить
+        UserMessageSend(msg);
+        UserMessageDestroy(msg);  // Не забудьте это!
+
+        PrintToServer($"Sent chat message: {text}\n");
+    }
+}
+[code]::
+::
+
+[size=16][b]Пример 2: Отправка подсказки конкретному игроку[/b][/size]
+
+[/code]csharp
+using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class HintSystem : Plugin
+{
+    public void OnPluginStart()
+    {
+        AddConsoleCommand("hint", "Show hint text",
+        ConVarFlag.LinkedConcommand | ConVarFlag.Release,
+        Command_Hint, HookMode.Post);
+    }
+
+    public ResultType Command_Hint(int caller, int context, string[] arguments)
+    {
+        if (caller == -1) return ResultType.Handled;
+
+        if (arguments.Length < 2)
+        {
+            PrintToServer("Usage: hint <message>\n");
+            return ResultType.Handled;
+        }
+
+        string hintText = string.Join(" ", arguments, 1, arguments.Length - 1);
+        SendHintToPlayer(caller, hintText);
+
+        return ResultType.Handled;
+    }
+
+    private void SendHintToPlayer(int playerSlot, string text)
+    {
+        using (var msg = new UserMessage("HintText"))
+        {
+            // Отправить только этому игроку
+            msg.AddRecipient(playerSlot);
+
+            // Установить текст подсказки
+            msg.SetString("text", text);
+
+            // Отправить
+            msg.Send();
+        } // Автоматически уничтожается
+    }
+}
+[code]::
+::div{label="Без классов" icon="lucide:code"}[/code]csharp
+using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class HintSystem : Plugin
+{
+    public void OnPluginStart()
+    {
+        AddConsoleCommand("hint", "Show hint text",
+        ConVarFlag.LinkedConcommand | ConVarFlag.Release,
+        Command_Hint, HookMode.Post);
+    }
+
+    public ResultType Command_Hint(int caller, int context, string[] arguments)
+    {
+        if (caller == -1) return ResultType.Handled;
+
+        if (arguments.Length < 2)
+        {
+            PrintToServer("Usage: hint <message>\n");
+            return ResultType.Handled;
+        }
+
+        string hintText = string.Join(" ", arguments, 1, arguments.Length - 1);
+        SendHintToPlayer(caller, hintText);
+
+        return ResultType.Handled;
+    }
+
+    private void SendHintToPlayer(int playerSlot, string text)
+    {
+        nint msg = UserMessageCreateFromName("HintText");
+
+        // Отправить только этому игроку
+        UserMessageAddRecipient(msg, playerSlot);
+
+        // Установить текст подсказки
+        PbSetString(msg, "text", text);
+
+        // Отправить и очистить
+        UserMessageSend(msg);
+        UserMessageDestroy(msg);
+    }
+}
+[code]::
+::
+
+[size=16][b]Пример 3: Эффект затемнения экрана[/b][/size]
+
+[/code]csharp
+using System.Numerics;
+using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class FadeEffect : Plugin
+{
+    public void OnPluginStart()
+    {
+        AddConsoleCommand("fade", "Apply screen fade effect",
+        ConVarFlag.LinkedConcommand | ConVarFlag.Release,
+        Command_Fade, HookMode.Post);
+    }
+
+    public ResultType Command_Fade(int caller, int context, string[] arguments)
+    {
+        if (caller == -1) return ResultType.Handled;
+
+        // Затемнение в красный
+        FadeScreen(caller, 2000, 1000, 255, 0, 0, 128);
+
+        return ResultType.Handled;
+    }
+
+    private void FadeScreen(int playerSlot, int duration, int holdTime,
+                           int r, int g, int b, int alpha)
+    {
+        using (var msg = new UserMessage("Fade"))
+        {
+            // Отправить конкретному игроку
+            msg.AddRecipient(playerSlot);
+
+            // Установить параметры затемнения
+            msg.SetInt32("duration", duration);  // Длительность затемнения в мс
+            msg.SetInt32("hold_time", holdTime); // Время удержания в мс
+            msg.SetInt32("flags", 0x0001);       // FFADE_IN
+
+            // Установить цвет RGBA
+            int colorPacked = (r << 24) | (g << 16) | (b << 8) | alpha;
+            msg.SetColor("clr", colorPacked);
+
+            // Отправить
+            msg.Send();
+
+            PrintToServer("Screen fade applied\n");
+        } // Автоматически уничтожается
+    }
+}
+[code]::
+::div{label="Без классов" icon="lucide:code"}[/code]csharp
+using System.Numerics;
+using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class FadeEffect : Plugin
+{
+    public void OnPluginStart()
+    {
+        AddConsoleCommand("fade", "Apply screen fade effect",
+        ConVarFlag.LinkedConcommand | ConVarFlag.Release,
+        Command_Fade, HookMode.Post);
+    }
+
+    public ResultType Command_Fade(int caller, int context, string[] arguments)
+    {
+        if (caller == -1) return ResultType.Handled;
+
+        // Затемнение в красный
+        FadeScreen(caller, 2000, 1000, 255, 0, 0, 128);
+
+        return ResultType.Handled;
+    }
+
+    private void FadeScreen(int playerSlot, int duration, int holdTime,
+                           int r, int g, int b, int alpha)
+    {
+        nint msg = UserMessageCreateFromName("Fade");
+
+        // Отправить конкретному игроку
+        UserMessageAddRecipient(msg, playerSlot);
+
+        // Установить параметры затемнения
+        PbSetInt32(msg, "duration", duration);  // Длительность затемнения в мс
+        PbSetInt32(msg, "hold_time", holdTime); // Время удержания в мс
+        PbSetInt32(msg, "flags", 0x0001);       // FFADE_IN
+
+        // Установить цвет RGBA
+        int colorPacked = (r << 24) | (g << 16) | (b << 8) | alpha;
+        PbSetColor(msg, "clr", colorPacked);
+
+        // Отправить и очистить
+        UserMessageSend(msg);
+        UserMessageDestroy(msg);
+
+        PrintToServer("Screen fade applied\n");
+    }
+}
+[code]::
+::
+
+[size=16][b]Пример 4: Показать пользовательское меню[/b][/size]
+
+[/code]csharp
+using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class MenuSystem : Plugin
+{
+    public void OnPluginStart()
+    {
+        AddConsoleCommand("showmenu", "Display a menu",
+        ConVarFlag.LinkedConcommand | ConVarFlag.Release,
+        Command_ShowMenu, HookMode.Post);
+    }
+
+    public ResultType Command_ShowMenu(int caller, int context, string[] arguments)
+    {
+        if (caller == -1) return ResultType.Handled;
+
+        ShowGameMenu(caller);
+
+        return ResultType.Handled;
+    }
+
+    private void ShowGameMenu(int playerSlot)
+    {
+        using (var msg = new UserMessage("ShowMenu"))
+        {
+            // Отправить конкретному игроку
+            msg.AddRecipient(playerSlot);
+
+            // Установить параметры меню
+            msg.SetInt32("validslots", 0x1FF);  // Слоты 1-9 действительны
+            msg.SetInt32("displaytime", 10);    // Отображать 10 секунд
+            msg.SetBool("needmore", false);
+
+            // Текст меню с опциями
+            string menuText = "Choose an option:\n1. Option 1\n2. Option 2\n3. Option 3";
+            msg.SetString("str", menuText);
+
+            // Отправить
+            msg.Send();
+
+            PrintToServer("Menu displayed\n");
+        } // Автоматически уничтожается
+    }
+}
+[code]::
+::div{label="Без классов" icon="lucide:code"}[/code]csharp
+using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class MenuSystem : Plugin
+{
+    public void OnPluginStart()
+    {
+        AddConsoleCommand("showmenu", "Display a menu",
+        ConVarFlag.LinkedConcommand | ConVarFlag.Release,
+        Command_ShowMenu, HookMode.Post);
+    }
+
+    public ResultType Command_ShowMenu(int caller, int context, string[] arguments)
+    {
+        if (caller == -1) return ResultType.Handled;
+
+        ShowGameMenu(caller);
+
+        return ResultType.Handled;
+    }
+
+    private void ShowGameMenu(int playerSlot)
+    {
+        nint msg = UserMessageCreateFromName("ShowMenu");
+
+        // Отправить конкретному игроку
+        UserMessageAddRecipient(msg, playerSlot);
+
+        // Установить параметры меню
+        PbSetInt32(msg, "validslots", 0x1FF);  // Слоты 1-9 действительны
+        PbSetInt32(msg, "displaytime", 10);    // Отображать 10 секунд
+        PbSetBool(msg, "needmore", false);
+
+        // Текст меню с опциями
+        string menuText = "Choose an option:\n1. Option 1\n2. Option 2\n3. Option 3";
+        PbSetString(msg, "str", menuText);
+
+        // Отправить и очистить
+        UserMessageSend(msg);
+        UserMessageDestroy(msg);
+
+        PrintToServer("Menu displayed\n");
+    }
+}
+[code]::
+::
+
+[size=16][b]Пример 5: Перехват и изменение сообщений[/b][/size]
+
+[/code]csharp
+using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class MessageFilter : Plugin
+{
+    public void OnPluginStart()
+    {
+        short msgId = UserMessage.FindMessageIdByName("TextMsg");
+        HookUserMessage(msgId, OnTextMessagePre, HookMode.Pre);
+    }
+
+    public void OnPluginEnd()
+    {
+        short msgId = UserMessage.FindMessageIdByName("TextMsg");
+        UnhookUserMessage(msgId, OnTextMessagePre, HookMode.Pre);
+    }
+
+    private static void OnTextMessagePre(nint userMessagePtr)
+    {
+        // Обернуть сырой указатель в класс UserMessage
+        var userMessage = new UserMessage(userMessagePtr, ownsHandle: false);
+
+        // Прочитать оригинальное сообщение
+        string originalText = userMessage.GetString("text", 0);
+
+        // Фильтровать ненормативную лексику
+        string filtered = originalText.Replace("badword", "[i]*[/i]*");
+
+        // Изменить сообщение
+        if (filtered != originalText)
+        {
+            userMessage.SetString("text", filtered);
+            PrintToServer("Filtered message content\n");
+        }
+
+        // Добавить префикс ко всем сообщениям
+        userMessage.SetString("text", "[Server] " + filtered);
+
+        // Примечание: Не нужно уничтожать - мы не владеем handle
+    }
+}
+[code]::
+::div{label="Без классов" icon="lucide:code"}[/code]csharp
+using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class MessageFilter : Plugin
+{
+    public void OnPluginStart()
+    {
+        short msgId = UserMessageFindMessageIdByName("TextMsg");
+        HookUserMessage(msgId, OnTextMessagePre, HookMode.Pre);
+    }
+
+    public void OnPluginEnd()
+    {
+        short msgId = UserMessageFindMessageIdByName("TextMsg");
+        UnhookUserMessage(msgId, OnTextMessagePre, HookMode.Pre);
+    }
+
+    private static void OnTextMessagePre(nint userMessage)
+    {
+        // Прочитать оригинальное сообщение
+        string originalText = PbReadString(userMessage, "text", 0);
+
+        // Фильтровать ненормативную лексику
+        string filtered = originalText.Replace("badword", "[i]*[/i]*");
+
+        // Изменить сообщение
+        if (filtered != originalText)
+        {
+            PbSetString(userMessage, "text", filtered);
+            PrintToServer("Filtered message content\n");
+        }
+
+        // Добавить префикс ко всем сообщениям
+        PbSetString(userMessage, "text", "[Server] " + filtered);
+    }
+}
+[code]::
+::
+
+[size=16][b]Пример 6: Отправка данных с повторяющимися полями[/b][/size]
+
+[/code]csharp
+using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class RepeatedFieldDemo : Plugin
+{
+    public void OnPluginStart()
+    {
+        AddConsoleCommand("send_scores", "Send player scores",
+        ConVarFlag.LinkedConcommand | ConVarFlag.Release,
+        Command_SendScores, HookMode.Post);
+    }
+
+    public ResultType Command_SendScores(int caller, int context, string[] arguments)
+    {
+        SendScoresList();
+        return ResultType.Handled;
+    }
+
+    private void SendScoresList()
+    {
+        using (var msg = new UserMessage("CustomScoreMsg"))
+        {
+            // Добавить всех игроков в качестве получателей
+            msg.AddAllPlayers();
+
+            // Добавить несколько имен игроков (повторяющееся поле)
+            msg.AddString("player_names", "Player1");
+            msg.AddString("player_names", "Player2");
+            msg.AddString("player_names", "Player3");
+
+            // Добавить соответствующие счета (повторяющееся поле)
+            msg.AddInt32("scores", 100);
+            msg.AddInt32("scores", 85);
+            msg.AddInt32("scores", 72);
+
+            // Проверить количество
+            int nameCount = msg.GetRepeatedFieldCount("player_names");
+            int scoreCount = msg.GetRepeatedFieldCount("scores");
+
+            PrintToServer($"Sending {nameCount} players with {scoreCount} scores\n");
+
+            // Отправить
+            msg.Send();
+        } // Автоматически уничтожается
+    }
+}
+[code]::
+::div{label="Без классов" icon="lucide:code"}[/code]csharp
+using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class RepeatedFieldDemo : Plugin
+{
+    public void OnPluginStart()
+    {
+        AddConsoleCommand("send_scores", "Send player scores",
+        ConVarFlag.LinkedConcommand | ConVarFlag.Release,
+        Command_SendScores, HookMode.Post);
+    }
+
+    public ResultType Command_SendScores(int caller, int context, string[] arguments)
+    {
+        SendScoresList();
+        return ResultType.Handled;
+    }
+
+    private void SendScoresList()
+    {
+        // Пример: Создать пользовательское сообщение с повторяющимися полями
+        nint msg = UserMessageCreateFromName("CustomScoreMsg");
+
+        // Добавить всех игроков в качестве получателей
+        UserMessageAddAllPlayers(msg);
+
+        // Добавить несколько имен игроков (повторяющееся поле)
+        PbAddString(msg, "player_names", "Player1");
+        PbAddString(msg, "player_names", "Player2");
+        PbAddString(msg, "player_names", "Player3");
+
+        // Добавить соответствующие счета (повторяющееся поле)
+        PbAddInt32(msg, "scores", 100);
+        PbAddInt32(msg, "scores", 85);
+        PbAddInt32(msg, "scores", 72);
+
+        // Проверить количество
+        int nameCount = UserMessageGetRepeatedFieldCount(msg, "player_names");
+        int scoreCount = UserMessageGetRepeatedFieldCount(msg, "scores");
+
+        PrintToServer($"Sending {nameCount} players with {scoreCount} scores\n");
+
+        // Отправить и очистить
+        UserMessageSend(msg);
+        UserMessageDestroy(msg);
+    }
+}
+[code]::
+::
+
+[size=20][b]Отладка User Messages[/b][/size]
+
+[size=16][b]Инспектировать содержимое сообщения[/b][/size]
+
+[/code]csharp
+using (var msg = new UserMessage("TextMsg"))
+{
+    msg.SetString("text", "Debug test");
+
+    // Получить отладочное представление
+    string debugStr = msg.GetDebugString();
+    PrintToServer($"Message debug: {debugStr}\n");
+} // Автоматически уничтожается
+[code]::
+::div{label="Без классов" icon="lucide:code"}[/code]csharp
+nint msg = UserMessageCreateFromName("TextMsg");
+PbSetString(msg, "text", "Debug test");
+
+// Получить отладочное представление
+string debugStr = UserMessageGetDebugString(msg);
+PrintToServer($"Message debug: {debugStr}\n");
+
+UserMessageDestroy(msg);
+[code]::
+::
+
+[size=16][b]Проверка существования поля[/b][/size]
+
+[/code]csharp
+using (var msg = new UserMessage("TextMsg"))
+{
+    // Проверить существование поля перед доступом к нему
+    if (msg.HasField("optional_field"))
+    {
+        int value = msg.GetInt32("optional_field", 0);
+        PrintToServer($"Optional field value: {value}\n");
+    }
+} // Автоматически уничтожается
+[code]::
+::div{label="Без классов" icon="lucide:code"}[/code]csharp
+nint msg = UserMessageCreateFromName("TextMsg");
+
+// Проверить существование поля перед доступом к нему
+if (UserMessageHasField(msg, "optional_field"))
+{
+    int value = PbReadInt32(msg, "optional_field", 0);
+    PrintToServer($"Optional field value: {value}\n");
+}
+
+UserMessageDestroy(msg);
+[font=monospace]`[/font]
+::
+::
+
+[size=20][b]Советы и лучшие практики[/b][/size]
+
+[list=1]
+[*][b]Всегда уничтожайте сообщения[/b] - Вызывайте [font=monospace]UserMessageDestroy()[/font] после отправки, чтобы предотвратить утечки памяти
+[*][b]Проверяйте ID сообщений[/b] - Убедитесь, что [font=monospace]UserMessageFindMessageIdByName()[/font] возвращает действительный ID перед использованием
+[*][b]Сначала устанавливайте получателей[/b] - Настраивайте получателей перед установкой значений полей
+[*][b]Используйте правильные имена полей[/b] - Обращайтесь к определениям protobuf для точных имен полей
+[*][b]Правильно обрабатывайте режимы перехвата[/b] - Используйте [font=monospace]Pre[/font] для изменения сообщений, [font=monospace]Post[/font] для наблюдения за ними
+[*][b]Отменяйте перехваты в OnPluginEnd[/b] - Всегда очищайте перехваты при выгрузке плагина
+[*][b]Проверяйте количество повторяющихся полей[/b] - Проверяйте количество перед доступом к индексам повторяющихся полей
+[*][b]Тестируйте с клиентами[/b] - Убедитесь, что сообщения правильно отображаются на стороне клиента
+[*][b]Используйте соответствующие типы данных[/b] - Сопоставляйте функции [font=monospace]PbRead[i][/font]/[font=monospace]PbSet[/i][/font] с типами полей
+[*][b]Учитывайте производительность[/b] - Избегайте отправки больших сообщений или слишком большого количества сообщений за тик
+[/list]
+
+[size=20][b]Часто используемые User Messages[/b][/size]
+
+Вот часто используемые user messages в CS:GO/CS2:
+
+[b]TextMsg[/b] - Отправить текст в чат или консоль:
+[list]
+[*][font=monospace]text[/font] (string) - Текст сообщения
+[*][font=monospace]msg_dst[/font] (int32) - Назначение: 2=консоль, 3=центр, 4=чат
+[/list]
+
+[b]HintText[/b] - Показать подсказку на экране:
+[list]
+[*][font=monospace]text[/font] (string) - Текст подсказки для отображения
+[/list]
+
+[b]Fade[/b] - Эффект затемнения экрана:
+[list]
+[*][font=monospace]duration[/font] (int32) - Длительность затемнения в миллисекундах
+[*][font=monospace]hold_time[/font] (int32) - Время удержания в миллисекундах
+[*][font=monospace]flags[/font] (int32) - Флаги затемнения (FFADE_IN, FFADE_OUT и т.д.)
+[*][font=monospace]clr[/font] (color) - Цвет RGBA
+[/list]
+
+[b]ShowMenu[/b] - Отобразить меню:
+[list]
+[*][font=monospace]validslots[/font] (int32) - Битовая маска допустимых слотов меню
+[*][font=monospace]displaytime[/font] (int32) - Как долго отображать (секунды)
+[*][font=monospace]needmore[/font] (bool) - Доступны дополнительные страницы
+[*][font=monospace]str[/font] (string) - Текст меню
+[/list]
+
+[b]Damage[/b] - Показать индикатор урона:
+[list]
+[*][font=monospace]amount[/font] (int32) - Количество урона
+[*][font=monospace]victim[/font] (int32) - Индекс сущности жертвы
+[/list]
+
+[b]SayText2[/b] - Форматированное чат-сообщение:
+[list]
+[*][font=monospace]ent_idx[/font] (int32) - Индекс сущности отправителя
+[*][font=monospace]chat[/font] (bool) - Отправить в чат
+[*][font=monospace]msg_name[/font] (string) - Строка формата сообщения
+[*][font=monospace]params[/font] (repeated string) - Параметры сообщения
+[/list]
+
+Обратитесь к [url=https://github.com/SteamDatabase/Protobufs/tree/master/csgo]определениям protobuf CS:GO[/url] для полного списка сообщений и их полей.
+
+[size=20][b]Режимы перехвата[/b][/size]
+
+[list]
+[*][b]Pre[/b] ([font=monospace]HookMode.Pre[/font]) - Перехват до обработки сообщения, позволяет модификацию
+[*][b]Post[/b] ([font=monospace]HookMode.Post[/font]) - Перехват после обработки сообщения, только чтение для наблюдения
+[/list]
+
+Используйте режим Pre, когда хотите изменить или заблокировать сообщения, режим Post для логирования или запуска побочных эффектов.

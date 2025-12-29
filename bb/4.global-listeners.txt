@@ -1,0 +1,44 @@
+
+[size=20][b]Добавление слушателя[/b][/size]
+
+Глобальные слушатели бывают разных видов, поэтому для них нет общей регистрации, они должны быть зарегистрированы в [font=monospace]OnStart[/font] вашего плагина (или где угодно) с использованием различных методов регистрации. Полный список слушателей событий можно найти в разделе [font=monospace]Listeners[/font], как показано ниже.
+
+[code=csharp]using System;
+using System.Numerics;
+using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class Sample : Plugin
+{
+    public void OnPluginStart()
+    {
+        OnEntitySpawned_Register(OnEntitySpawnedCallback);
+    }
+
+    public void OnPluginEnd()
+    {
+        OnEntitySpawned_Unregister(OnEntitySpawnedCallback);
+    }
+
+    private static void OnEntitySpawnedCallback(int entityHandle)
+    {
+        string className = GetEntityClassname(entityHandle);
+        if (className != "smokegrenade_projectile") return;
+        // Изменяет цвет дымовой гранаты на случайный цвет каждый раз.
+        QueueTaskForNextFrame(OnEntitySpawnedCallback_Post, [entityHandle]);
+    }
+
+    private static void OnEntitySpawnedCallback_Post(object[] data) {
+        int entityHandle = data[0] as int;
+        Vector3 smokeColor = new Vector3(
+            Random.Shared.NextSingle() * 255.0f
+            Random.Shared.NextSingle() * 255.0f
+            Random.Shared.NextSingle() * 255.0f
+        );
+        SetEntSchemaVector3D(entityHandle, 'CSmokeGrenadeProjectile', 'm_vSmokeColor', smokeColor, true, 0);
+        PrintToServer($"Smoke grenade spawned with color {smokeColor}");
+    }
+}[/code]
+
+
+Полный список глобальных слушателей можно найти [url=https://api.plugify.net/?file=https://raw.githubusercontent.com/untrustedmodders/plugify-plugin-s2sdk/refs/heads/main/plugify-plugin-s2sdk.pplugin.in#/Listeners]здесь[/url]

@@ -1,0 +1,550 @@
+
+[size=20][b]Понимание схем[/b][/size]
+
+В Source 1 сущности имели два типа свойств: [b]send props[/b] (синхронизируемые с клиентами) и [b]data props[/b] (только на сервере). Source 2 упростил это, объединив их в единую систему [b]схем[/b]. Схемы определяют структуру и свойства всех игровых объектов, и многие поля схем автоматически передаются по сети.
+
+Схемы позволяют вам получать доступ и изменять свойства любой сущности или объекта в Source 2, включая здоровье, позицию, скорость, модель, команду и бесчисленное количество других атрибутов. Когда вы изменяете сетевые поля схем с установленным [font=monospace]changeState[/font] в [font=monospace]true[/font], изменения автоматически синхронизируются с клиентами.
+
+[size=20][b]Поиск информации о схемах[/b][/size]
+
+Вы можете найти названия классов схем и имена членов, используя:
+[list]
+[*][b]Онлайн-дампы[/b]: [url=https://github.com/a2x/cs2-dumper/blob/main/output/server_dll.hpp]репозиторий cs2-dumper[/url]
+[*][b]Дамперы схем[/b]: Различные инструменты сообщества для извлечения определений схем
+[*][b]Файлы ресурсов игры[/b]: Расположены в папках схем вашей игры
+[/list]
+
+Распространенные классы схем включают [font=monospace]CBaseEntity[/font], [font=monospace]CBasePlayerPawn[/font], [font=monospace]CCSPlayerController[/font], [font=monospace]CBaseModelEntity[/font] и многие другие.
+
+[size=20][b]Методы Schema vs методы Data[/b][/size]
+
+s2sdk предоставляет два подхода для работы со схемами:
+
+[size=16][b]Методы Schema (рекомендуется)[/b][/size]
+Используют имена классов и членов в виде строк. Они проще в использовании и более читаемы:
+[code=csharp]SetEntSchema(entityHandle, "CBaseEntity", "m_iHealth", 200, true, 0);
+int health = GetEntSchema(entityHandle, "CBaseEntity", "m_iHealth", 0);[/code]
+
+[size=16][b]Методы Data (расширенные)[/b][/size]
+Используют необработанные смещения в памяти. Они быстрее, но требуют ручного управления смещениями:
+[code=csharp]int offset = GetSchemaOffset("CBaseEntity", "m_iHealth");
+SetEntData(entityHandle, offset, 200, 4, true, 0);
+int health = GetEntData(entityHandle, offset, 4);[/code]
+
+[size=20][b]Handle сущностей vs указатели[/b][/size]
+
+Большинство функций поставляются в двух версиях:
+
+[list]
+[*][b]Версия с handle[/b] (например, [font=monospace]GetEntSchema[/font]): Работает с handle сущностей - используйте это по возможности
+[*][b]Версия с указателем[/b] (например, [font=monospace]GetEntSchema2[/font]): Работает с необработанными указателями - используйте только когда handle не могут быть сгенерированы (некоторые схемы не основаны на сущностях)
+[/list]
+
+Всегда предпочитайте handle сущностей, если только вы не работаете с объектами схем, не являющимися сущностями.
+
+[size=20][b]Базовый пример: изменение здоровья сущности[/b][/size]
+
+Вот простой пример чтения и изменения здоровья сущности:
+
+
+[code=csharp]using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class Sample : Plugin
+{
+    public void OnPluginStart()
+    {
+        AddConsoleCommand("set_health", "Sets player health to 200",
+            ConVarFlag.LinkedConcommand | ConVarFlag.Release,
+            (caller, context, arguments) =>
+            {
+                if (caller == -1) return ResultType.Handled;
+
+                // Convert player's slot to entity's handle
+                int player = PlayerSlotToEntHandle(caller);
+
+                // Set the caller's health to 200
+                SetEntSchema(player, "CBaseEntity", "m_iHealth", 200, true, 0);
+
+                // Read back the health
+                int health = (int)GetEntSchema(player, "CBaseEntity", "m_iHealth", 0);
+                PrintToServer($"Player health set to {health}\n");
+
+                return ResultType.Handled;
+            }, HookMode.Post);
+    }
+}[/code]
+::
+::div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[code=cpp]#include <plugify/cpp_plugin.hpp>
+#include "s2sdk.hpp"
+
+using namespace s2sdk;
+
+class Sample : public plg::IPluginEntry {
+public:
+    void OnPluginStart() override {
+        ConVarFlag flags = ConVarFlag::LinkedConcommand | ConVarFlag::Release;
+        AddConsoleCommand("set_health", "Sets player health to 200", flags,
+            [](int caller, int context, const plg::vector<plg::string>& arguments) -> ResultType {
+                if (caller == -1) return ResultType::Handled;
+
+                // Convert player's slot to entity's handle
+                int player = PlayerSlotToEntHandle(caller);
+
+                // Set the caller's health to 200
+                SetEntSchema(player, "CBaseEntity", "m_iHealth", 200, true, 0);
+
+                // Read back the health
+                int64_t health = GetEntSchema(player, "CBaseEntity", "m_iHealth", 0);
+                PrintToServer(std::format("Player health set to {}\n", health).c_str());
+
+                return ResultType::Handled;
+            }, HookMode::Post);
+    }
+};[/code]
+::
+::div{label="python" icon="vscode-icons:file-type-python"}
+[code=python]from plugify.plugin import Plugin
+from plugify.pps import s2sdk as s2
+
+class Sample(Plugin):
+    def plugin_start(self):
+        flags = s2.ConVarFlag.LinkedConcommand | s2.ConVarFlag.Release
+
+        def set_health_cmd(caller, context, arguments):
+            if caller == -1:
+                return s2.ResultType.Handled
+
+            # Convert player's slot to entity's handle
+            player = s2.PlayerSlotToEntHandle(caller);
+
+            # Set the caller's health to 200
+            s2.SetEntSchema(player, "CBaseEntity", "m_iHealth", 200, True, 0)
+
+            # Read back the health
+            health = s2.GetEntSchema(player, "CBaseEntity", "m_iHealth", 0)
+            s2.PrintToServer(f"Player health set to {health}\n")
+
+            return s2.ResultType.Handled
+
+        s2.AddConsoleCommand("set_health", "Sets player health to 200", flags,
+                           set_health_cmd, s2.HookMode.Post)[/code]
+::
+::div{label="go" icon="vscode-icons:file-type-go"}
+[code=go]package main
+
+import (
+    "fmt"
+    "s2sdk"
+    "github.com/untrustedmodders/go-plugify"
+)
+
+func init() {
+    plugify.OnPluginStart(func() {
+        flags := s2sdk.ConVarFlag.LinkedConcommand | s2sdk.ConVarFlag.Release
+        s2sdk.AddConsoleCommand("set_health", "Sets player health to 200", flags,
+            func(caller int, context int, arguments []string) s2sdk.ResultType {
+                if caller == -1 {
+                    return s2sdk.ResultType.Handled
+                }
+
+                // Convert player's slot to entity's handle
+                int player = s2sdk.PlayerSlotToEntHandle(caller);
+
+                // Set the caller's health to 200
+                s2sdk.SetEntSchema(player, "CBaseEntity", "m_iHealth", 200, true, 0)
+
+                // Read back the health
+                health := s2sdk.GetEntSchema(player, "CBaseEntity", "m_iHealth", 0)
+                s2sdk.PrintToServer(fmt.Sprintf("Player health set to %d\n", health))
+
+                return s2sdk.ResultType.Handled
+            }, s2sdk.HookMode.Post)
+    })
+}[/code]
+::
+::div{label="js" icon="vscode-icons:file-type-js-official"}
+[code=js]import { Plugin } from 'plugify';
+import { s2 } from ':s2sdk';
+
+export class Sample extends Plugin {
+    pluginStart() {
+        const flags = s2.ConVarFlag.LinkedConcommand | s2.ConVarFlag.Release;
+        s2.AddConsoleCommand("set_health", "Sets player health to 200", flags,
+            (caller, context, arguments) => {
+                if (caller === -1) return s2.ResultType.Handled;
+
+                // Convert player's slot to entity's handle
+                const player = s2.PlayerSlotToEntHandle(caller);
+
+                // Set the caller's health to 200
+                s2.SetEntSchema(player, "CBaseEntity", "m_iHealth", 200, true, 0);
+
+                // Read back the health
+                const health = s2.GetEntSchema(player, "CBaseEntity", "m_iHealth", 0);
+                s2.PrintToServer([font=monospace]Player health set to ${health}\n[/font]);
+
+                return s2.ResultType.Handled;
+            }, s2.HookMode.Post);
+    }
+}[/code]
+::
+::div{label="lua" icon="vscode-icons:file-type-lua"}
+[code=lua]local plugify = require 'plugify'
+local Plugin = plugify.Plugin
+local s2 = require 's2sdk'
+
+local Sample = {}
+setmetatable(Sample, { __index = Plugin })
+
+function Sample:plugin_start()
+    local flags = bit.bor(s2.ConVarFlag.LinkedConcommand, s2.ConVarFlag.Release)
+    s2:AddConsoleCommand("set_health", "Sets player health to 200", flags,
+        function(caller, context, arguments)
+            if caller == -1 then return s2.ResultType.Handled end
+
+            -- Convert player's slot to entity's handle
+            local player = s2:PlayerSlotToEntHandle(caller);
+
+            -- Set the caller's health to 200
+            s2:SetEntSchema(player, "CBaseEntity", "m_iHealth", 200, true, 0)
+
+            -- Read back the health
+            local health = s2:GetEntSchema(player, "CBaseEntity", "m_iHealth", 0)
+            s2:PrintToServer(string.format("Player health set to %d\n", health))
+
+            return s2.ResultType.Handled
+        end, s2.HookMode.Post)
+end
+
+local M = {}
+M.Sample = Sample
+return M[/code]
+::
+::
+
+[size=20][b]Работа с различными типами данных[/b][/size]
+
+Система схем поддерживает несколько типов данных. Вот примеры для каждого:
+
+[size=16][b]Целые числа[/b][/size]
+[code=csharp]// Получение/установка целочисленных значений (здоровье, броня, деньги и т.д.)
+SetEntSchema(entityHandle, "CBaseEntity", "m_iHealth", 100, true, 0);
+int health = (int)GetEntSchema(entityHandle, "CBaseEntity", "m_iHealth", 0);[/code]
+
+[size=16][b]Числа с плавающей точкой[/b][/size]
+[code=csharp]// Получение/установка значений с плавающей точкой (скорость, гравитация и т.д.)
+SetEntSchemaFloat(entityHandle, "CCSPlayerPawn", "m_flGravityScale", 0.5, true, 0);
+double gravity = GetEntSchemaFloat(entityHandle, "CCSPlayerPawn", "m_flGravityScale", 0);[/code]
+
+[size=16][b]Строки[/b][/size]
+[code=csharp]// Получение/установка строковых значений (имена, модели и т.д.)
+SetEntSchemaString(entityHandle, "CBaseModelEntity", "m_ModelName", "models/player.mdl", true, 0);
+string modelName = GetEntSchemaString(entityHandle, "CBaseModelEntity", "m_ModelName", 0);[/code]
+
+[size=16][b]Векторы[/b][/size]
+[code=csharp]// Получение/установка 3D векторов (позиция, скорость, углы и т.д.)
+using System.Numerics;
+
+Vector3 newPos = new Vector3(100.0f, 200.0f, 300.0f);
+SetEntSchemaVector3D(entityHandle, "CBaseEntity", "m_vecAbsOrigin", newPos, true, 0);
+Vector3 position = GetEntSchemaVector3D(entityHandle, "CBaseEntity", "m_vecAbsOrigin", 0);[/code]
+
+[size=16][b]Handle сущностей[/b][/size]
+[code=csharp]// Получение/установка ссылок на сущности (владелец, родитель, оружие и т.д.)
+SetEntSchemaEnt(entityHandle, "CBaseEntity", "m_hOwnerEntity", ownerHandle, true, 0);
+int owner = GetEntSchemaEnt(entityHandle, "CBaseEntity", "m_hOwnerEntity", 0);[/code]
+
+[size=20][b]Работа с массивами[/b][/size]
+
+Некоторые поля схем являются массивами. Используйте параметр [font=monospace]element[/font] для доступа к определенным индексам массива:
+
+[code=csharp]// Получение размера массива
+int arraySize = GetEntSchemaArraySize(entityHandle, "SomeClass", "m_arrayField");
+
+// Доступ к элементам массива (параметр element - последний перед параметрами по умолчанию для конкретного типа)
+for (int i = 0; i < arraySize; i++)
+{
+    int value = (int)GetEntSchema(entityHandle, "SomeClass", "m_arrayField", i);
+    PrintToServer($"Array[{i}] = {value}\n");
+}
+
+// Установка элемента массива
+SetEntSchema(entityHandle, "SomeClass", "m_arrayField", 42, true, 2); // Установить индекс 2 в 42[/code]
+
+[size=20][b]Понимание параметров[/b][/size]
+
+[size=16][b]changeState (bool)[/b][/size]
+Когда [font=monospace]true[/font], помечает поле как измененное и запускает сетевую синхронизацию с клиентами. Устанавливайте в [font=monospace]true[/font] при изменении сетевых полей, [font=monospace]false[/font] для изменений только на сервере.
+
+[size=16][b]element (int)[/b][/size]
+Индекс массива при работе с полями массивов схем. Используйте [font=monospace]0[/font] для полей, не являющихся массивами.
+
+[size=16][b]chainOffset (int)[/b][/size]
+Расширенный параметр для смещений цепочки в иерархиях наследования. Используйте [font=monospace]0[/font] для большинства случаев, или используйте [font=monospace]GetSchemaChainOffset()[/font] для конкретных цепочек наследования. Используйте [font=monospace]-1[/font] для классов, не являющихся сущностями.
+
+[size=20][b]Практические примеры[/b][/size]
+
+[size=16][b]Пример 1: Переключение режима бога[/b][/size]
+
+
+[code=csharp]using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class GodMode : Plugin
+{
+    private bool[] godMode = new bool[65]; // Max players
+
+    public void OnPluginStart()
+    {
+        AddConsoleCommand("god", "Toggle god mode",
+            ConVarFlag.LinkedConcommand | ConVarFlag.Release,
+            Command_God, HookMode.Post);
+    }
+
+    public ResultType Command_God(int caller, int context, string[] arguments)
+    {
+        if (caller == -1) return ResultType.Handled;
+
+        godMode[caller] = !godMode[caller];
+
+        int player = PlayerSlotToEntHandle(caller);
+
+        if (godMode[caller])
+        {
+            SetEntSchema(player, "CBaseEntity", "m_iHealth", 999, true, 0);
+            SetEntSchema(player, "CBaseEntity", "m_takedamage", 0, true, 0); // DAMAGE_NO
+            PrintToServer("God mode enabled\n");
+        }
+        else
+        {
+            SetEntSchema(player, "CBaseEntity", "m_iHealth", 100, true, 0);
+            SetEntSchema(player, "CBaseEntity", "m_takedamage", 2, true, 0); // DAMAGE_YES
+            PrintToServer("God mode disabled\n");
+        }
+
+        return ResultType.Handled;
+    }
+}[/code]
+::
+::
+
+[size=16][b]Пример 2: Телепортация[/b][/size]
+
+
+[code=csharp]using System.Numerics;
+using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class Teleport : Plugin
+{
+    public void OnPluginStart()
+    {
+        AddConsoleCommand("teleport", "Teleport to coordinates",
+            ConVarFlag.LinkedConcommand | ConVarFlag.Release,
+            Command_Teleport, HookMode.Post);
+    }
+
+    public ResultType Command_Teleport(int caller, int context, string[] arguments)
+    {
+        if (caller == -1) return ResultType.Handled;
+        if (arguments.Length < 4)
+        {
+            PrintToServer("Usage: teleport <x> <y> <z>\n");
+            return ResultType.Handled;
+        }
+
+        int player = PlayerSlotToEntHandle(caller);
+
+        float x = float.Parse(arguments[1]);
+        float y = float.Parse(arguments[2]);
+        float z = float.Parse(arguments[3]);
+
+        Vector3 newPosition = new Vector3(x, y, z);
+        SetEntSchemaVector3D(player, "CBaseEntity", "m_vecAbsOrigin", newPosition, true, 0);
+
+        // Also reset velocity to prevent momentum
+        Vector3 zeroVelocity = new Vector3(0, 0, 0);
+        SetEntSchemaVector3D(player, "CBaseEntity", "m_vecAbsVelocity", zeroVelocity, true, 0);
+
+        PrintToServer($"Teleported to ({x}, {y}, {z})\n");
+
+        return ResultType.Handled;
+    }
+}[/code]
+::
+::
+
+[size=16][b]Пример 3: Смена модели игрока[/b][/size]
+
+
+[code=csharp]using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class ModelChanger : Plugin
+{
+    public void OnPluginStart()
+    {
+        AddConsoleCommand("setmodel", "Change player model",
+            ConVarFlag.LinkedConcommand | ConVarFlag.Release,
+            Command_SetModel, HookMode.Post);
+    }
+
+    public ResultType Command_SetModel(int caller, int context, string[] arguments)
+    {
+        if (caller == -1) return ResultType.Handled;
+        if (arguments.Length < 2)
+        {
+            PrintToServer("Usage: setmodel <model_path>\n");
+            return ResultType.Handled;
+        }
+
+        int player = PlayerSlotToEntHandle(caller);
+
+        string modelPath = arguments[1];
+        SetEntSchemaString(player, "CBaseModelEntity", "m_ModelName", modelPath, true, 0);
+
+        PrintToServer($"Model changed to: {modelPath}\n");
+
+        return ResultType.Handled;
+    }
+}[/code]
+::
+::
+
+[size=16][b]Пример 4: Модификатор скорости[/b][/size]
+
+
+[code=csharp]using Plugify;
+using static s2sdk.s2sdk;
+
+public unsafe class SpeedMod : Plugin
+{
+    public void OnPluginStart()
+    {
+        AddConsoleCommand("speed", "Change player speed",
+            ConVarFlag.LinkedConcommand | ConVarFlag.Release,
+            Command_Speed, HookMode.Post);
+    }
+
+    public ResultType Command_Speed(int caller, int context, string[] arguments)
+    {
+        if (caller == -1) return ResultType.Handled;
+        if (arguments.Length < 2)
+        {
+            PrintToServer("Usage: speed <multiplier> (1.0 = normal)\n");
+            return ResultType.Handled;
+        }
+
+        int player = PlayerSlotToEntHandle(caller);
+
+		// Get pawn entity from player
+		int entityHandle = GetEntSchemaEnt(player, "CCSPlayerController", "m_hPlayerPawn");
+
+        float speedMultiplier = float.Parse(arguments[1]);
+
+        // Set speed on player pawn
+        SetEntSchemaFloat(entityHandle, "CCSPlayerPawn", "m_flVelocityModifier", speedMultiplier, true, 0);
+
+        PrintToServer($"Speed set to {speedMultiplier}x\n");
+
+        return ResultType.Handled;
+    }
+}[/code]
+::
+::
+
+[size=20][b]Расширенное: использование необработанных смещений[/b][/size]
+
+Для критичного по производительности кода вы можете использовать необработанные смещения:
+
+[code=csharp]// Получите смещение один раз и кешируйте его
+int healthOffset = GetSchemaOffset("CBaseEntity", "m_iHealth");
+int chainOffset = GetSchemaChainOffset("CBaseEntity");
+
+// Используйте смещение напрямую для лучшей производительности
+SetEntData(entityHandle, healthOffset, 100, 4, true, chainOffset);
+int health = (int)GetEntData(entityHandle, healthOffset, 4);[/code]
+
+[size=20][b]Использование версий с указателями[/b][/size]
+
+Для объектов схем, не являющихся сущностями (когда handle недоступны):
+
+[code=csharp]// Пример: работа с объектом схемы, не являющимся сущностью
+nint objectPointer = GetSomeNonEntityPointer();
+
+// Используйте версию функций с '2'
+SetEntSchema2(objectPointer, "SomeClass", "m_someField", 42, true, 0);
+int value = (int)GetEntSchema2(objectPointer, "SomeClass", "m_someField", 0);[/code]
+
+[size=20][b]Обновления сетевого состояния[/b][/size]
+
+Для ручного запуска сетевых обновлений:
+
+[code=csharp]// Обновить конкретное поле
+NetworkStateChanged(entityHandle, "CBaseEntity", "m_iHealth");
+
+// Или используя смещение
+int offset = GetSchemaOffset("CBaseEntity", "m_iHealth");
+int chainOffset = GetSchemaChainOffset("CBaseEntity");
+ChangeEntityState(entityHandle, offset, chainOffset);[/code]
+
+[size=20][b]Советы и лучшие практики[/b][/size]
+
+[list=1]
+[*][b]Используйте методы schema вместо методов data[/b] - Они более читаемы и удобны в обслуживании
+[*][b]Предпочитайте handle сущностей указателям[/b] - Используйте версии с указателями только при необходимости
+[*][b]Кешируйте смещения в критичном по производительности коде[/b] - Избегайте повторных вызовов [font=monospace]GetSchemaOffset()[/font]
+[*][b]Всегда устанавливайте changeState правильно[/b] - Используйте [font=monospace]true[/font] для сетевых изменений, [font=monospace]false[/font] только для сервера
+[*][b]Обращайтесь к дампам схем[/b] - Проверьте [url=https://github.com/Wend4r/s2d-schema]s2d-schema[/url] для доступных полей
+[*][b]Проверяйте handle сущностей[/b] - Убедитесь, что сущности действительны перед доступом к схемам
+[*][b]Используйте соответствующие типы данных[/b] - Сопоставляйте функцию с типом поля схемы (Int, Float, String, Vector и т.д.)
+[*][b]Тестируйте с клиентами[/b] - Проверьте, что сетевые изменения синхронизируются правильно
+[/list]
+
+[size=20][b]Распространенные поля схем[/b][/size]
+
+Вот некоторые часто используемые поля схем:
+
+[b]CBaseEntity:[/b]
+[list]
+[*][font=monospace]m_iHealth[/font] - Здоровье сущности
+[*][font=monospace]m_iMaxHealth[/font] - Максимальное здоровье
+[*][font=monospace]m_vecAbsOrigin[/font] - Позиция
+[*][font=monospace]m_angAbsRotation[/font] - Углы поворота
+[*][font=monospace]m_vecAbsVelocity[/font] - Скорость
+[*][font=monospace]m_hOwnerEntity[/font] - Handle сущности-владельца
+[*][font=monospace]m_takedamage[/font] - Поведение урона (0=нет, 2=да)
+[/list]
+
+[b]CBasePlayerPawn:[/b]
+[list]
+[*][font=monospace]m_iMaxHealth[/font] - Максимальное здоровье
+[*][font=monospace]m_ArmorValue[/font] - Количество брони
+[*][font=monospace]m_vecViewOffset[/font] - Смещение высоты обзора
+[/list]
+
+[b]CCSPlayerPawn:[/b]
+[list]
+[*][font=monospace]m_flGravityScale[/font] - Множитель гравитации
+[*][font=monospace]m_flVelocityModifier[/font] - Множитель скорости
+[*][font=monospace]m_bIsScoped[/font] - Использует ли игрок прицел
+[/list]
+
+[b]CCSPlayerController:[/b]
+[list]
+[*][font=monospace]m_sSanitizedPlayerName[/font] - Имя игрока
+[*][font=monospace]m_iPing[/font] - Пинг игрока
+[*][font=monospace]m_iScore[/font] - Счет игрока
+[*][font=monospace]m_hPlayerPawn[/font] - Handle пешки игрока
+[/list]
+
+[b]CBaseModelEntity:[/b]
+[list]
+[*][font=monospace]m_ModelName[/font] - Путь к модели
+[*][font=monospace]m_nSkin[/font] - Скин модели
+[*][font=monospace]m_clrRender[/font] - Цвет рендера
+[/list]
+
+Обратитесь к дампам схем для полного списка доступных классов и полей.
