@@ -21,7 +21,8 @@
 Зарегистрируйте хук CheckTransmit в методе запуска вашего плагина и отмените регистрацию при завершении:
 
 [spoiler=c#]
-[code=csharp]  using Plugify;
+[code=csharp]
+  using Plugify;
   using static s2sdk.s2sdk;
 
   public unsafe class Sample : Plugin
@@ -46,10 +47,12 @@
           }
       }
   }
-  [font=monospace]`[/font]
+  
+[/code]
 [/spoiler]
 
-[spoiler=c++][/code]cpp
+[spoiler=c++]
+[code=cpp]
   #include <plg/plugin.hpp>
   #include "s2sdk.hpp"
 
@@ -72,9 +75,12 @@
           OnServerCheckTransmit_Unregister();
       }
   };
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
 
-[spoiler=python][/code]python
+[spoiler=python]
+[code=python]
   from plugify.plugin import Plugin
   from plugify.pps import s2sdk as s2
 
@@ -90,9 +96,12 @@
           for player_slot, info in enumerate(infos):
               # Изменяйте состояния передачи для этого слота игрока
               pass
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
 
-[spoiler=go][/code]go
+[spoiler=go]
+[code=go]
   package main
 
   import (
@@ -116,9 +125,12 @@
           s2sdk.OnServerCheckTransmit_Unregister()
       })
   }
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
 
-[spoiler=js][/code]js
+[spoiler=js]
+[code=js]
   import { Plugin } from 'plugify';
   import { s2 } from ':s2sdk';
 
@@ -136,9 +148,12 @@
           s2.OnServerCheckTransmit_Unregister();
       }
   }
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
 
-[spoiler=lua][/code]lua
+[spoiler=lua]
+[code=lua]
   local plugify = require 'plugify'
   local Plugin = plugify.Plugin
   local s2 = require 's2sdk'
@@ -162,7 +177,10 @@
   local M = {}
   M.Sample = Sample
   return M
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
+
 [size=20][b]Структура CheckTransmitInfo[/b][/size]
 
 Каждый объект [font=monospace]CheckTransmitInfo[/font] содержит информацию о состояниях передачи для конкретного игрока. [b]Слот игрока определяется индексом массива[/b] (0-63), а не полем в структуре.
@@ -187,44 +205,55 @@ S2SDK предоставляет два способа работы с CheckTran
 
 Используйте эти методы, передавая указатель CheckTransmitInfo в качестве первого параметра:
 
-#### Методы передачи объектов[/code]csharp
+#### Методы передачи объектов
+[code=csharp]
 SetTransmitInfoEntity(info, entityHandle);          // Отметить объект как передаваемый
 ClearTransmitInfoEntity(info, entityHandle);        // Отметить объект как не передаваемый
 IsTransmitInfoEntitySet(info, entityHandle);        // Проверить, передается ли объект
 SetTransmitInfoEntityAll(info);                     // Отметить все объекты как передаваемые
 ClearTransmitInfoEntityAll(info);                   // Отметить все объекты как не передаваемые
-[code]
-#### Методы передачи не-игроков[/code]csharp
+[/code]
+
+#### Методы передачи не-игроков
+[code=csharp]
 SetTransmitInfoNonPlayer(info, entityHandle);       // Отметить не-игрока как передаваемого
 ClearTransmitInfoNonPlayer(info, entityHandle);     // Отметить не-игрока как не передаваемого
 IsTransmitInfoNonPlayerSet(info, entityHandle);     // Проверить, передается ли не-игрок
 SetTransmitInfoNonPlayerAll(info);                  // Отметить всех не-игроков как передаваемых
 ClearTransmitInfoNonPlayerAll(info);                // Отметить всех не-игроков как не передаваемых
-[code]
-#### Методы постоянной передачи[/code]csharp
+[/code]
+
+#### Методы постоянной передачи
+[code=csharp]
 SetTransmitInfoAlways(info, entityHandle);          // Отметить объект для постоянной передачи
 ClearTransmitInfoAlways(info, entityHandle);        // Снять отметку объекта с постоянной передачи
 IsTransmitInfoAlwaysSet(info, entityHandle);        // Проверить, всегда ли передается объект
 SetTransmitInfoAlwaysAll(info);                     // Отметить все объекты для постоянной передачи
 ClearTransmitInfoAlwaysAll(info);                   // Снять отметку всех объектов с постоянной передачи
-[code]
-#### Методы целевых слотов[/code]csharp
+[/code]
+
+#### Методы целевых слотов
+[code=csharp]
 GetTransmitInfoTargetSlotsCount(info);              // Получить количество целевых слотов
 GetTransmitInfoTargetSlot(info, index);             // Получить конкретный целевой слот
 AddTransmitInfoTargetSlot(info, playerSlot);        // Добавить целевой слот
 RemoveTransmitInfoTargetSlot(info, index);          // Удалить целевой слот по индексу
 GetTransmitInfoTargetSlotsAll(info);                // Получить все целевые слоты
 RemoveTransmitInfoTargetSlotsAll(info);             // Очистить все целевые слоты
-[code]
-#### Методы полного обновления[/code]csharp
+[/code]
+
+#### Методы полного обновления
+[code=csharp]
 GetTransmitInfoFullUpdate(info);                    // Получить флаг полного обновления
 SetTransmitInfoFullUpdate(info, fullUpdate);        // Установить флаг полного обновления
-[code]
+[/code]
+
 [size=16][b]2. Объектно-ориентированный API (класс CheckTransmitInfo)[/b][/size]
 
 В языках, которые это поддерживают, вы можете создать класс CheckTransmitInfo из указателя для более интуитивного доступа в стиле ООП:
 
-[spoiler=c#][/code]csharp
+[spoiler=c#]
+[code=csharp]
   private void OnCheckTransmit(nint[] infos)
   {
       for (int playerSlot = 0; playerSlot < infos.Length; playerSlot++)
@@ -241,9 +270,12 @@ SetTransmitInfoFullUpdate(info, fullUpdate);        // Установить фл
           info.SetFullUpdate(true);
       }
   }
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
 
-[spoiler=c++][/code]cpp
+[spoiler=c++]
+[code=cpp]
   void OnCheckTransmit(const plg::vector<void*>& infos) {
       for (size_t playerSlot = 0; playerSlot < infos.size(); playerSlot++) {
           // Использовать указатель напрямую с методами
@@ -257,12 +289,16 @@ SetTransmitInfoFullUpdate(info, fullUpdate);        // Установить фл
           info.SetFullUpdate(true);
       }
   }
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
+
 [size=20][b]Практические примеры[/b][/size]
 
 [size=16][b]Пример 1: Скрыть конкретный объект от всех игроков[/b][/size]
 
-[spoiler=c#][/code]csharp
+[spoiler=c#]
+[code=csharp]
   using Plugify;
   using static s2sdk.s2sdk;
 
@@ -322,12 +358,16 @@ SetTransmitInfoFullUpdate(info, fullUpdate);        // Установить фл
           }
       }
   }
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
+
 [size=16][b]Пример 2: Создание видимости для конкретных игроков[/b][/size]
 
 Скрывайте объекты от конкретных игроков на основе условий:
 
-[spoiler=c#][/code]csharp
+[spoiler=c#]
+[code=csharp]
   using Plugify;
   using static s2sdk.s2sdk;
   using System.Collections.Generic;
@@ -393,12 +433,16 @@ SetTransmitInfoFullUpdate(info, fullUpdate);        // Установить фл
           }
       }
   }
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
+
 [size=16][b]Пример 3: Скрыть игроков друг от друга[/b][/size]
 
 Создать "режим невидимости", где конкретные игроки не видят друг друга:
 
-[spoiler=c#][/code]csharp
+[spoiler=c#]
+[code=csharp]
   using Plugify;
   using static s2sdk.s2sdk;
   using System.Collections.Generic;
@@ -465,12 +509,16 @@ SetTransmitInfoFullUpdate(info, fullUpdate);        // Установить фл
           }
       }
   }
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
+
 [size=16][b]Пример 4: Показывать только членов команды[/b][/size]
 
 Отображать объекты только игрокам из той же команды:
 
-[spoiler=c#][/code]csharp
+[spoiler=c#]
+[code=csharp]
   using Plugify;
   using static s2sdk.s2sdk;
   using System.Collections.Generic;
@@ -540,12 +588,16 @@ SetTransmitInfoFullUpdate(info, fullUpdate);        // Установить фл
           return GetEntSchemaInt32(entityHandle, "CBaseEntity", "m_iTeamNum", false, 0);
       }
   }
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
+
 [size=16][b]Пример 5: Контроль полного обновления[/b][/size]
 
 Принудительно отправлять полные обновления для конкретных ситуаций:
 
-[spoiler=c#][/code]csharp
+[spoiler=c#]
+[code=csharp]
   using Plugify;
   using static s2sdk.s2sdk;
   using System.Collections.Generic;
@@ -594,8 +646,10 @@ SetTransmitInfoFullUpdate(info, fullUpdate);        // Установить фл
           }
       }
   }
-  [font=monospace]`[/font]
+  
+[/code]
 [/spoiler]
+
 [size=20][b]Справочник методов[/b][/size]
 
 [size=16][b]Операции с Entity BitVec[/b][/size]

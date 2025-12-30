@@ -16,7 +16,8 @@
 [size=20][b]Быстрый пример: Событие смерти игрока[/b][/size]
 
 [spoiler=С классами (рекомендуется)]
-[code=csharp]  public void RegisterEvents()
+[code=csharp]
+  public void RegisterEvents()
   {
       HookEvent("player_death", Event_PlayerDeath);
   }
@@ -32,12 +33,14 @@
       int victim = victim_id + 1;
       int attacker = attacker_id + 1;
 
-      /[i] CODE [/i]/
+      /* CODE */
   }
-  [font=monospace]`[/font]
+  
+[/code]
 [/spoiler]
 
-[spoiler=Без классов][/code]csharp
+[spoiler=Без классов]
+[code=csharp]
   public void RegisterEvents()
   {
       HookEvent("player_death", Event_PlayerDeath);
@@ -52,14 +55,18 @@
       int victim = victim_id + 1;
       int attacker = attacker_id + 1;
 
-      /[i] CODE [/i]/
+      /* CODE */
   }
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
+
 [size=20][b]Добавление слушателя событий[/b][/size]
 
 Вы можете привязать слушатели событий в [font=monospace]OnPluginStart[/font] (или где угодно).
 
-[spoiler=c#][/code]csharp
+[spoiler=c#]
+[code=csharp]
   using Plugify;
   using static s2sdk.s2sdk;
 
@@ -75,9 +82,10 @@
           }, HookMode.Post);
       }
   }
-  [code][/spoiler]
-
-[spoiler=c++][/code]cpp
+  
+[/code]
+[/spoiler]div{label="c++" icon="vscode-icons:file-type-cpp3"}
+  [code=cpp]
   #include <plg/plugin.hpp>
   #include "s2sdk.hpp"
 
@@ -93,9 +101,10 @@
               }, HookMode::Post);
       }
   }
-  [code][/spoiler]
-
-[spoiler=python][/code]python
+  
+[/code]
+[spoiler=python]
+[code=python]
   from plugify.plugin import Plugin
   from plugify.pps import s2sdk as s2
 
@@ -108,9 +117,11 @@
                    s2.PrintToServer("event called.\n")
             )[1]
       ), s2.HookMode.Post)
-  [code][/spoiler]
-
-[spoiler=go][/code]go
+  
+[/code]
+[/spoiler]
+::div{label="go" icon="vscode-icons:file-type-go"}
+  [code=go]
   package main
 
   import (
@@ -128,9 +139,10 @@
               }, s2sdk.HookMode.Post)
       })
   }
-  [code][/spoiler]
-
-[spoiler=js][/code]js
+  
+[/code]
+[spoiler=js]
+[code=js]
   import { Plugin } from 'plugify';
   import { s2 } from ':s2sdk';
 
@@ -143,9 +155,11 @@
               }, s2.HookMode.Post);
       }
   }
-  [code][/spoiler]
-
-[spoiler=lua][/code]lua
+  
+[/code]
+[/spoiler]
+::div{label="lua" icon="vscode-icons:file-type-lua"}
+  [code=lua]
   local plugify = require 'plugify'
   local Plugin = plugify.Plugin
   local s2 = require 's2sdk'
@@ -164,12 +178,15 @@
   local M = {}
   M.Sample = Sample
   return M
-  [code][/spoiler]
+  
+[/code]
+
+
 [size=20][b]Доступ к параметрам событий[/b][/size]
 
 [spoiler=С классами (рекомендуется)]
 Доступ к параметрам событий с использованием типизированных методов на экземпляре EventInfo:
-  [font=monospace]`[/font]csharp
+  [code=csharp]
   // Чтение параметров событий
   int userid = event.GetInt("userid");
   float damage = event.GetFloat("damage");
@@ -180,10 +197,11 @@
   int playerController = event.GetPlayerController("userid");
   int playerPawn = event.GetPlayerPawn("userid");
   int entity = event.GetEntity("entityid");
-  [font=monospace]`[/font]
+  
+[/code]
 
   Установка параметров событий столь же проста:
-  [font=monospace]`[/font]csharp
+  [code=csharp]
   // Установка параметров событий
   event.SetInt("userid", 123);
   event.SetFloat("damage", 50.0f);
@@ -193,12 +211,13 @@
   // Установка ссылок на сущности
   event.SetPlayerController("userid", controllerHandle);
   event.SetEntity("entityid", entityHandle);
-  [font=monospace]`[/font]
+  
+[/code]
 [/spoiler]
 
 [spoiler=Без классов]
 Доступ к параметрам событий с использованием явных функций с дескриптором события:
-  [font=monospace]`[/font]csharp
+  [code=csharp]
   // Чтение параметров событий
   int userid = GetEventInt(event, "userid");
   float damage = GetEventFloat(event, "damage");
@@ -209,10 +228,11 @@
   int playerController = GetEventPlayerController(event, "userid");
   int playerPawn = GetEventPlayerPawn(event, "userid");
   int entity = GetEventEntity(event, "entityid");
-  [font=monospace]`[/font]
+  
+[/code]
 
   Установка параметров событий требует явных вызовов функций:
-  [font=monospace]`[/font]csharp
+  [code=csharp]
   // Установка параметров событий
   SetEventInt(event, "userid", 123);
   SetEventFloat(event, "damage", 50.0f);
@@ -222,13 +242,15 @@
   // Установка ссылок на сущности
   SetEventPlayerController(event, "userid", controllerHandle);
   SetEventEntity(event, "entityid", entityHandle);
-  [font=monospace]`[/font]
+  
+[/code]
 [/spoiler]
+
 [size=20][b]Создание и запуск событий[/b][/size]
 
 [spoiler=С классами (рекомендуется)]
 Создавайте и запускайте пользовательские события используя класс EventInfo:
-  [font=monospace]`[/font]csharp
+  [code=csharp]
   // Создание нового события
   using (var customEvent = new EventInfo("player_hurt"))
   {
@@ -244,12 +266,13 @@
       // Или запуск для конкретного игрока
       customEvent.FireToClient(playerSlot);
   } // Автоматическая очистка
-  [font=monospace]`[/font]
+  
+[/code]
 [/spoiler]
 
 [spoiler=Без классов]
 Создавайте и запускайте пользовательские события используя явные функции:
-  [font=monospace]`[/font]csharp
+  [code=csharp]
   // Создание нового события
   nint customEvent = CreateEvent("player_hurt");
 
@@ -266,28 +289,34 @@
   FireEventToClient(customEvent, playerSlot);
 
   // Примечание: Событие автоматически освобождается после запуска
-  [font=monospace]`[/font]
+  
+[/code]
 [/spoiler]
+
 [size=20][b]Предотвращение трансляции[/b][/size]
 
 [spoiler=С классами (рекомендуется)]
 Предотвращение трансляции события клиентам:
-  [font=monospace]`[/font]csharp
+  [code=csharp]
   event.SetBroadcast(false);
-  [font=monospace]`[/font]
+  
+[/code]
 [/spoiler]
 
 [spoiler=Без классов]
 Предотвращение трансляции события клиентам:
-  [font=monospace]`[/font]csharp
+  [code=csharp]
   SetEventBroadcast(event, false);
-  [font=monospace]`[/font]
+  
+[/code]
 [/spoiler]
+
 [size=20][b]Отмена события[/b][/size]
 
 В хуке pre-события вы можете предотвратить передачу события другим плагинам, вернув [font=monospace]ResultType.Handled[/font] или [font=monospace]ResultType.Stop[/font].
 
-[spoiler=С классами (рекомендуется)][/code]csharp
+[spoiler=С классами (рекомендуется)]
+[code=csharp]
   public void OnPluginStart()
   {
       HookEvent("player_death", OnPlayerDeathPre, HookMode.Pre);
@@ -307,9 +336,12 @@
 
       return ResultType.Continue;
   }
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
 
-[spoiler=Без классов][/code]csharp
+[spoiler=Без классов]
+[code=csharp]
   public void OnPluginStart()
   {
       HookEvent("player_death", OnPlayerDeathPre, HookMode.Pre);
@@ -328,5 +360,6 @@
 
       return ResultType.Continue;
   }
-  [font=monospace]`[/font]
+  
+[/code]
 [/spoiler]

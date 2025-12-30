@@ -14,24 +14,28 @@
 
 [spoiler=С классами (рекомендуется)]
 Используйте статический метод [font=monospace]ConVar.Find[/font] для получения экземпляра ConVar:
-  [code=csharp]  var cheatsCvar = ConVar.Find("sv_cheats");
+  [code=csharp]
+  var cheatsCvar = ConVar.Find("sv_cheats");
   if (cheatsCvar != null && cheatsCvar.Valid()) {
       // Используйте экземпляр ConVar
   }
-  [font=monospace]`[/font]
+  
+[/code]
 [/spoiler]
 
 [spoiler=Без классов]
 Используйте функцию [font=monospace]FindConVar[/font] для получения дескриптора:
-  [font=monospace]`[/font]csharp
+  [code=csharp]
   var cheatsCvar = FindConVar("sv_cheats");
-  [font=monospace]`[/font]
+  
+[/code]
 [/spoiler]
+
 [size=20][b]Манипулирование примитивными значениями[/b][/size]
 
 [spoiler=С классами (рекомендуется)]
 Чтение и установка значений более интуитивны с методами:
-  [font=monospace]`[/font]csharp
+  [code=csharp]
   var cheatsCvar = ConVar.Find("sv_cheats");
 
   // Чтение значения с использованием типизированных методов
@@ -42,29 +46,32 @@
 
   // Вы также можете использовать универсальный метод Set
   cheatsCvar.Set(true);
-  [font=monospace]`[/font]
+  
+[/code]
 [/spoiler]
 
 [spoiler=Без классов]
 Чтение и установка требует явной передачи дескриптора:
-  [font=monospace]`[/font]csharp
+  [code=csharp]
   var cheatsCvar = FindConVar("sv_cheats");
 
   // Чтение значения
   bool value = GetConVarBool(cheatsCvar);
 
   // Установка значения с дополнительными параметрами
-  SetConVarBool(cheatsCvar, true, /[i]replicate[/i]/true, /[i]notify[/i]/false);
+  SetConVarBool(cheatsCvar, true, /*replicate*/true, /*notify*/false);
 
   // Или используйте упрощённый помощник
   SetConVar(cheatsCvar, true);
-  [font=monospace]`[/font]
+  
+[/code]
 [/spoiler]
+
 [size=20][b]Манипулирование объектами[/b][/size]
 
 [spoiler=С классами (рекомендуется)]
 Строковые значения обрабатываются через типизированные методы:
-  [font=monospace]`[/font]csharp
+  [code=csharp]
   var stringCvar = ConVar.Find("sv_skyname");
 
   // Получение строкового значения
@@ -73,12 +80,13 @@
 
   // Установка строкового значения
   stringCvar.SetString("foobar");
-  [font=monospace]`[/font]
+  
+[/code]
 [/spoiler]
 
 [spoiler=Без классов]
 Строковые значения требуют явного преобразования типов:
-  [font=monospace]`[/font]csharp
+  [code=csharp]
   var stringCvar = FindConVar("sv_skyname");
 
   // Получение строкового значения
@@ -87,13 +95,15 @@
 
   // Установка строкового значения
   SetConVarString(stringCvar, "foobar");
-  [font=monospace]`[/font]
+  
+[/code]
 [/spoiler]
+
 [size=20][b]Создание ConVars[/b][/size]
 
 [spoiler=С классами (рекомендуется)]
 Создавайте ConVars используя конструктор класса с автоматическим определением типа:
-  [font=monospace]`[/font]csharp
+  [code=csharp]
   // Создание различных типов ConVars
   var stringCvar = new ConVar("my_plugin_name", "DefaultName", "Player name", ConVarFlags.None);
   var intCvar = new ConVar("my_plugin_maxplayers", 32, "Max players", ConVarFlags.None);
@@ -105,12 +115,13 @@
       int maxPlayers = intCvar.GetInt32();
       PrintToServer($"Plugin enabled with {maxPlayers} max players\n");
   }
-  [font=monospace]`[/font]
+  
+[/code]
 [/spoiler]
 
 [spoiler=Без классов]
 Создавайте ConVars используя функции для конкретных типов:
-  [font=monospace]`[/font]csharp
+  [code=csharp]
   // Создание различных типов ConVars
   var stringCvar = CreateConVarString("my_plugin_name", "DefaultName", "Player name", ConVarFlags.None);
   var intCvar = CreateConVarInt32("my_plugin_maxplayers", 32, "Max players", ConVarFlags.None);
@@ -122,11 +133,14 @@
       int maxPlayers = GetConVarInt32(intCvar);
       PrintToServer($"Plugin enabled with {maxPlayers} max players\n");
   }
-  [font=monospace]`[/font]
+  
+[/code]
 [/spoiler]
+
 [size=20][b]Полный пример[/b][/size]
 
-[spoiler=С классами (рекомендуется)][/code]csharp
+[spoiler=С классами (рекомендуется)]
+[code=csharp]
   using Plugify;
   using static s2sdk.s2sdk;
 
@@ -167,9 +181,12 @@
           PrintToServer($"Speed changed from {oldValue} to {newValue}\n");
       }
   }
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
 
-[spoiler=Без классов][/code]csharp
+[spoiler=Без классов]
+[code=csharp]
   using Plugify;
   using static s2sdk.s2sdk;
 
@@ -210,5 +227,6 @@
           PrintToServer($"Speed changed from {oldValue} to {newValue}\n");
       }
   }
-  [font=monospace]`[/font]
+  
+[/code]
 [/spoiler]

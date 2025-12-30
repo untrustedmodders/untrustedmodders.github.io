@@ -3,7 +3,8 @@
 
 Глобальные слушатели бывают разных видов, поэтому для них нет общей регистрации, они должны быть зарегистрированы в [font=monospace]OnStart[/font] вашего плагина (или где угодно) с использованием различных методов регистрации. Полный список слушателей событий можно найти в разделе [font=monospace]Listeners[/font], как показано ниже.
 
-[code=csharp]using System;
+[code=csharp]
+using System;
 using System.Numerics;
 using Plugify;
 using static s2sdk.s2sdk;
@@ -38,7 +39,8 @@ public unsafe class Sample : Plugin
         SetEntSchemaVector3D(entityHandle, 'CSmokeGrenadeProjectile', 'm_vSmokeColor', smokeColor, true, 0);
         PrintToServer($"Smoke grenade spawned with color {smokeColor}");
     }
-}[/code]
+}
+[/code]
 
 
 Полный список глобальных слушателей можно найти [url=https://api.plugify.net/?file=https://raw.githubusercontent.com/untrustedmodders/plugify-plugin-s2sdk/refs/heads/main/plugify-plugin-s2sdk.pplugin.in#/Listeners]здесь[/url]

@@ -31,8 +31,9 @@ User messages работают аналогично реализации SourceM
 
 Вы можете перехватывать user messages до того, как они будут отправлены клиентам:
 
-
-[code=csharp]using Plugify;
+[spoiler=c#]
+[code=csharp]
+using Plugify;
 using static s2sdk.s2sdk;
 
 public unsafe class Sample : Plugin
@@ -58,10 +59,11 @@ public unsafe class Sample : Plugin
         string text = PbReadString(userMessage, "text", 0);
         PrintToServer($"TextMsg intercepted: {text}\n");
     }
-}[/code]
-::
-::div{label="c++" icon="vscode-icons:file-type-cpp3"}
-[code=cpp]#include <plugify/cpp_plugin.hpp>
+}
+[/code]
+[/spoiler]div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[code=cpp]
+#include <plugify/cpp_plugin.hpp>
 #include "s2sdk.hpp"
 
 using namespace s2sdk;
@@ -84,10 +86,11 @@ public:
         int16_t msgId = UserMessageFindMessageIdByName("TextMsg");
         UnhookUserMessage(msgId, OnTextMessage, HookMode::Post);
     }
-};[/code]
-::
-::div{label="python" icon="vscode-icons:file-type-python"}
-[code=python]from plugify.plugin import Plugin
+};
+[/code]
+[spoiler=python]
+[code=python]
+from plugify.plugin import Plugin
 from plugify.pps import s2sdk as s2
 
 class Sample(Plugin):
@@ -101,10 +104,12 @@ class Sample(Plugin):
 
     def on_text_message(self, user_message):
         text = s2.PbReadString(user_message, "text", 0)
-        s2.PrintToServer(f"TextMsg intercepted: {text}\n")[/code]
-::
+        s2.PrintToServer(f"TextMsg intercepted: {text}\n")
+[/code]
+[/spoiler]
 ::div{label="go" icon="vscode-icons:file-type-go"}
-[code=go]package main
+[code=go]
+package main
 
 import (
     "fmt"
@@ -128,10 +133,11 @@ func init() {
         msgId := s2sdk.UserMessageFindMessageIdByName("TextMsg")
         s2sdk.UnhookUserMessage(msgId, onTextMessage, s2sdk.HookMode.Post)
     })
-}[/code]
-::
-::div{label="js" icon="vscode-icons:file-type-js-official"}
-[code=js]import { Plugin } from 'plugify';
+}
+[/code]
+[spoiler=js]
+[code=js]
+import { Plugin } from 'plugify';
 import { s2 } from ':s2sdk';
 
 export class Sample extends Plugin {
@@ -147,13 +153,15 @@ export class Sample extends Plugin {
 
     onTextMessage(userMessage) {
         const text = s2.PbReadString(userMessage, "text", 0);
-        s2.PrintToServer([font=monospace]TextMsg intercepted: ${text}\n[/font]);
+        s2.PrintToServer(`TextMsg intercepted: ${text}\n`);
         return s2.ResultType.Continue;
     }
-}[/code]
-::
+}
+[/code]
+[/spoiler]
 ::div{label="lua" icon="vscode-icons:file-type-lua"}
-[code=lua]local plugify = require 'plugify'
+[code=lua]
+local plugify = require 'plugify'
 local Plugin = plugify.Plugin
 local s2 = require 's2sdk'
 
@@ -178,15 +186,16 @@ end
 
 local M = {}
 M.Sample = Sample
-return M[/code]
-::
-::
+return M
+[/code]
+
 
 [size=20][b]Создание и отправка User Messages[/b][/size]
 
 [spoiler=С классами (Рекомендуется)]
 Создавайте user messages используя класс [font=monospace]UserMessage[/font] с автоматической очисткой:
-  [code=csharp]  // Создать из имени сообщения (наиболее распространенный способ)
+  [code=csharp]
+  // Создать из имени сообщения (наиболее распространенный способ)
   using (var msg = new UserMessage("TextMsg"))
   {
       // Установить получателей
@@ -206,12 +215,13 @@ return M[/code]
   {
       // Настроить и отправить...
   }
-  [font=monospace]`[/font]
+  
+[/code]
 [/spoiler]
 
 [spoiler=Без классов]
 Создавайте user messages используя явные функции:
-  [font=monospace]`[/font]csharp
+  [code=csharp]
   // Метод 1: Из имени сообщения (наиболее распространенный)
   nint msg = UserMessageCreateFromName("TextMsg");
 
@@ -238,15 +248,18 @@ return M[/code]
 
   // Очистить (ВАЖНО!)
   UserMessageDestroy(msg);
-  [font=monospace]`[/font]
+  
+[/code]
 [/spoiler]
+
 [size=20][b]Чтение и запись типов данных[/b][/size]
 
 User messages поддерживают различные типы данных. Вы можете использовать либо методы класса [font=monospace]UserMessage[/font] (рекомендуется), либо функции [font=monospace]PbRead[i][/font] и [font=monospace]PbSet[/i][/font]:
 
 [size=16][b]Целые числа[/b][/size]
 
-[spoiler=С классами (Рекомендуется)][/code]csharp
+[spoiler=С классами (Рекомендуется)]
+[code=csharp]
   using (var msg = new UserMessage("TextMsg"))
   {
       // Записать целые числа
@@ -259,9 +272,12 @@ User messages поддерживают различные типы данных.
       long bigValue = msg.GetInt64("bigField");
       uint unsigned = msg.GetUInt32("unsignedField");
   }
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
 
-[spoiler=Без классов][/code]csharp
+[spoiler=Без классов]
+[code=csharp]
   // Чтение
   int value = PbReadInt32(msg, "fieldName", 0);
   long bigValue = PbReadInt64(msg, "fieldName", 0);
@@ -271,10 +287,14 @@ User messages поддерживают различные типы данных.
   PbSetInt32(msg, "fieldName", 42);
   PbSetInt64(msg, "fieldName", 1000000L);
   PbSetUInt32(msg, "fieldName", 99u);
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
+
 [size=16][b]Числа с плавающей точкой[/b][/size]
 
-[spoiler=С классами (Рекомендуется)][/code]csharp
+[spoiler=С классами (Рекомендуется)]
+[code=csharp]
   using (var msg = new UserMessage("CustomMsg"))
   {
       // Записать значения с плавающей точкой
@@ -285,9 +305,12 @@ User messages поддерживают различные типы данных.
       float speed = msg.GetFloat("speed");
       double precision = msg.GetDouble("precision");
   }
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
 
-[spoiler=Без классов][/code]csharp
+[spoiler=Без классов]
+[code=csharp]
   // Чтение
   float speed = PbReadFloat(msg, "speed", 0);
   double precision = PbReadDouble(msg, "value", 0);
@@ -295,10 +318,14 @@ User messages поддерживают различные типы данных.
   // Запись
   PbSetFloat(msg, "speed", 1.5f);
   PbSetDouble(msg, "value", 3.14159);
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
+
 [size=16][b]Булевы значения[/b][/size]
 
-[spoiler=С классами (Рекомендуется)][/code]csharp
+[spoiler=С классами (Рекомендуется)]
+[code=csharp]
   using (var msg = new UserMessage("ShowMenu"))
   {
       // Записать булево значение
@@ -308,18 +335,25 @@ User messages поддерживают различные типы данных.
       // Прочитать булево значение (в callback-перехватчиках)
       bool isActive = msg.GetBool("active");
   }
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
 
-[spoiler=Без классов][/code]csharp
+[spoiler=Без классов]
+[code=csharp]
   // Чтение
   bool isActive = PbReadBool(msg, "active", 0);
 
   // Запись
   PbSetBool(msg, "active", true);
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
+
 [size=16][b]Строки[/b][/size]
 
-[spoiler=С классами (Рекомендуется)][/code]csharp
+[spoiler=С классами (Рекомендуется)]
+[code=csharp]
   using (var msg = new UserMessage("TextMsg"))
   {
       // Записать строку
@@ -329,18 +363,25 @@ User messages поддерживают различные типы данных.
       // Прочитать строку (в callback-перехватчиках)
       string text = msg.GetString("text");
   }
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
 
-[spoiler=Без классов][/code]csharp
+[spoiler=Без классов]
+[code=csharp]
   // Чтение
   string text = PbReadString(msg, "text", 0);
 
   // Запись
   PbSetString(msg, "text", "Custom message");
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
+
 [size=16][b]Векторы и углы[/b][/size]
 
-[spoiler=С классами (Рекомендуется)][/code]csharp
+[spoiler=С классами (Рекомендуется)]
+[code=csharp]
   using System.Numerics;
 
   using (var msg = new UserMessage("CustomPositionMsg"))
@@ -357,9 +398,12 @@ User messages поддерживают различные типы данных.
       Vector3 angles = msg.GetQAngle("angles");
       Vector2 pos2d = msg.GetVector2("pos");
   }
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
 
-[spoiler=Без классов][/code]csharp
+[spoiler=Без классов]
+[code=csharp]
   using System.Numerics;
 
   // Прочитать 3D вектор
@@ -375,10 +419,14 @@ User messages поддерживают различные типы данных.
 
   // Записать 2D вектор
   PbSetVector2(msg, "pos", new Vector2(50, 100));
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
+
 [size=16][b]Перечисления[/b][/size]
 
-[spoiler=С классами (Рекомендуется)][/code]csharp
+[spoiler=С классами (Рекомендуется)]
+[code=csharp]
   using (var msg = new UserMessage("CustomMsg"))
   {
       // Записать значение enum
@@ -389,18 +437,25 @@ User messages поддерживают различные типы данных.
       int enumValue = msg.GetEnum("type");
       GameState state = (GameState)msg.GetEnum("state");
   }
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
 
-[spoiler=Без классов][/code]csharp
+[spoiler=Без классов]
+[code=csharp]
   // Прочитать значение enum
   int enumValue = PbReadEnum(msg, "type", 0);
 
   // Записать значение enum
   PbSetEnum(msg, "type", 2);
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
+
 [size=16][b]Цвета[/b][/size]
 
-[spoiler=С классами (Рекомендуется)][/code]csharp
+[spoiler=С классами (Рекомендуется)]
+[code=csharp]
   using (var msg = new UserMessage("Fade"))
   {
       // Записать цвет (упакованный RGBA)
@@ -420,20 +475,27 @@ User messages поддерживают различные типы данных.
       int blue = (packedColor >> 8) & 0xFF;
       int alpha = packedColor & 0xFF;
   }
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
 
-[spoiler=Без классов][/code]csharp
+[spoiler=Без классов]
+[code=csharp]
   // Прочитать цвет (упакованный RGBA)
   int color = PbReadColor(msg, "color", 0);
 
   // Записать цвет
   PbSetColor(msg, "color", 0xFF0000FF);  // Красный с полной альфой
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
+
 [size=20][b]Работа с повторяющимися полями[/b][/size]
 
 Некоторые protobuf-поля являются массивами (repeated fields):
 
-[spoiler=С классами (Рекомендуется)][/code]csharp
+[spoiler=С классами (Рекомендуется)]
+[code=csharp]
   using (var msg = new UserMessage("CustomMsg"))
   {
       // Добавить значения в повторяющееся поле
@@ -460,9 +522,12 @@ User messages поддерживают различные типы данных.
       // Удалить значение из повторяющегося поля
       msg.RemoveRepeatedFieldValue("items", 0);  // Удалить индекс 0
   }
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
 
-[spoiler=Без классов][/code]csharp
+[spoiler=Без классов]
+[code=csharp]
   // Получить количество элементов в повторяющемся поле
   int count = UserMessageGetRepeatedFieldCount(msg, "items");
 
@@ -483,12 +548,16 @@ User messages поддерживают различные типы данных.
 
   // Удалить значение из повторяющегося поля
   UserMessageRemoveRepeatedFieldValue(msg, "items", 0);  // Удалить индекс 0
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
+
 [size=20][b]Работа с вложенными сообщениями[/b][/size]
 
 Некоторые сообщения содержат вложенные поля сообщений:
 
-[spoiler=С классами (Рекомендуется)][/code]csharp
+[spoiler=С классами (Рекомендуется)]
+[code=csharp]
   using (var msg = new UserMessage("ComplexMsg"))
   {
       // Получить вложенное сообщение
@@ -520,9 +589,12 @@ User messages поддерживают различные типы данных.
       newMsg.SetInt32("score", 100);
       msg.AddMessage("repeated_nested", newMsg);
   }
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
 
-[spoiler=Без классов][/code]csharp
+[spoiler=Без классов]
+[code=csharp]
   // Получить вложенное сообщение
   nint nestedMsg = IntPtr.Zero;
   if (UserMessageGetMessage(msg, "nested_field", nestedMsg))
@@ -542,12 +614,16 @@ User messages поддерживают различные типы данных.
   // Добавить вложенное сообщение в повторяющееся поле
   nint newMsg = IntPtr.Zero;  // Создать соответствующим образом
   UserMessageAddMessage(msg, "repeated_nested", newMsg);
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
+
 [size=20][b]Управление получателями[/b][/size]
 
 Контролируйте, кто получает сообщение:
 
-[spoiler=С классами (Рекомендуется)][/code]csharp
+[spoiler=С классами (Рекомендуется)]
+[code=csharp]
   using (var msg = new UserMessage("TextMsg"))
   {
       // Отправить всем игрокам
@@ -575,9 +651,12 @@ User messages поддерживают различные типы данных.
       // Отправить
       msg.Send();
   }
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
 
-[spoiler=Без классов][/code]csharp
+[spoiler=Без классов]
+[code=csharp]
   // Отправить всем игрокам
   UserMessageAddAllPlayers(msg);
 
@@ -595,12 +674,16 @@ User messages поддерживают различные типы данных.
 
   // Получить текущую маску получателей
   ulong currentMask = UserMessageGetRecipientMask(msg);
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
+
 [size=20][b]Практические примеры[/b][/size]
 
 [size=16][b]Пример 1: Отправка чат-сообщения всем игрокам[/b][/size]
 
-[/code]csharp
+[spoiler=С классами]
+[code=csharp]
 using Plugify;
 using static s2sdk.s2sdk;
 
@@ -646,8 +729,9 @@ public unsafe class ChatMessage : Plugin
         } // Автоматически уничтожается здесь
     }
 }
-[code]::
-::div{label="Без классов" icon="lucide:code"}[/code]csharp
+[/code]
+[/spoiler]div{label="Без классов" icon="lucide:code"}
+[code=csharp]
 using Plugify;
 using static s2sdk.s2sdk;
 
@@ -692,12 +776,13 @@ public unsafe class ChatMessage : Plugin
         PrintToServer($"Sent chat message: {text}\n");
     }
 }
-[code]::
-::
+[/code]
+
 
 [size=16][b]Пример 2: Отправка подсказки конкретному игроку[/b][/size]
 
-[/code]csharp
+[spoiler=С классами]
+[code=csharp]
 using Plugify;
 using static s2sdk.s2sdk;
 
@@ -741,8 +826,9 @@ public unsafe class HintSystem : Plugin
         } // Автоматически уничтожается
     }
 }
-[code]::
-::div{label="Без классов" icon="lucide:code"}[/code]csharp
+[/code]
+[/spoiler]div{label="Без классов" icon="lucide:code"}
+[code=csharp]
 using Plugify;
 using static s2sdk.s2sdk;
 
@@ -786,12 +872,13 @@ public unsafe class HintSystem : Plugin
         UserMessageDestroy(msg);
     }
 }
-[code]::
-::
+[/code]
+
 
 [size=16][b]Пример 3: Эффект затемнения экрана[/b][/size]
 
-[/code]csharp
+[spoiler=С классами]
+[code=csharp]
 using System.Numerics;
 using Plugify;
 using static s2sdk.s2sdk;
@@ -839,8 +926,9 @@ public unsafe class FadeEffect : Plugin
         } // Автоматически уничтожается
     }
 }
-[code]::
-::div{label="Без классов" icon="lucide:code"}[/code]csharp
+[/code]
+[/spoiler]div{label="Без классов" icon="lucide:code"}
+[code=csharp]
 using System.Numerics;
 using Plugify;
 using static s2sdk.s2sdk;
@@ -888,12 +976,13 @@ public unsafe class FadeEffect : Plugin
         PrintToServer("Screen fade applied\n");
     }
 }
-[code]::
-::
+[/code]
+
 
 [size=16][b]Пример 4: Показать пользовательское меню[/b][/size]
 
-[/code]csharp
+[spoiler=С классами]
+[code=csharp]
 using Plugify;
 using static s2sdk.s2sdk;
 
@@ -938,8 +1027,9 @@ public unsafe class MenuSystem : Plugin
         } // Автоматически уничтожается
     }
 }
-[code]::
-::div{label="Без классов" icon="lucide:code"}[/code]csharp
+[/code]
+[/spoiler]div{label="Без классов" icon="lucide:code"}
+[code=csharp]
 using Plugify;
 using static s2sdk.s2sdk;
 
@@ -984,12 +1074,13 @@ public unsafe class MenuSystem : Plugin
         PrintToServer("Menu displayed\n");
     }
 }
-[code]::
-::
+[/code]
+
 
 [size=16][b]Пример 5: Перехват и изменение сообщений[/b][/size]
 
-[/code]csharp
+[spoiler=С классами]
+[code=csharp]
 using Plugify;
 using static s2sdk.s2sdk;
 
@@ -1016,7 +1107,7 @@ public unsafe class MessageFilter : Plugin
         string originalText = userMessage.GetString("text", 0);
 
         // Фильтровать ненормативную лексику
-        string filtered = originalText.Replace("badword", "[i]*[/i]*");
+        string filtered = originalText.Replace("badword", "****");
 
         // Изменить сообщение
         if (filtered != originalText)
@@ -1031,8 +1122,9 @@ public unsafe class MessageFilter : Plugin
         // Примечание: Не нужно уничтожать - мы не владеем handle
     }
 }
-[code]::
-::div{label="Без классов" icon="lucide:code"}[/code]csharp
+[/code]
+[/spoiler]div{label="Без классов" icon="lucide:code"}
+[code=csharp]
 using Plugify;
 using static s2sdk.s2sdk;
 
@@ -1056,7 +1148,7 @@ public unsafe class MessageFilter : Plugin
         string originalText = PbReadString(userMessage, "text", 0);
 
         // Фильтровать ненормативную лексику
-        string filtered = originalText.Replace("badword", "[i]*[/i]*");
+        string filtered = originalText.Replace("badword", "****");
 
         // Изменить сообщение
         if (filtered != originalText)
@@ -1069,12 +1161,13 @@ public unsafe class MessageFilter : Plugin
         PbSetString(userMessage, "text", "[Server] " + filtered);
     }
 }
-[code]::
-::
+[/code]
+
 
 [size=16][b]Пример 6: Отправка данных с повторяющимися полями[/b][/size]
 
-[/code]csharp
+[spoiler=С классами]
+[code=csharp]
 using Plugify;
 using static s2sdk.s2sdk;
 
@@ -1121,8 +1214,9 @@ public unsafe class RepeatedFieldDemo : Plugin
         } // Автоматически уничтожается
     }
 }
-[code]::
-::div{label="Без классов" icon="lucide:code"}[/code]csharp
+[/code]
+[/spoiler]div{label="Без классов" icon="lucide:code"}
+[code=csharp]
 using Plugify;
 using static s2sdk.s2sdk;
 
@@ -1170,14 +1264,15 @@ public unsafe class RepeatedFieldDemo : Plugin
         UserMessageDestroy(msg);
     }
 }
-[code]::
-::
+[/code]
+
 
 [size=20][b]Отладка User Messages[/b][/size]
 
 [size=16][b]Инспектировать содержимое сообщения[/b][/size]
 
-[/code]csharp
+[spoiler=С классами]
+[code=csharp]
 using (var msg = new UserMessage("TextMsg"))
 {
     msg.SetString("text", "Debug test");
@@ -1186,8 +1281,9 @@ using (var msg = new UserMessage("TextMsg"))
     string debugStr = msg.GetDebugString();
     PrintToServer($"Message debug: {debugStr}\n");
 } // Автоматически уничтожается
-[code]::
-::div{label="Без классов" icon="lucide:code"}[/code]csharp
+[/code]
+[/spoiler]div{label="Без классов" icon="lucide:code"}
+[code=csharp]
 nint msg = UserMessageCreateFromName("TextMsg");
 PbSetString(msg, "text", "Debug test");
 
@@ -1196,12 +1292,13 @@ string debugStr = UserMessageGetDebugString(msg);
 PrintToServer($"Message debug: {debugStr}\n");
 
 UserMessageDestroy(msg);
-[code]::
-::
+[/code]
+
 
 [size=16][b]Проверка существования поля[/b][/size]
 
-[/code]csharp
+[spoiler=С классами]
+[code=csharp]
 using (var msg = new UserMessage("TextMsg"))
 {
     // Проверить существование поля перед доступом к нему
@@ -1211,8 +1308,9 @@ using (var msg = new UserMessage("TextMsg"))
         PrintToServer($"Optional field value: {value}\n");
     }
 } // Автоматически уничтожается
-[code]::
-::div{label="Без классов" icon="lucide:code"}[/code]csharp
+[/code]
+[/spoiler]div{label="Без классов" icon="lucide:code"}
+[code=csharp]
 nint msg = UserMessageCreateFromName("TextMsg");
 
 // Проверить существование поля перед доступом к нему
@@ -1223,9 +1321,8 @@ if (UserMessageHasField(msg, "optional_field"))
 }
 
 UserMessageDestroy(msg);
-[font=monospace]`[/font]
-::
-::
+[/code]
+
 
 [size=20][b]Советы и лучшие практики[/b][/size]
 

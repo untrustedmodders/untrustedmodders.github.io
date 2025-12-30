@@ -42,8 +42,9 @@ s2sdk предоставляет два способа работы с gamedata:
 | JavaScript | [font=monospace]this.location[/font] |
 | Lua | [font=monospace]self.location[/font] |
 
-
-[code=csharp]using Plugify;
+[spoiler=c#]
+[code=csharp]
+using Plugify;
 using static s2sdk.s2sdk;
 
 public unsafe class Sample : Plugin
@@ -79,10 +80,11 @@ public unsafe class Sample : Plugin
             gameData = IntPtr.Zero;
         }
     }
-}[/code]
-::
-::div{label="c++" icon="vscode-icons:file-type-cpp3"}
-[code=cpp]#include <plugify/cpp_plugin.hpp>
+}
+[/code]
+[/spoiler]div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[code=cpp]
+#include <plugify/cpp_plugin.hpp>
 #include <filesystem>
 #include "s2sdk.hpp"
 
@@ -119,10 +121,11 @@ public:
             gameData = nullptr;
         }
     }
-};[/code]
-::
-::div{label="python" icon="vscode-icons:file-type-python"}
-[code=python]import os
+};
+[/code]
+[spoiler=python]
+[code=python]
+import os
 from plugify.plugin import Plugin
 from plugify.pps import s2sdk as s2
 
@@ -151,10 +154,12 @@ class Sample(Plugin):
         # Clean up gamedata
         if self.game_data is not None:
             s2.CloseGameConfigFile(self.game_data)
-            self.game_data = None[/code]
-::
+            self.game_data = None
+[/code]
+[/spoiler]
 ::div{label="go" icon="vscode-icons:file-type-go"}
-[code=go]package main
+[code=go]
+package main
 
 import (
     "fmt"
@@ -192,10 +197,11 @@ func init() {
             gameData = nil
         }
     })
-}[/code]
-::
-::div{label="js" icon="vscode-icons:file-type-js-official"}
-[code=js]import { Plugin } from 'plugify';
+}
+[/code]
+[spoiler=js]
+[code=js]
+import { Plugin } from 'plugify';
 import { s2 } from ':s2sdk';
 import path from 'path';
 
@@ -220,7 +226,7 @@ export class Sample extends Plugin {
 
         // Use gamedata methods...
         const offset = s2.GetGameConfigOffset(this.gameData, "SomeOffset");
-        s2.PrintToServer([font=monospace]Offset value: ${offset}\n[/font]);
+        s2.PrintToServer(`Offset value: ${offset}\n`);
     }
 
     pluginEnd() {
@@ -230,10 +236,12 @@ export class Sample extends Plugin {
             this.gameData = null;
         }
     }
-}[/code]
-::
+}
+[/code]
+[/spoiler]
 ::div{label="lua" icon="vscode-icons:file-type-lua"}
-[code=lua]local plugify = require 'plugify'
+[code=lua]
+local plugify = require 'plugify'
 local Plugin = plugify.Plugin
 local s2 = require 's2sdk'
 
@@ -275,15 +283,16 @@ end
 
 local M = {}
 M.Sample = Sample
-return M[/code]
-::
-::
+return M
+[/code]
+
 
 [size=20][b]Структура схемы JSON[/b][/size]
 
 Файлы GameData используют формат JSON с платформозависимыми конфигурациями. Вот базовая структура:
 
-[code=json]{
+[code=json]
+{
   "Signatures": {
     "SignatureName": {
       "library": "server",
@@ -331,7 +340,8 @@ return M[/code]
       "table": "CBaseEntity"
     }
   }
-}[/code]
+}
+[/code]
 
 [quote][b]Info:[/b] [b]Важно:[/b] Файл gamedata должен быть размещён в директории данных вашего плагина. Имя файла, передаваемое в [font=monospace]LoadGameConfigFile[/font], должно быть относительно этой директории.[/quote]
 
@@ -357,8 +367,9 @@ return M[/code]
 [*][font=monospace]GetSignature(name)[/font] - Получить адрес именованной сигнатуры
 [/list]
 
-
-[code=csharp]using Plugify;
+[spoiler=c#]
+[code=csharp]
+using Plugify;
 using static s2sdk.s2sdk;
 
 public unsafe class Sample : Plugin
@@ -393,10 +404,11 @@ public unsafe class Sample : Plugin
         gameConfig?.Dispose();
         gameConfig = null;
     }
-}[/code]
-::
-::div{label="c++" icon="vscode-icons:file-type-cpp3"}
-[code=cpp]#include <plugify/cpp_plugin.hpp>
+}
+[/code]
+[/spoiler]div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[code=cpp]
+#include <plugify/cpp_plugin.hpp>
 #include "s2sdk.hpp"
 
 using namespace s2sdk;
@@ -432,10 +444,11 @@ public:
         // Destructor automatically closes gamedata - no manual cleanup needed!
         gameConfig.reset();
     }
-};[/code]
-::
-::div{label="python" icon="vscode-icons:file-type-python"}
-[code=python]from plugify.plugin import Plugin
+};
+[/code]
+[spoiler=python]
+[code=python]
+from plugify.plugin import Plugin
 from plugify.pps import s2sdk as s2
 
 class Sample(Plugin):
@@ -465,10 +478,12 @@ class Sample(Plugin):
         # Destructor automatically closes gamedata - no manual cleanup needed!
         if self.game_config is not None:
             del self.game_config
-            self.game_config = None[/code]
-::
+            self.game_config = None
+[/code]
+[/spoiler]
 ::div{label="go" icon="vscode-icons:file-type-go"}
-[code=go]package main
+[code=go]
+package main
 
 import (
     "fmt"
@@ -508,10 +523,11 @@ func init() {
             gameConfig = nil
         }
     })
-}[/code]
-::
-::div{label="js" icon="vscode-icons:file-type-js-official"}
-[code=js]import { Plugin } from 'plugify';
+}
+[/code]
+[spoiler=js]
+[code=js]
+import { Plugin } from 'plugify';
 import { s2 } from ':s2sdk';
 
 export class Sample extends Plugin {
@@ -531,13 +547,13 @@ export class Sample extends Plugin {
 
         // Use member methods directly on the object
         const offset = this.gameConfig.getOffset("SomeOffset");
-        s2.PrintToServer([font=monospace]Offset value: ${offset}\n[/font]);
+        s2.PrintToServer(`Offset value: ${offset}\n`);
 
         const signature = this.gameConfig.getSignature("SignatureName");
-        s2.PrintToServer([font=monospace]Signature at: 0x${signature.toString(16)}\n[/font]);
+        s2.PrintToServer(`Signature at: 0x${signature.toString(16)}\n`);
 
         const address = this.gameConfig.getAddress("GlobalVars");
-        s2.PrintToServer([font=monospace]Address at: 0x${address.toString(16)}\n[/font]);
+        s2.PrintToServer(`Address at: 0x${address.toString(16)}\n`);
     }
 
     pluginEnd() {
@@ -547,10 +563,12 @@ export class Sample extends Plugin {
             this.gameConfig = null;
         }
     }
-}[/code]
-::
+}
+[/code]
+[/spoiler]
 ::div{label="lua" icon="vscode-icons:file-type-lua"}
-[code=lua]local plugify = require 'plugify'
+[code=lua]
+local plugify = require 'plugify'
 local Plugin = plugify.Plugin
 local s2 = require 's2sdk'
 
@@ -594,9 +612,9 @@ end
 
 local M = {}
 M.Sample = Sample
-return M[/code]
-::
-::
+return M
+[/code]
+
 
 [quote][b]Info:[/b] [b]Ключевое отличие:[/b] С ООП-подходом вам не нужно передавать дескриптор gamedata в каждый вызов метода. Объект [font=monospace]GameConfig[/font] инкапсулирует дескриптор и предоставляет методы-члены, которые автоматически используют его.[/quote]
 
@@ -627,8 +645,9 @@ return M[/code]
 
 [size=16][b]Использование сигнатур[/b][/size]
 
-
-[code=csharp]// Get single signature
+[spoiler=c#]
+[code=csharp]
+// Get single signature
 nint address = GetGameConfigSignature(gameData, "SignatureName");
 if (address != IntPtr.Zero)
 {
@@ -636,10 +655,11 @@ if (address != IntPtr.Zero)
 }
 
 // Search all loaded configs for signature
-nint signatureAll = GetGameConfigSignatureAll("SignatureName");[/code]
-::
-::div{label="c++" icon="vscode-icons:file-type-cpp3"}
-[code=cpp]// Get single signature
+nint signatureAll = GetGameConfigSignatureAll("SignatureName");
+[/code]
+[/spoiler]div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[code=cpp]
+// Get single signature
 void* address = GetGameConfigSignature(gameData, "SignatureName");
 if (address != nullptr) {
     PrintToServer(std::format("Found signature at: {:X}\n",
@@ -647,18 +667,19 @@ if (address != nullptr) {
 }
 
 // Search all loaded configs for signature
-void* signatureAll = GetGameConfigSignatureAll("SignatureName");[/code]
-::
-::div{label="python" icon="vscode-icons:file-type-python"}
-[code=python]# Get single signature
+void* signatureAll = GetGameConfigSignatureAll("SignatureName");
+[/code]
+[spoiler=python]
+[code=python]
+# Get single signature
 address = s2.GetGameConfigSignature(game_data, "SignatureName")
 if address is not None:
     s2.PrintToServer(f"Found signature at: 0x{address:X}\n")
 
-[size=24][b]Search all loaded configs for signature[/b][/size]
-signature_all = s2.GetGameConfigSignatureAll("SignatureName")[/code]
-::
-::
+# Search all loaded configs for signature
+signature_all = s2.GetGameConfigSignatureAll("SignatureName")
+[/code]
+[/spoiler]
 
 [size=20][b]Смещения[/b][/size]
 
@@ -666,7 +687,8 @@ signature_all = s2.GetGameConfigSignatureAll("SignatureName")[/code]
 
 [size=16][b]Определение смещений[/b][/size]
 
-[code=json]{
+[code=json]
+{
   "Offsets": {
     "HealthOffset": {
       "win64": 3216,
@@ -677,12 +699,14 @@ signature_all = s2.GetGameConfigSignatureAll("SignatureName")[/code]
       "linuxsteamrt64": 1040
     }
   }
-}[/code]
+}
+[/code]
 
 [size=16][b]Использование смещений[/b][/size]
 
-
-[code=csharp]// Get single offset
+[spoiler=c#]
+[code=csharp]
+// Get single offset
 int healthOffset = GetGameConfigOffset(gameData, "HealthOffset");
 PrintToServer($"Health offset: {healthOffset}\n");
 
@@ -691,10 +715,11 @@ int offsetAll = GetGameConfigOffsetAll("HealthOffset");
 
 // Use offset with entity data
 int entityHandle = PlayerSlotToEntHandle(0);
-SetEntData(entityHandle, healthOffset, 200, 4, true, 0);[/code]
-::
-::div{label="c++" icon="vscode-icons:file-type-cpp3"}
-[code=cpp]// Get single offset
+SetEntData(entityHandle, healthOffset, 200, 4, true, 0);
+[/code]
+[/spoiler]div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[code=cpp]
+// Get single offset
 int healthOffset = GetGameConfigOffset(gameData, "HealthOffset");
 PrintToServer(std::format("Health offset: {}\n", healthOffset).c_str());
 
@@ -703,21 +728,22 @@ int offsetAll = GetGameConfigOffsetAll("HealthOffset");
 
 // Use offset with entity data
 int entityHandle = PlayerSlotToEntHandle(0);
-SetEntData(entityHandle, healthOffset, 200, 4, true, 0);[/code]
-::
-::div{label="python" icon="vscode-icons:file-type-python"}
-[code=python]# Get single offset
+SetEntData(entityHandle, healthOffset, 200, 4, true, 0);
+[/code]
+[spoiler=python]
+[code=python]
+# Get single offset
 health_offset = s2.GetGameConfigOffset(game_data, "HealthOffset")
 s2.PrintToServer(f"Health offset: {health_offset}\n")
 
-[size=24][b]Search all loaded configs for offset[/b][/size]
+# Search all loaded configs for offset
 offset_all = s2.GetGameConfigOffsetAll("HealthOffset")
 
-[size=24][b]Use offset with entity data[/b][/size]
+# Use offset with entity data
 entity_handle = s2.PlayerSlotToEntHandle(0)
-s2.SetEntData(entity_handle, health_offset, 200, 4, True, 0)[/code]
-::
-::
+s2.SetEntData(entity_handle, health_offset, 200, 4, True, 0)
+[/code]
+[/spoiler]
 
 [size=20][b]Адреса[/b][/size]
 
@@ -735,7 +761,8 @@ s2.SetEntData(entity_handle, health_offset, 200, 4, True, 0)[/code]
 
 Адреса определяются как [b]массивы шагов действий[/b] для каждой платформы:
 
-[code=json]{
+[code=json]
+{
   "Addresses": {
     "GlobalVars": {
       "signature": "GlobalVarsSignature",
@@ -783,14 +810,16 @@ s2.SetEntData(entity_handle, health_offset, 200, 4, True, 0)[/code]
       ]
     }
   }
-}[/code]
+}
+[/code]
 
 [quote][b]Info:[/b] [b]Выполнение шагов:[/b] Каждое действие адреса выполняется последовательно. Например, [font=monospace]EntityList[/font] сначала добавляет смещение 10, затем читает указатель 2 раза.[/quote]
 
 [size=16][b]Использование адресов[/b][/size]
 
-
-[code=csharp]// Get single address
+[spoiler=c#]
+[code=csharp]
+// Get single address
 nint globalVarsAddr = GetGameConfigAddress(gameData, "GlobalVars");
 if (globalVarsAddr != IntPtr.Zero)
 {
@@ -801,10 +830,11 @@ if (globalVarsAddr != IntPtr.Zero)
 }
 
 // Search all loaded configs for address
-nint addressAll = GetGameConfigAddressAll("GlobalVars");[/code]
-::
-::div{label="c++" icon="vscode-icons:file-type-cpp3"}
-[code=cpp]// Get single address
+nint addressAll = GetGameConfigAddressAll("GlobalVars");
+[/code]
+[/spoiler]div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[code=cpp]
+// Get single address
 void* globalVarsAddr = GetGameConfigAddress(gameData, "GlobalVars");
 if (globalVarsAddr != nullptr) {
     PrintToServer(std::format("GlobalVars at: {:X}\n",
@@ -815,10 +845,11 @@ if (globalVarsAddr != nullptr) {
 }
 
 // Search all loaded configs for address
-void* addressAll = GetGameConfigAddressAll("GlobalVars");[/code]
-::
-::div{label="python" icon="vscode-icons:file-type-python"}
-[code=python]# Get single address
+void* addressAll = GetGameConfigAddressAll("GlobalVars");
+[/code]
+[spoiler=python]
+[code=python]
+# Get single address
 global_vars_addr = s2.GetGameConfigAddress(game_data, "GlobalVars")
 if global_vars_addr is not None:
     s2.PrintToServer(f"GlobalVars at: 0x{global_vars_addr:X}\n")
@@ -826,10 +857,10 @@ if global_vars_addr is not None:
     # Use the address to read/write memory
     # ... pointer dereferencing code ...
 
-[size=24][b]Search all loaded configs for address[/b][/size]
-address_all = s2.GetGameConfigAddressAll("GlobalVars")[/code]
-::
-::
+# Search all loaded configs for address
+address_all = s2.GetGameConfigAddressAll("GlobalVars")
+[/code]
+[/spoiler]
 
 [size=20][b]Патчи[/b][/size]
 
@@ -841,7 +872,8 @@ address_all = s2.GetGameConfigAddressAll("GlobalVars")[/code]
 
 Патчи ссылаются на адрес (из разделов Addresses или Signatures) и указывают байты патча для записи:
 
-[code=json]{
+[code=json]
+{
   "Patches": {
     "VScriptEnable": {
       "address": "VScriptInitialization",
@@ -854,7 +886,8 @@ address_all = s2.GetGameConfigAddressAll("GlobalVars")[/code]
       "linuxsteamrt64": "90 90"
     }
   }
-}[/code]
+}
+[/code]
 
 [list]
 [*][b][font=monospace]address[/font][/b] - Имя адреса/сигнатуры из файла gamedata
@@ -869,8 +902,9 @@ address_all = s2.GetGameConfigAddressAll("GlobalVars")[/code]
 
 Хотя патчи применяются автоматически, вы всё ещё можете запрашивать данные о патчах:
 
-
-[code=csharp]// Get single patch address (where it was applied)
+[spoiler=c#]
+[code=csharp]
+// Get single patch address (where it was applied)
 nint patchAddr = GetGameConfigPatch(gameData, "DisableValidation");
 if (patchAddr != IntPtr.Zero)
 {
@@ -878,10 +912,11 @@ if (patchAddr != IntPtr.Zero)
 }
 
 // Search all loaded configs for patch
-nint patchAll = GetGameConfigPatchAll("DisableValidation");[/code]
-::
-::div{label="c++" icon="vscode-icons:file-type-cpp3"}
-[code=cpp]// Get single patch address (where it was applied)
+nint patchAll = GetGameConfigPatchAll("DisableValidation");
+[/code]
+[/spoiler]div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[code=cpp]
+// Get single patch address (where it was applied)
 void* patchAddr = GetGameConfigPatch(gameData, "DisableValidation");
 if (patchAddr != nullptr) {
     PrintToServer(std::format("Patch applied at: {:X}\n",
@@ -889,18 +924,19 @@ if (patchAddr != nullptr) {
 }
 
 // Search all loaded configs for patch
-void* patchAll = GetGameConfigPatchAll("DisableValidation");[/code]
-::
-::div{label="python" icon="vscode-icons:file-type-python"}
-[code=python]# Get single patch address (where it was applied)
+void* patchAll = GetGameConfigPatchAll("DisableValidation");
+[/code]
+[spoiler=python]
+[code=python]
+# Get single patch address (where it was applied)
 patch_addr = s2.GetGameConfigPatch(game_data, "DisableValidation")
 if patch_addr is not None:
     s2.PrintToServer(f"Patch applied at: 0x{patch_addr:X}\n")
 
-[size=24][b]Search all loaded configs for patch[/b][/size]
-patch_all = s2.GetGameConfigPatchAll("DisableValidation")[/code]
-::
-::
+# Search all loaded configs for patch
+patch_all = s2.GetGameConfigPatchAll("DisableValidation")
+[/code]
+[/spoiler]
 
 [size=20][b]Виртуальные таблицы[/b][/size]
 
@@ -908,7 +944,8 @@ patch_all = s2.GetGameConfigPatchAll("DisableValidation")[/code]
 
 [size=16][b]Определение виртуальных таблиц[/b][/size]
 
-[code=json]{
+[code=json]
+{
   "VTables": {
     "CBaseEntity": {
       "signature": "CBaseEntityVTableSignature",
@@ -925,12 +962,14 @@ patch_all = s2.GetGameConfigPatchAll("DisableValidation")[/code]
       }
     }
   }
-}[/code]
+}
+[/code]
 
 [size=16][b]Использование виртуальных таблиц[/b][/size]
 
-
-[code=csharp]// Get single vtable
+[spoiler=c#]
+[code=csharp]
+// Get single vtable
 nint vtableAddr = GetGameConfigVTable(gameData, "CBaseEntity");
 if (vtableAddr != IntPtr.Zero)
 {
@@ -941,10 +980,11 @@ if (vtableAddr != IntPtr.Zero)
 }
 
 // Search all loaded configs for vtable
-nint vtableAll = GetGameConfigVTableAll("CBaseEntity");[/code]
-::
-::div{label="c++" icon="vscode-icons:file-type-cpp3"}
-[code=cpp]// Get single vtable
+nint vtableAll = GetGameConfigVTableAll("CBaseEntity");
+[/code]
+[/spoiler]div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[code=cpp]
+// Get single vtable
 void* vtableAddr = GetGameConfigVTable(gameData, "CBaseEntity");
 if (vtableAddr != nullptr) {
     PrintToServer(std::format("CBaseEntity vtable at: {:X}\n",
@@ -955,10 +995,11 @@ if (vtableAddr != nullptr) {
 }
 
 // Search all loaded configs for vtable
-void* vtableAll = GetGameConfigVTableAll("CBaseEntity");[/code]
-::
-::div{label="python" icon="vscode-icons:file-type-python"}
-[code=python]# Get single vtable
+void* vtableAll = GetGameConfigVTableAll("CBaseEntity");
+[/code]
+[spoiler=python]
+[code=python]
+# Get single vtable
 vtable_addr = s2.GetGameConfigVTable(game_data, "CBaseEntity")
 if vtable_addr is not None:
     s2.PrintToServer(f"CBaseEntity vtable at: 0x{vtable_addr:X}\n")
@@ -966,17 +1007,18 @@ if vtable_addr is not None:
     # You can now access virtual function pointers
     # vtable[0], vtable[1], etc.
 
-[size=24][b]Search all loaded configs for vtable[/b][/size]
-vtable_all = s2.GetGameConfigVTableAll("CBaseEntity")[/code]
-::
-::
+# Search all loaded configs for vtable
+vtable_all = s2.GetGameConfigVTableAll("CBaseEntity")
+[/code]
+[/spoiler]
 
 [size=20][b]Полный пример: плагин с пользовательскими GameData[/b][/size]
 
 Вот полный пример, демонстрирующий все возможности gamedata:
 
-
-[code=csharp]using System;
+[spoiler=c#]
+[code=csharp]
+using System;
 using Plugify;
 using static s2sdk.s2sdk;
 
@@ -1034,10 +1076,11 @@ public unsafe class GameDataExample : Plugin
             PrintToServer("GameData closed.\n");
         }
     }
-}[/code]
-::
-::div{label="c++" icon="vscode-icons:file-type-cpp3"}
-[code=cpp]#include <plugify/cpp_plugin.hpp>
+}
+[/code]
+[/spoiler]div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[code=cpp]
+#include <plugify/cpp_plugin.hpp>
 #include "s2sdk.hpp"
 
 using namespace s2sdk;
@@ -1097,10 +1140,11 @@ public:
             PrintToServer("GameData closed.\n");
         }
     }
-};[/code]
-::
-::div{label="python" icon="vscode-icons:file-type-python"}
-[code=python]from plugify.plugin import Plugin
+};
+[/code]
+[spoiler=python]
+[code=python]
+from plugify.plugin import Plugin
 from plugify.pps import s2sdk as s2
 
 class GameDataExample(Plugin):
@@ -1149,10 +1193,12 @@ class GameDataExample(Plugin):
         if self.game_data is not None:
             s2.CloseGameConfigFile(self.game_data)
             self.game_data = None
-            s2.PrintToServer("GameData closed.\n")[/code]
-::
+            s2.PrintToServer("GameData closed.\n")
+[/code]
+[/spoiler]
 ::div{label="go" icon="vscode-icons:file-type-go"}
-[code=go]package main
+[code=go]
+package main
 
 import (
     "fmt"
@@ -1210,10 +1256,11 @@ func init() {
             s2sdk.PrintToServer("GameData closed.\n")
         }
     })
-}[/code]
-::
-::div{label="js" icon="vscode-icons:file-type-js-official"}
-[code=js]import { Plugin } from 'plugify';
+}
+[/code]
+[spoiler=js]
+[code=js]
+import { Plugin } from 'plugify';
 import { s2 } from ':s2sdk';
 
 export class GameDataExample extends Plugin {
@@ -1236,27 +1283,27 @@ export class GameDataExample extends Plugin {
         // Demonstrate Signature
         s2.PrintToServer("\n--- Signature Example ---\n");
         const signature = s2.GetGameConfigSignature(this.gameData, "SignatureName");
-        s2.PrintToServer([font=monospace]  Signature: 0x${signature.toString(16)}\n[/font]);
+        s2.PrintToServer(`  Signature: 0x${signature.toString(16)}\n`);
 
         // Demonstrate Offset
         s2.PrintToServer("\n--- Offset Example ---\n");
         const offset = s2.GetGameConfigOffset(this.gameData, "OffsetName");
-        s2.PrintToServer([font=monospace]  Offset: ${offset}\n[/font]);
+        s2.PrintToServer(`  Offset: ${offset}\n`);
 
         // Demonstrate Address
         s2.PrintToServer("\n--- Address Example ---\n");
         const addr = s2.GetGameConfigAddress(this.gameData, "AddressName");
-        s2.PrintToServer([font=monospace]  Address: 0x${addr.toString(16)}\n[/font]);
+        s2.PrintToServer(`  Address: 0x${addr.toString(16)}\n`);
 
         // Demonstrate Patch
         s2.PrintToServer("\n--- Patch Example ---\n");
         const patchAddr = s2.GetGameConfigPatch(this.gameData, "PatchName");
-        s2.PrintToServer([font=monospace]  Patch: 0x${patchAddr.toString(16)} (auto-applied)\n[/font]);
+        s2.PrintToServer(`  Patch: 0x${patchAddr.toString(16)} (auto-applied)\n`);
 
         // Demonstrate VTable
         s2.PrintToServer("\n--- VTable Example ---\n");
         const vtableAddr = s2.GetGameConfigVTable(this.gameData, "VTableName");
-        s2.PrintToServer([font=monospace]  VTable: 0x${vtableAddr.toString(16)}\n[/font]);
+        s2.PrintToServer(`  VTable: 0x${vtableAddr.toString(16)}\n`);
 
         s2.PrintToServer("\n=== GameData Demo Complete ===\n");
     }
@@ -1268,10 +1315,12 @@ export class GameDataExample extends Plugin {
             s2.PrintToServer("GameData closed.\n");
         }
     }
-}[/code]
-::
+}
+[/code]
+[/spoiler]
 ::div{label="lua" icon="vscode-icons:file-type-lua"}
-[code=lua]local plugify = require 'plugify'
+[code=lua]
+local plugify = require 'plugify'
 local Plugin = plugify.Plugin
 local s2 = require 's2sdk'
 
@@ -1334,9 +1383,9 @@ end
 
 local M = {}
 M.GameDataExample = GameDataExample
-return M[/code]
-::
-::
+return M
+[/code]
+
 
 [size=20][b]Справочник методов[/b][/size]
 
@@ -1427,7 +1476,8 @@ return M[/code]
 
 Для экспортируемых функций используйте префикс [font=monospace]@[/font] для ссылки по имени символа:
 
-[code=json]{
+[code=json]
+{
   "Signatures": {
     "CreateInterface": {
       "windows": {
@@ -1440,13 +1490,15 @@ return M[/code]
       }
     }
   }
-}[/code]
+}
+[/code]
 
 [size=16][b]Многоуровневое разрешение адресов[/b][/size]
 
 Комбинируйте [font=monospace]read[/font] со смещениями для следования цепочкам указателей:
 
-[code=json]{
+[code=json]
+{
   "Addresses": {
     "DeepPointer": {
       "signature": "BaseSignature",
@@ -1468,7 +1520,8 @@ return M[/code]
       ]
     }
   }
-}[/code]
+}
+[/code]
 
 Это сначала добавляет смещение, затем читает указатель 3 раза (следует 3 разыменованиям указателей).
 
@@ -1476,7 +1529,8 @@ return M[/code]
 
 Используйте [font=monospace]read_offs32[/font] для RIP-относительной адресации (распространено в x64). Это читает 32-битное относительное смещение и вычисляет абсолютный адрес:
 
-[code=json]{
+[code=json]
+{
   "Addresses": {
     "v8::Isolate::Enter": {
       "signature": "CSScript::ResolveModule",
@@ -1492,7 +1546,8 @@ return M[/code]
       ]
     }
   }
-}[/code]
+}
+[/code]
 
 Это полезно, когда сигнатура указывает на инструкции вроде [font=monospace]call [rip + offset][/font] или [font=monospace]lea reg, [rip + offset][/font]. Значение [font=monospace]read_offs32[/font] - это байтовое смещение, где находится 32-битное относительное смещение.
 

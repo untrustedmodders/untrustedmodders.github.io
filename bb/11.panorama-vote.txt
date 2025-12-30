@@ -19,7 +19,9 @@
 [size=16][b]YesNoVoteHandler[/b][/size]
 Вызывается для событий голосования (начало, индивидуальные голоса, конец):
 
-[code=csharp]void Handler(VoteAction action, int param1, int param2)[/code]
+[code=csharp]
+void Handler(VoteAction action, int param1, int param2)
+[/code]
 
 [list]
 [*][b]VoteAction.Start[/b]: Голосование началось (param1 и param2 не используются)
@@ -34,8 +36,10 @@
 [size=16][b]YesNoVoteResult[/b][/size]
 Вызывается в конце голосования для определения, прошло ли оно:
 
-[code=csharp]bool Result(int numVotes, int yesVotes, int noVotes, int numClients,
-            int[] clientInfoSlot, int[] clientInfoItem)[/code]
+[code=csharp]
+bool Result(int numVotes, int yesVotes, int noVotes, int numClients,
+            int[] clientInfoSlot, int[] clientInfoItem)
+[/code]
 
 [list]
 [*][b]Возвращает[/b]: [font=monospace]true[/font] для прохождения голосования, [font=monospace]false[/font] для провала
@@ -58,8 +62,9 @@
 
 [size=16][b]Простое голосование для всех игроков[/b][/size]
 
-
-[code=csharp]using Plugify;
+[spoiler=c#]
+[code=csharp]
+using Plugify;
 using static s2sdk.s2sdk;
 
 public unsafe class VoteExample : Plugin
@@ -116,10 +121,11 @@ public unsafe class VoteExample : Plugin
                 break;
         }
     }
-}[/code]
-::
-::div{label="c++" icon="vscode-icons:file-type-cpp3"}
-[code=cpp]#include <plugify/cpp_plugin.hpp>
+}
+[/code]
+[/spoiler]div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[code=cpp]
+#include <plugify/cpp_plugin.hpp>
 #include "s2sdk.hpp"
 
 using namespace s2sdk;
@@ -167,10 +173,11 @@ public:
             }
         );
     }
-};[/code]
-::
-::div{label="python" icon="vscode-icons:file-type-python"}
-[code=python]from plugify.plugin import Plugin
+};
+[/code]
+[spoiler=python]
+[code=python]
+from plugify.plugin import Plugin
 from plugify.pps import s2sdk as s2
 
 class VoteExample(Plugin):
@@ -203,10 +210,12 @@ class VoteExample(Plugin):
             '''fail_reason='''0,
             '''result='''on_vote_result,
             '''handler='''on_vote_handler
-        )[/code]
-::
+        )
+[/code]
+[/spoiler]
 ::div{label="go" icon="vscode-icons:file-type-go"}
-[code=go]package main
+[code=go]
+package main
 
 import (
     "fmt"
@@ -256,10 +265,11 @@ func init() {
             onVoteHandler,
         )
     })
-}[/code]
-::
-::div{label="js" icon="vscode-icons:file-type-js-official"}
-[code=js]import { Plugin } from 'plugify';
+}
+[/code]
+[spoiler=js]
+[code=js]
+import { Plugin } from 'plugify';
 import { s2 } from ':s2sdk';
 
 export class VoteExample extends Plugin {
@@ -275,8 +285,8 @@ export class VoteExample extends Plugin {
             // Result callback
             (numVotes, yesVotes, noVotes, numClients,
              clientInfoSlot, clientInfoItem) => {
-                s2.PrintToServer([font=monospace]Vote: ${yesVotes} Yes, ${noVotes} No, [/font] +
-                               [font=monospace]${numVotes}/${numClients} voted\n[/font]);
+                s2.PrintToServer(`Vote: ${yesVotes} Yes, ${noVotes} No, ` +
+                               `${numVotes}/${numClients} voted\n`);
                 return yesVotes > noVotes;
             },
             // Handler callback
@@ -287,18 +297,20 @@ export class VoteExample extends Plugin {
                     const clientSlot = param1;
                     const choice = param2;
                     const vote = choice === s2.CastVote.VOTE_OPTION1 ? "Yes" : "No";
-                    s2.PrintToServer([font=monospace]Player ${clientSlot} voted: ${vote}\n[/font]);
+                    s2.PrintToServer(`Player ${clientSlot} voted: ${vote}\n`);
                 } else if (action === s2.VoteAction.End) {
                     const reason = param2;
-                    s2.PrintToServer([font=monospace]Vote ended: ${reason}\n[/font]);
+                    s2.PrintToServer(`Vote ended: ${reason}\n`);
                 }
             }
         );
     }
-}[/code]
-::
+}
+[/code]
+[/spoiler]
 ::div{label="lua" icon="vscode-icons:file-type-lua"}
-[code=lua]local plugify = require 'plugify'
+[code=lua]
+local plugify = require 'plugify'
 local Plugin = plugify.Plugin
 local s2 = require 's2sdk'
 
@@ -343,9 +355,9 @@ end
 
 local M = {}
 M.VoteExample = VoteExample
-return M[/code]
-::
-::
+return M
+[/code]
+
 
 [size=20][b]Перечисления[/b][/size]
 
@@ -392,8 +404,9 @@ return M[/code]
 
 [size=16][b]Создание битовой маски получателей[/b][/size]
 
-
-[code=csharp]// Включить определенных игроков по слотам
+[spoiler=c#]
+[code=csharp]
+// Включить определенных игроков по слотам
 public ulong BuildRecipients(int[] playerSlots)
 {
     ulong recipients = 0;
@@ -432,10 +445,11 @@ PanoramaSendYesNoVote(
     recipients: recipients,
     result: OnVoteResult,
     handler: OnVoteHandler
-);[/code]
-::
-::div{label="python" icon="vscode-icons:file-type-python"}
-[code=python]def build_recipients(player_slots):
+);
+[/code]
+[/spoiler]div{label="python" icon="vscode-icons:file-type-python"}
+[code=python]
+def build_recipients(player_slots):
     """Создать битовую маску получателей из списка слотов игроков"""
     recipients = 0
     for slot in player_slots:
@@ -443,12 +457,12 @@ PanoramaSendYesNoVote(
             recipients |= (1 << slot)
     return recipients
 
-[size=24][b]Примеры:[/b][/size]
+# Примеры:
 player_0_only = 1 << 0  # = 1
 player_5_only = 1 << 5  # = 32
 players_012 = (1 << 0) | (1 << 1) | (1 << 2)  # = 7
 
-[size=24][b]Использование в голосовании[/b][/size]
+# Использование в голосовании
 target_players = [0, 2, 5]
 recipients = build_recipients(target_players)
 
@@ -463,15 +477,16 @@ s2.PanoramaSendYesNoVote(
     '''recipients='''recipients,
     '''result='''on_vote_result,
     '''handler='''on_vote_handler
-)[/code]
-::
-::
+)
+[/code]
+
 
 [size=20][b]Пользовательская логика прохождения голосования[/b][/size]
 
 Обратный вызов [font=monospace]result[/font] позволяет реализовать пользовательскую логику для определения прохождения голосования:
 
-[code=csharp]// Требуется 60% голосов "Да"
+[code=csharp]
+// Требуется 60% голосов "Да"
 private bool OnVoteResult(int numVotes, int yesVotes, int noVotes,
                           int numClients, int[] clientInfoSlot, int[] clientInfoItem)
 {
@@ -507,7 +522,8 @@ private bool OnVoteResultDetailed(int numVotes, int yesVotes, int noVotes,
     }
 
     return yesVotes > noVotes;
-}[/code]
+}
+[/code]
 
 [size=20][b]Вспомогательные функции голосования[/b][/size]
 
@@ -515,35 +531,45 @@ private bool OnVoteResultDetailed(int numVotes, int yesVotes, int noVotes,
 
 [size=16][b]Проверка активного голосования[/b][/size]
 
-[code=csharp]bool isVoting = PanoramaIsVoteInProgress();
+[code=csharp]
+bool isVoting = PanoramaIsVoteInProgress();
 if (isVoting)
 {
     PrintToServer("A vote is currently active!\n");
-}[/code]
+}
+[/code]
 
 [size=16][b]Удаление игрока из голосования[/b][/size]
 
 Удаляет игрока из текущего пула голосования (он больше не может голосовать):
 
-[code=csharp]PanoramaRemovePlayerFromVote(3);  // Удалить игрока в слоте 3[/code]
+[code=csharp]
+PanoramaRemovePlayerFromVote(3);  // Удалить игрока в слоте 3
+[/code]
 
 [size=16][b]Проверка, находится ли игрок в пуле голосования[/b][/size]
 
-[code=csharp]int playerSlot = 5;
+[code=csharp]
+int playerSlot = 5;
 if (PanoramaIsPlayerInVotePool(playerSlot))
 {
     PrintToServer($"Player {playerSlot} can vote\n");
-}[/code]
+}
+[/code]
 
 [size=16][b]Перерисовка UI голосования для игрока[/b][/size]
 
 Принудительно обновляет UI голосования для конкретного игрока:
 
-[code=csharp]bool success = PanoramaRedrawVoteToClient(playerSlot);[/code]
+[code=csharp]
+bool success = PanoramaRedrawVoteToClient(playerSlot);
+[/code]
 
 [size=16][b]Ручное завершение голосования[/b][/size]
 
-[code=csharp]PanoramaEndVote(VoteEndReason.Cancelled);[/code]
+[code=csharp]
+PanoramaEndVote(VoteEndReason.Cancelled);
+[/code]
 
 [size=20][b]Практические примеры[/b][/size]
 
@@ -551,7 +577,8 @@ if (PanoramaIsPlayerInVotePool(playerSlot))
 
 Разрешить только контр-террористам голосовать за смену карты:
 
-[code=csharp]public void StartMapVote()
+[code=csharp]
+public void StartMapVote()
 {
     // Создать битовую маску получателей только для команды CT
     ulong recipients = 0;
@@ -596,11 +623,13 @@ if (PanoramaIsPlayerInVotePool(playerSlot))
             }
         }
     );
-}[/code]
+}
+[/code]
 
 [size=16][b]Пример 2: Отслеживание прогресса голосования[/b][/size]
 
-[code=csharp]private int totalYesVotes = 0;
+[code=csharp]
+private int totalYesVotes = 0;
 private int totalNoVotes = 0;
 
 public void StartTrackedVote()
@@ -646,11 +675,13 @@ public void StartTrackedVote()
             }
         }
     );
-}[/code]
+}
+[/code]
 
 [size=16][b]Пример 3: Голосование за кик, инициированное игроком[/b][/size]
 
-[code=csharp]public void StartKickVote(int callerSlot, int targetSlot)
+[code=csharp]
+public void StartKickVote(int callerSlot, int targetSlot)
 {
     if (PanoramaIsVoteInProgress())
     {
@@ -693,7 +724,8 @@ public void StartTrackedVote()
             }
         }
     );
-}[/code]
+}
+[/code]
 
 [size=20][b]Строки перевода[/b][/size]
 
@@ -730,10 +762,11 @@ public void StartTrackedVote()
 [*][b][font=monospace]recipients[/font][/b] (uint64) - Битовая маска слотов игроков, которые могут голосовать (только для [font=monospace]PanoramaSendYesNoVote[/font])
 [*][b][font=monospace]result[/font][/b] (обратный вызов YesNoVoteResult) - Функция, которая определяет, прошло ли голосование:
 [/list]
-  [font=monospace]`[/font]csharp
+  [code=csharp]
   bool Result(int numVotes, int yesVotes, int noVotes, int numClients,
               int[] clientInfoSlot, int[] clientInfoItem)
-  [font=monospace]`[/font]
+  
+[/code]
   - Возвращает [font=monospace]true[/font] для прохождения голосования, [font=monospace]false[/font] для провала
   - [font=monospace]numVotes[/font]: Всего отдано голосов
   - [font=monospace]yesVotes[/font]: Количество голосов "Да"
@@ -745,9 +778,10 @@ public void StartTrackedVote()
 [list]
 [*][b][font=monospace]handler[/font][/b] (обратный вызов YesNoVoteHandler) - Функция, вызываемая для событий голосования:
 [/list]
-  [font=monospace]`[/font]csharp
+  [code=csharp]
   void Handler(VoteAction action, int param1, int param2)
-  [font=monospace]`[/font]
+  
+[/code]
   - [font=monospace]action[/font]: Тип события (Start, Vote, End)
   - [font=monospace]param1[/font]: Зависит от действия (слот клиента для Vote, -1 для End)
   - [font=monospace]param2[/font]: Зависит от действия (выбор голоса для Vote, VoteEndReason для End)

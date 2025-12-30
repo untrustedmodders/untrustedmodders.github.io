@@ -40,13 +40,13 @@ def convert_code_blocks(content):
     # ```language\ncode\n``` -> [code=language]code[/code]
     def replace_code_block(match):
         lang = match.group(1) if match.group(1) else ''
-        code = match.group(2)
+        code = match.group(2).rstrip('\n')
         if lang:
-            return f'[code={lang}]{code}[/code]'
+            return f'[code={lang}]\n{code}\n[/code]'
         else:
-            return f'[code]{code}[/code]'
+            return f'[code]\n{code}\n[/code]'
 
-    content = re.sub(r'```(\w*)\n(.*?)\n```', replace_code_block, content, flags=re.DOTALL)
+    content = re.sub(r'```(\w*)\n(.*?)```', replace_code_block, content, flags=re.DOTALL)
     return content
 
 def convert_callouts(content):
@@ -86,21 +86,69 @@ def convert_tabs(content):
         tabs_content = match.group(1)
         result = []
 
-        # Find all ::div blocks within tabs
-        div_pattern = r'::div\{label="([^"]+)"[^\}]*\}\s*\n(.*?)(?=\n\s*::div|\n\s*::$)'
+        # Find all ::div blocks within tabs (with optional leading whitespace)
+        # Pattern matches divs that end with :: OR divs at the end (no closing ::)
+        div_pattern = r'\s*::div\{label="([^"]+)"[^\}]*\}\s*\n(.*?)(?=\n\s*::\s*(?:\n|$)|$)'
         divs = re.finditer(div_pattern, tabs_content, flags=re.DOTALL)
 
         for div_match in divs:
             label = div_match.group(1)
             div_content = div_match.group(2).strip()
-            # Remove the closing :: markers
-            div_content = re.sub(r'\s*::$', '', div_content)
             result.append(f'[spoiler={label}]\n{div_content}\n[/spoiler]')
 
         return '\n\n'.join(result)
 
-    # Match tabs blocks more accurately
-    content = re.sub(r'::tabs(?:\{[^\}]*\})?\s*\n(.*?)(?=\n[^\s:]|\Z)', replace_tabs, content, flags=re.DOTALL)
+    # Process tabs blocks iteratively to avoid greedy/non-greedy issues
+    # Match from ::tabs to the next ::\n:: that closes the block
+    tabs_pattern = r'::tabs(?:\{[^\}]*\})?\s*\n'
+
+    # Keep converting until no more tabs blocks found
+    while True:
+        # Find the first ::tabs
+        match = re.search(tabs_pattern, content)
+        if not match:
+            break
+
+        start = match.end()
+        # Find the closing ::\n:: after this position
+        # Look for pattern that has :: on one line, then :: on the next line
+        # Account for optional whitespace before the first ::
+        closing_pattern = r'\n\s*::\n::'
+        closing_match = re.search(closing_pattern, content[start:])
+
+        if not closing_match:
+            break
+
+        end = start + closing_match.start()
+        tabs_content = content[start:end]
+
+        # Convert divs to spoilers
+        result_parts = []
+        div_pattern = r'\s*::div\{label="([^"]+)"[^\}]*\}\s*\n(.*?)(?=\n\s*::\s*(?:\n|$)|$)'
+        divs = re.finditer(div_pattern, tabs_content, flags=re.DOTALL)
+
+        for div_match in divs:
+            label = div_match.group(1)
+            div_content = div_match.group(2).strip()
+            result_parts.append(f'[spoiler={label}]\n{div_content}\n[/spoiler]')
+
+        replacement = '\n\n'.join(result_parts)
+
+        # Replace this tabs block in the content
+        content = content[:match.start()] + replacement + content[start + closing_match.end():]
+
+    return content
+
+def convert_standalone_divs(content):
+    """Convert standalone ::div blocks (not in tabs) to spoilers."""
+    def replace_div(match):
+        label = match.group(1)
+        div_content = match.group(2).strip()
+        return f'[spoiler={label}]\n{div_content}\n[/spoiler]'
+
+    # Match standalone ::div blocks followed by :: on its own line
+    # This handles divs that are not inside ::tabs
+    content = re.sub(r'::\n::div\{label="([^"]+)"[^\}]*\}\s*\n(.*?)\n::', replace_div, content, flags=re.DOTALL)
     return content
 
 def convert_lists(content):
@@ -153,14 +201,27 @@ def convert_markdown_to_bbcode(content):
     # Remove YAML front matter
     content = remove_yaml_frontmatter(content)
 
-    # Convert tabs before other conversions
+    # Protect code blocks FIRST by replacing with placeholders
+    code_blocks = []
+    def save_code_block(match):
+        code_blocks.append(match.group(0))
+        return f'___CODE_BLOCK_{len(code_blocks)-1}___'
+
+    # Save all code blocks (both with and without language)
+    content = re.sub(r'```\w*\n.*?```', save_code_block, content, flags=re.DOTALL)
+
+    # Convert tabs after code blocks are protected
     content = convert_tabs(content)
+
+    # Convert standalone divs (not inside tabs)
+    content = convert_standalone_divs(content)
 
     # Convert callouts
     content = convert_callouts(content)
 
-    # Convert code blocks (before inline code)
-    content = convert_code_blocks(content)
+    # Remove ::code-group markers (just keep the code blocks inside)
+    content = re.sub(r'::code-group\s*\n', '', content)
+    content = re.sub(r'^::\s*$', '', content, flags=re.MULTILINE)
 
     # Convert headers
     content = convert_headers(content)
@@ -174,12 +235,17 @@ def convert_markdown_to_bbcode(content):
     # Convert lists (do this last to avoid interfering with other conversions)
     content = convert_lists(content)
 
+    # Restore code blocks and convert them to BBCode
+    for i, code_block in enumerate(code_blocks):
+        bbcode = convert_code_blocks(code_block)
+        content = content.replace(f'___CODE_BLOCK_{i}___', bbcode)
+
     return content
 
 def main():
     # Define paths
     source_dir = Path(r'D:\untrustedmodders.github.io\content\ru\6.plugins\5.s2sdk\3.guides')
-    output_dir = Path(r'D:\untrustedmodders.github.io\tmp')
+    output_dir = Path(r'D:\untrustedmodders.github.io\bb')
 
     # Create output directory if it doesn't exist
     output_dir.mkdir(parents=True, exist_ok=True)

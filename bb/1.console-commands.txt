@@ -3,7 +3,8 @@
 
 Функция обратного вызова вызывается каждый раз при использовании команды. Нажмите здесь, чтобы увидеть её прототип. Пример:
 
-[code=csharp]public void OnPluginStart()
+[code=csharp]
+public void OnPluginStart()
 {
     var flags = ConVarFlag.LinkedConcommand | ConVarFlag.Release | ConVarFlag.ClientCanExecute;
     AddConsoleCommand("sm_myslap", "slap me baby!", flags, Command_MySlap);
@@ -12,7 +13,8 @@
 public ResultType Command_MySlap(int caller, CommandCallingContext context, string[] arguments)
 {
     return ResultType.Continue;
-}[/code]
+}
+[/code]
 
 Теперь мы успешно реализовали команду -- хотя она пока ничего не делает.
 На самом деле, она скажет "Unknown command", если вы её используете! Это потому, что вы не возвращаете [font=monospace]ResultType.Handled[/font] в вашем коллбэке.
@@ -20,10 +22,12 @@ public ResultType Command_MySlap(int caller, CommandCallingContext context, stri
 Причина, по которой сервер ожидает, что ваша функция вернёт [font=monospace]ResultType.Handled[/font], заключается в теге Result, который вы указали в прототипе функции.
 Тег Result указывает, что [font=monospace]Command_MySlap[/font] должна вернуть одно из четырёх значений. См. перечисление Result в API, чтобы узнать больше об этих типах возврата и когда их использовать.
 
-[code=csharp]public ResultType Command_MySlap(int caller, CommandCallingContext context, string[] arguments)
+[code=csharp]
+public ResultType Command_MySlap(int caller, CommandCallingContext context, string[] arguments)
 {
     return ResultType.Handled;
-}[/code]
+}
+[/code]
 
 Теперь команда не будет сообщать об ошибке, но она всё равно ничего не будет делать. Это потому, что возврат "ResultType.Handled" в коллбэке команды предотвратит обработку команды движком.
 Движок даже не узнает, что команда была выполнена. Это то, что вам нужно сделать, если вы регистрируете совершенно новую команду через SourceMod.
@@ -33,7 +37,8 @@ public ResultType Command_MySlap(int caller, CommandCallingContext context, stri
 Вы можете привязать команды в [font=monospace]OnPluginStart[/font] (или где угодно).
 
 [spoiler=c#]
-[code=csharp]  using Plugify;
+[code=csharp]
+  using Plugify;
   using static s2sdk.s2sdk;
 
   public unsafe class Sample : Plugin
@@ -49,6 +54,7 @@ public ResultType Command_MySlap(int caller, CommandCallingContext context, stri
           }, HookMode.Post);
       }
   }
+  
 [/code]
 [/spoiler]
 
@@ -70,6 +76,7 @@ public ResultType Command_MySlap(int caller, CommandCallingContext context, stri
               }, HookMode::Post);
       }
   }
+  
 [/code]
 [/spoiler]
 
@@ -85,6 +92,7 @@ public ResultType Command_MySlap(int caller, CommandCallingContext context, stri
                            lambda caller, context, arguments: (
                              None if caller == -1 else s2.PrintToServer("Custom command called.\n")
                            ), s2.HookMode.Post)
+  
 [/code]
 [/spoiler]
 
@@ -110,6 +118,7 @@ public ResultType Command_MySlap(int caller, CommandCallingContext context, stri
               }, s2sdk.HookMode.Post)
       })
   }
+  
 [/code]
 [/spoiler]
 
@@ -128,9 +137,12 @@ public ResultType Command_MySlap(int caller, CommandCallingContext context, stri
               }, s2.HookMode.Post);
       }
   }
-  [code][/spoiler]
+  
+[/code]
+[/spoiler]
 
-[spoiler=lua][/code]lua
+[spoiler=lua]
+[code=lua]
   local plugify = require 'plugify'
   local Plugin = plugify.Plugin
   local s2 = require 's2sdk'
@@ -150,6 +162,7 @@ public ResultType Command_MySlap(int caller, CommandCallingContext context, stri
   local M = {}
   M.Sample = Sample
   return M
+  
 [/code]
 [/spoiler]
 
@@ -168,14 +181,16 @@ public void OnCommand(int caller, CommandCallingContext context, string[] argume
         First Argument: {arguments[0]}
         Second Argument: {command[1]}");
 }
-[code][/code]shell
+[/code]
+
+[code=shell]
 > custom_command "Test Quoted" 5 13
 
-[size=24][b]Output[/b][/size]
+# Output
 Command Caller: 1
 Command Context: 0
 Arg Count: 4
 Arg String: "Test Quoted" 5 13
 First Argument: custom_command
 Second Argument: Test Quoted
-[font=monospace]`[/font]
+[/code]
