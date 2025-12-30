@@ -81,23 +81,6 @@ def convert_callouts(content):
 
 def convert_tabs(content):
     """Convert ::tabs blocks to spoilers."""
-    # ::tabs{...} ... :: -> flatten with [spoiler=Language]...[/spoiler]
-    def replace_tabs(match):
-        tabs_content = match.group(1)
-        result = []
-
-        # Find all ::div blocks within tabs (with optional leading whitespace)
-        # Pattern matches divs that end with :: OR divs at the end (no closing ::)
-        div_pattern = r'\s*::div\{label="([^"]+)"[^\}]*\}\s*\n(.*?)(?=\n\s*::\s*(?:\n|$)|$)'
-        divs = re.finditer(div_pattern, tabs_content, flags=re.DOTALL)
-
-        for div_match in divs:
-            label = div_match.group(1)
-            div_content = div_match.group(2).strip()
-            result.append(f'[spoiler={label}]\n{div_content}\n[/spoiler]')
-
-        return '\n\n'.join(result)
-
     # Process tabs blocks iteratively to avoid greedy/non-greedy issues
     # Match from ::tabs to the next ::\n:: that closes the block
     tabs_pattern = r'::tabs(?:\{[^\}]*\})?\s*\n'
@@ -111,9 +94,10 @@ def convert_tabs(content):
 
         start = match.end()
         # Find the closing ::\n:: after this position
-        # Look for pattern that has :: on one line, then :: on the next line
+        # Look for pattern that has :: on one line, then :: on the next line (both standalone)
         # Account for optional whitespace before the first ::
-        closing_pattern = r'\n\s*::\n::'
+        # Use negative lookahead to ensure the second :: is not part of ::div
+        closing_pattern = r'\n\s*::\n::(?!div)'
         closing_match = re.search(closing_pattern, content[start:])
 
         if not closing_match:
@@ -122,15 +106,23 @@ def convert_tabs(content):
         end = start + closing_match.start()
         tabs_content = content[start:end]
 
-        # Convert divs to spoilers
+        # Convert divs to spoilers by splitting on :: markers
         result_parts = []
-        div_pattern = r'\s*::div\{label="([^"]+)"[^\}]*\}\s*\n(.*?)(?=\n\s*::\s*(?:\n|$)|$)'
-        divs = re.finditer(div_pattern, tabs_content, flags=re.DOTALL)
 
-        for div_match in divs:
-            label = div_match.group(1)
-            div_content = div_match.group(2).strip()
-            result_parts.append(f'[spoiler={label}]\n{div_content}\n[/spoiler]')
+        # Split content by single :: on its own line (with optional whitespace)
+        div_blocks = re.split(r'\n\s*::\n', tabs_content)
+
+        for block in div_blocks:
+            block = block.strip()
+            if not block:
+                continue
+
+            # Check if this block starts with ::div
+            div_match = re.match(r'::div\{label="([^"]+)"[^\}]*\}\s*\n(.*)', block, flags=re.DOTALL)
+            if div_match:
+                label = div_match.group(1)
+                div_content = div_match.group(2).strip()
+                result_parts.append(f'[spoiler={label}]\n{div_content}\n[/spoiler]')
 
         replacement = '\n\n'.join(result_parts)
 
@@ -204,11 +196,15 @@ def convert_markdown_to_bbcode(content):
     # Protect code blocks FIRST by replacing with placeholders
     code_blocks = []
     def save_code_block(match):
-        code_blocks.append(match.group(0))
+        # Strip leading whitespace from the entire match to remove indentation
+        block = match.group(0).lstrip()
+        code_blocks.append(block)
         return f'___CODE_BLOCK_{len(code_blocks)-1}___'
 
     # Save all code blocks (both with and without language)
-    content = re.sub(r'```\w*\n.*?```', save_code_block, content, flags=re.DOTALL)
+    # Match code blocks that start at the beginning of a line (with optional leading whitespace)
+    # Use negative lookahead to avoid matching closing backticks followed by :: markers
+    content = re.sub(r'^\s*```(\w*)\n(?!::)(.*?)^\s*```$', save_code_block, content, flags=re.MULTILINE | re.DOTALL)
 
     # Convert tabs after code blocks are protected
     content = convert_tabs(content)

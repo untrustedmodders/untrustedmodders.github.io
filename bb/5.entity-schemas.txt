@@ -80,7 +80,9 @@ public unsafe class Sample : Plugin
     }
 }
 [/code]
-[/spoiler]div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[/spoiler]
+
+[spoiler=c++]
 [code=cpp]
 #include <plugify/cpp_plugin.hpp>
 #include "s2sdk.hpp"
@@ -110,6 +112,8 @@ public:
     }
 };
 [/code]
+[/spoiler]
+
 [spoiler=python]
 [code=python]
 from plugify.plugin import Plugin
@@ -139,7 +143,8 @@ class Sample(Plugin):
                            set_health_cmd, s2.HookMode.Post)
 [/code]
 [/spoiler]
-::div{label="go" icon="vscode-icons:file-type-go"}
+
+[spoiler=go]
 [code=go]
 package main
 
@@ -173,6 +178,8 @@ func init() {
     })
 }
 [/code]
+[/spoiler]
+
 [spoiler=js]
 [code=js]
 import { Plugin } from 'plugify';
@@ -201,7 +208,8 @@ export class Sample extends Plugin {
 }
 [/code]
 [/spoiler]
-::div{label="lua" icon="vscode-icons:file-type-lua"}
+
+[spoiler=lua]
 [code=lua]
 local plugify = require 'plugify'
 local Plugin = plugify.Plugin
@@ -234,7 +242,7 @@ local M = {}
 M.Sample = Sample
 return M
 [/code]
-
+[/spoiler]
 
 [size=20][b]Работа с различными типами данных[/b][/size]
 
@@ -281,7 +289,6 @@ int owner = GetEntSchemaEnt(entityHandle, "CBaseEntity", "m_hOwnerEntity", 0);
 [size=20][b]Работа с массивами[/b][/size]
 
 Некоторые поля схем являются массивами. Используйте параметр [font=monospace]element[/font] для доступа к определенным индексам массива:
-
 [code=csharp]
 // Получение размера массива
 int arraySize = GetEntSchemaArraySize(entityHandle, "SomeClass", "m_arrayField");
@@ -486,7 +493,6 @@ public unsafe class SpeedMod : Plugin
 [size=20][b]Расширенное: использование необработанных смещений[/b][/size]
 
 Для критичного по производительности кода вы можете использовать необработанные смещения:
-
 [code=csharp]
 // Получите смещение один раз и кешируйте его
 int healthOffset = GetSchemaOffset("CBaseEntity", "m_iHealth");
@@ -500,7 +506,6 @@ int health = (int)GetEntData(entityHandle, healthOffset, 4);
 [size=20][b]Использование версий с указателями[/b][/size]
 
 Для объектов схем, не являющихся сущностями (когда handle недоступны):
-
 [code=csharp]
 // Пример: работа с объектом схемы, не являющимся сущностью
 nint objectPointer = GetSomeNonEntityPointer();
@@ -513,7 +518,6 @@ int value = (int)GetEntSchema2(objectPointer, "SomeClass", "m_someField", 0);
 [size=20][b]Обновления сетевого состояния[/b][/size]
 
 Для ручного запуска сетевых обновлений:
-
 [code=csharp]
 // Обновить конкретное поле
 NetworkStateChanged(entityHandle, "CBaseEntity", "m_iHealth");

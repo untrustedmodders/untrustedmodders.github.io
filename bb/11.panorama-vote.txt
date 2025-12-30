@@ -18,7 +18,6 @@
 
 [size=16][b]YesNoVoteHandler[/b][/size]
 Вызывается для событий голосования (начало, индивидуальные голоса, конец):
-
 [code=csharp]
 void Handler(VoteAction action, int param1, int param2)
 [/code]
@@ -35,7 +34,6 @@ void Handler(VoteAction action, int param1, int param2)
 
 [size=16][b]YesNoVoteResult[/b][/size]
 Вызывается в конце голосования для определения, прошло ли оно:
-
 [code=csharp]
 bool Result(int numVotes, int yesVotes, int noVotes, int numClients,
             int[] clientInfoSlot, int[] clientInfoItem)
@@ -123,7 +121,9 @@ public unsafe class VoteExample : Plugin
     }
 }
 [/code]
-[/spoiler]div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[/spoiler]
+
+[spoiler=c++]
 [code=cpp]
 #include <plugify/cpp_plugin.hpp>
 #include "s2sdk.hpp"
@@ -175,6 +175,8 @@ public:
     }
 };
 [/code]
+[/spoiler]
+
 [spoiler=python]
 [code=python]
 from plugify.plugin import Plugin
@@ -213,7 +215,8 @@ class VoteExample(Plugin):
         )
 [/code]
 [/spoiler]
-::div{label="go" icon="vscode-icons:file-type-go"}
+
+[spoiler=go]
 [code=go]
 package main
 
@@ -267,6 +270,8 @@ func init() {
     })
 }
 [/code]
+[/spoiler]
+
 [spoiler=js]
 [code=js]
 import { Plugin } from 'plugify';
@@ -308,7 +313,8 @@ export class VoteExample extends Plugin {
 }
 [/code]
 [/spoiler]
-::div{label="lua" icon="vscode-icons:file-type-lua"}
+
+[spoiler=lua]
 [code=lua]
 local plugify = require 'plugify'
 local Plugin = plugify.Plugin
@@ -357,7 +363,7 @@ local M = {}
 M.VoteExample = VoteExample
 return M
 [/code]
-
+[/spoiler]
 
 [size=20][b]Перечисления[/b][/size]
 
@@ -447,7 +453,9 @@ PanoramaSendYesNoVote(
     handler: OnVoteHandler
 );
 [/code]
-[/spoiler]div{label="python" icon="vscode-icons:file-type-python"}
+[/spoiler]
+
+[spoiler=python]
 [code=python]
 def build_recipients(player_slots):
     """Создать битовую маску получателей из списка слотов игроков"""
@@ -479,12 +487,11 @@ s2.PanoramaSendYesNoVote(
     '''handler='''on_vote_handler
 )
 [/code]
-
+[/spoiler]
 
 [size=20][b]Пользовательская логика прохождения голосования[/b][/size]
 
 Обратный вызов [font=monospace]result[/font] позволяет реализовать пользовательскую логику для определения прохождения голосования:
-
 [code=csharp]
 // Требуется 60% голосов "Да"
 private bool OnVoteResult(int numVotes, int yesVotes, int noVotes,
@@ -530,7 +537,6 @@ private bool OnVoteResultDetailed(int numVotes, int yesVotes, int noVotes,
 Система голосования предоставляет несколько утилитарных функций:
 
 [size=16][b]Проверка активного голосования[/b][/size]
-
 [code=csharp]
 bool isVoting = PanoramaIsVoteInProgress();
 if (isVoting)
@@ -542,13 +548,11 @@ if (isVoting)
 [size=16][b]Удаление игрока из голосования[/b][/size]
 
 Удаляет игрока из текущего пула голосования (он больше не может голосовать):
-
 [code=csharp]
 PanoramaRemovePlayerFromVote(3);  // Удалить игрока в слоте 3
 [/code]
 
 [size=16][b]Проверка, находится ли игрок в пуле голосования[/b][/size]
-
 [code=csharp]
 int playerSlot = 5;
 if (PanoramaIsPlayerInVotePool(playerSlot))
@@ -560,13 +564,11 @@ if (PanoramaIsPlayerInVotePool(playerSlot))
 [size=16][b]Перерисовка UI голосования для игрока[/b][/size]
 
 Принудительно обновляет UI голосования для конкретного игрока:
-
 [code=csharp]
 bool success = PanoramaRedrawVoteToClient(playerSlot);
 [/code]
 
 [size=16][b]Ручное завершение голосования[/b][/size]
-
 [code=csharp]
 PanoramaEndVote(VoteEndReason.Cancelled);
 [/code]
@@ -576,7 +578,6 @@ PanoramaEndVote(VoteEndReason.Cancelled);
 [size=16][b]Пример 1: Голосование за карту с ограничением по команде[/b][/size]
 
 Разрешить только контр-террористам голосовать за смену карты:
-
 [code=csharp]
 public void StartMapVote()
 {
@@ -627,7 +628,6 @@ public void StartMapVote()
 [/code]
 
 [size=16][b]Пример 2: Отслеживание прогресса голосования[/b][/size]
-
 [code=csharp]
 private int totalYesVotes = 0;
 private int totalNoVotes = 0;
@@ -679,7 +679,6 @@ public void StartTrackedVote()
 [/code]
 
 [size=16][b]Пример 3: Голосование за кик, инициированное игроком[/b][/size]
-
 [code=csharp]
 public void StartKickVote(int callerSlot, int targetSlot)
 {
@@ -762,7 +761,7 @@ public void StartKickVote(int callerSlot, int targetSlot)
 [*][b][font=monospace]recipients[/font][/b] (uint64) - Битовая маска слотов игроков, которые могут голосовать (только для [font=monospace]PanoramaSendYesNoVote[/font])
 [*][b][font=monospace]result[/font][/b] (обратный вызов YesNoVoteResult) - Функция, которая определяет, прошло ли голосование:
 [/list]
-  [code=csharp]
+[code=csharp]
   bool Result(int numVotes, int yesVotes, int noVotes, int numClients,
               int[] clientInfoSlot, int[] clientInfoItem)
   
@@ -778,7 +777,7 @@ public void StartKickVote(int callerSlot, int targetSlot)
 [list]
 [*][b][font=monospace]handler[/font][/b] (обратный вызов YesNoVoteHandler) - Функция, вызываемая для событий голосования:
 [/list]
-  [code=csharp]
+[code=csharp]
   void Handler(VoteAction action, int param1, int param2)
   
 [/code]

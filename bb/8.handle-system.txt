@@ -120,9 +120,9 @@ int handle = PlayerSlotToEntHandle(playerSlot);
 // Хендл в слот игрока (конвертация через указатель)
 nint entity = EntHandleToEntPointer(handle);
 int playerSlot = EntPointerToPlayerSlot(entity);
-[code]
+```
 
-[/code]csharp [Слот игрока ↔ Клиент]
+[font=monospace]`[/font]csharp [Слот игрока ↔ Клиент]
 // Слот игрока в указатель клиента
 nint clientPtr = PlayerSlotToClientPtr(playerSlot);
 
@@ -139,13 +139,11 @@ int playerSlot = ClientIndexToPlayerSlot(clientIndex);
 [/code]csharp [Сервисы игрока]
 // Сервисы игрока в слот игрока
 int playerSlot = PlayerServicesToPlayerSlot(playerServices);
-[code]
-::
+```
 
-### Конвертация сущностей
+[size=16][b]Конвертация сущностей[/b][/size]
 
-::code-group
-[/code]csharp [Индекс ↔ Указатель]
+[font=monospace]`[/font]csharp [Индекс ↔ Указатель]
 // Индекс сущности в указатель
 int entityIndex = 5;
 nint entity = EntIndexToEntPointer(entityIndex);
@@ -160,25 +158,22 @@ int handle = EntPointerToEntHandle(entity);
 
 // Хендл сущности в указатель
 nint entity = EntHandleToEntPointer(handle);
-[code]
+```
 
-[/code]csharp [Индекс ↔ Хендл]
+[font=monospace]`[/font]csharp [Индекс ↔ Хендл]
 // Индекс сущности в хендл
 int handle = EntIndexToEntHandle(entityIndex);
 
 // Хендл сущности в индекс
 int index = EntHandleToEntIndex(handle);
-[code]
-::
+[font=monospace]`[/font]
 
-## Функции валидации
+[size=20][b]Функции валидации[/b][/size]
 
 Всегда проверяйте сущности перед их использованием:
 
-::callout{icon="i-lucide-alert-triangle" color="amber"}
-**Предупреждение о производительности**: `IsValidEntPointer()` **дорогостоящая операция** - она выполняет полный поиск в системе сущностей. По возможности используйте `IsValidEntHandle()` вместо неё. Хендлы проверяются намного быстрее!
-::
-[/code]csharp
+[quote][b]Info:[/b] [b]Предупреждение о производительности[/b]: [font=monospace]IsValidEntPointer()[/font] [b]дорогостоящая операция[/b] - она выполняет полный поиск в системе сущностей. По возможности используйте [font=monospace]IsValidEntHandle()[/font] вместо неё. Хендлы проверяются намного быстрее![/quote]
+[code=csharp]
 // ✅ РЕКОМЕНДУЕТСЯ: Проверить хендл сущности (быстро)
 if (IsValidEntHandle(entityHandle))
 {
@@ -210,16 +205,14 @@ if (playerSlot >= 0 && playerSlot < 64)
         // Безопасно использовать
     }
 }
-[code]
+[/code]
 
-## Функции проверки слота игрока
+[size=20][b]Функции проверки слота игрока[/b][/size]
 
 Для операций, специфичных для игрока, S2SDK предоставляет специализированные функции проверки, которые работают напрямую со слотами игроков. Они более удобны, чем проверка хендла, для проверки состояния подключения игрока:
 
-::callout{icon="i-lucide-users" color="green"}
-**Специфично для игроков**: Эти функции разработаны специально для слотов игроков (0-63) и проверяют состояние подключения/аутентификации, а не просто валидность сущности.
-::
-[/code]csharp
+[quote][b]Info:[/b] [b]Специфично для игроков[/b]: Эти функции разработаны специально для слотов игроков (0-63) и проверяют состояние подключения/аутентификации, а не просто валидность сущности.[/quote]
+[code=csharp]
 // Проверить, валиден ли слот игрока и подключен ли игрок
 if (IsClientConnected(playerSlot))
 {
@@ -255,18 +248,19 @@ if (IsClientSourceTV(playerSlot))
 {
     PrintToServer($"Player {playerSlot} is SourceTV\n");
 }
-[code]
+[/code]
 
-### Состояния подключения игрока
+[size=16][b]Состояния подключения игрока[/b][/size]
 
 Игроки проходят через несколько состояний подключения:
 
-1. **Подключен** (`IsClientConnected`) - Игрок подключился к серверу
-2. **Авторизован** (`IsClientAuthorized`) - Аутентификация Steam завершена
-3. **В игре** (`IsClientInGame`) - Игрок полностью загрузился и вошел в игру
+[list=1]
+[*][b]Подключен[/b] ([font=monospace]IsClientConnected[/font]) - Игрок подключился к серверу
+[*][b]Авторизован[/b] ([font=monospace]IsClientAuthorized[/font]) - Аутентификация Steam завершена
+[*][b]В игре[/b] ([font=monospace]IsClientInGame[/font]) - Игрок полностью загрузился и вошел в игру
+[/list]
 
-::code-group
-[/code]csharp [Типичный паттерн проверки]
+[font=monospace]`[/font]csharp [Типичный паттерн проверки]
 public void DoSomethingWithPlayer(int playerSlot)
 {
     // Базовая проверка
@@ -305,9 +299,9 @@ public void TeleportPlayer(int playerSlot, Vector3 position)
     int handle = PlayerSlotToEntHandle(playerSlot);
     SetEntityOrigin(handle, position);
 }
-[code]
+```
 
-[/code]csharp [Фильтр SourceTV]
+[font=monospace]`[/font]csharp [Фильтр SourceTV]
 public void BroadcastToPlayers(string message)
 {
     for (int i = 0; i < 64; i++)
@@ -324,31 +318,27 @@ public void BroadcastToPlayers(string message)
         PrintToChat(i, message);
     }
 }
-[code]
-::
+[font=monospace]`[/font]
 
-### Когда использовать каждую функцию
+[size=16][b]Когда использовать каждую функцию[/b][/size]
 
 | Функция | Случай использования |
 |----------|----------|
-| `IsClientConnected()` | Проверить, занят ли слот игрока |
-| `IsClientAuthorized()` | Проверить, завершена ли аутентификация Steam (для анти-чита, проверки админов) |
-| `IsClientInGame()` | **Наиболее частая** - Игрок полностью загружен и готов |
-| `IsClientAlive()` | Проверить, жив ли игрок (не наблюдает/мертв) |
-| `IsFakeClient()` | Определить ботов для специальной обработки |
-| `IsClientSourceTV()` | Исключить бота SourceTV из операций с игроками |
+| [font=monospace]IsClientConnected()[/font] | Проверить, занят ли слот игрока |
+| [font=monospace]IsClientAuthorized()[/font] | Проверить, завершена ли аутентификация Steam (для анти-чита, проверки админов) |
+| [font=monospace]IsClientInGame()[/font] | [b]Наиболее частая[/b] - Игрок полностью загружен и готов |
+| [font=monospace]IsClientAlive()[/font] | Проверить, жив ли игрок (не наблюдает/мертв) |
+| [font=monospace]IsFakeClient()[/font] | Определить ботов для специальной обработки |
+| [font=monospace]IsClientSourceTV()[/font] | Исключить бота SourceTV из операций с игроками |
 
-::callout{icon="i-lucide-lightbulb" color="blue"}
-**Совет**: Для большинства игровых операций используйте `IsClientInGame()` - это гарантирует, что игрок полностью загружен и готов к взаимодействию.
-::
+[quote][b]Info:[/b] [b]Совет[/b]: Для большинства игровых операций используйте [font=monospace]IsClientInGame()[/font] - это гарантирует, что игрок полностью загружен и готов к взаимодействию.[/quote]
 
-## Практические примеры
+[size=20][b]Практические примеры[/b][/size]
 
-### Пример 1: Хранение ссылок на сущности
+[size=16][b]Пример 1: Хранение ссылок на сущности[/b][/size]
 
-::tabs{variant="card"}
-::div{label="c#" icon="vscode-icons:file-type-csharp2"}
-[/code]csharp
+[spoiler=c#]
+[code=csharp]
 using Plugify;
 using static s2sdk.s2sdk;
 
@@ -397,15 +387,13 @@ public unsafe class EntityTracker : Plugin
         }
     }
 }
-[code]
-::
-::
+[/code]
+[/spoiler]
 
-### Пример 2: Работа со слотами игроков
+[size=16][b]Пример 2: Работа со слотами игроков[/b][/size]
 
-::tabs{variant="card"}
-::div{label="c#" icon="vscode-icons:file-type-csharp2"}
-[/code]csharp
+[spoiler=c#]
+[code=csharp]
 using Plugify;
 using static s2sdk.s2sdk;
 
@@ -450,15 +438,13 @@ public unsafe class PlayerManager : Plugin
         return ResultType.Handled;
     }
 }
-[code]
-::
-::
+[/code]
+[/spoiler]
 
-### Пример 3: Безопасная итерация по сущностям
+[size=16][b]Пример 3: Безопасная итерация по сущностям[/b][/size]
 
-::tabs{variant="card"}
-::div{label="c#" icon="vscode-icons:file-type-csharp2"}
-[/code]csharp
+[spoiler=c#]
+[code=csharp]
 using Plugify;
 using static s2sdk.s2sdk;
 
@@ -504,15 +490,13 @@ public unsafe class EntityManager : Plugin
         return ResultType.Handled;
     }
 }
-[code]
-::
-::
+[/code]
+[/spoiler]
 
-### Пример 4: Паттерн валидации хендла
+[size=16][b]Пример 4: Паттерн валидации хендла[/b][/size]
 
-::tabs{variant="card"}
-::div{label="c#" icon="vscode-icons:file-type-csharp2"}
-[/code]csharp
+[spoiler=c#]
+[code=csharp]
 using Plugify;
 using static s2sdk.s2sdk;
 
@@ -553,15 +537,13 @@ public unsafe class SafeEntityAccess : Plugin
         AccessStoredEntity();
     }
 }
-[code]
-::
-::
+[/code]
+[/spoiler]
 
-### Пример 5: Конвертация между всеми типами
+[size=16][b]Пример 5: Конвертация между всеми типами[/b][/size]
 
-::tabs{variant="card"}
-::div{label="c#" icon="vscode-icons:file-type-csharp2"}
-[/code]csharp
+[spoiler=c#]
+[code=csharp]
 using Plugify;
 using static s2sdk.s2sdk;
 
@@ -626,14 +608,13 @@ public unsafe class ConversionDemo : Plugin
         PrintToServer($"\nAll conversions match: {allMatch}\n");
     }
 }
-[code]
-::
-::
+[/code]
+[/spoiler]
 
-## Распространенные паттерны
+[size=20][b]Распространенные паттерны[/b][/size]
 
-### Паттерн 1: Хранить хендлы, использовать указатели
-[/code]csharp
+[size=16][b]Паттерн 1: Хранить хендлы, использовать указатели[/b][/size]
+[code=csharp]
 // ✅ ХОРОШО: Хранить хендлы
 private int playerEntityHandle;
 
@@ -659,10 +640,10 @@ public void SavePlayer(int playerSlot)
     playerEntity = PlayerSlotToEntPointer(playerSlot);
     // Указатель может стать невалидным, если сущность удалена
 }
-[code]
+[/code]
 
-### Паттерн 2: Проверять перед использованием
-[/code]csharp
+[size=16][b]Паттерн 2: Проверять перед использованием[/b][/size]
+[code=csharp]
 // ✅ ХОРОШО: Проверить хендл один раз
 int entityHandle = PlayerSlotToEntHandle(playerSlot);
 if (IsValidEntHandle(entityHandle))
@@ -687,10 +668,10 @@ if (IsValidEntHandle(entityHandle))
         ProcessEntity(entity);
     }
 }
-[code]
+[/code]
 
-### Паттерн 3: Использовать слоты игроков для игроков
-[/code]csharp
+[size=16][b]Паттерн 3: Использовать слоты игроков для игроков[/b][/size]
+[code=csharp]
 // ✅ ХОРОШО: Использовать слоты игроков для операций с игроками
 public void KickPlayer(int playerSlot)
 {
@@ -712,26 +693,34 @@ public void TrackPlayer(int playerSlot)
 {
     playerHandles[playerSlot] = PlayerSlotToEntHandle(playerSlot);
 }
-[code]
+[/code]
 
-## Соображения производительности
+[size=20][b]Соображения производительности[/b][/size]
 
-::callout{icon="i-lucide-zap" color="red"}
-**Критично**: `IsValidEntPointer()` выполняет **полный поиск в системе сущностей** и значительно дороже, чем `IsValidEntHandle()`. Предпочитайте проверку хендла в критичном к производительности коде!
-::
+[quote][b]Info:[/b] [b]Критично[/b]: [font=monospace]IsValidEntPointer()[/font] выполняет [b]полный поиск в системе сущностей[/b] и значительно дороже, чем [font=monospace]IsValidEntHandle()[/font]. Предпочитайте проверку хендла в критичном к производительности коде![/quote]
 
-1. **Проверка указателя (дорого)**: `IsValidEntPointer()` делает полный поиск в системе сущностей. Избегайте в циклах или частых проверках.
+[list=1]
+[*][b]Проверка указателя (дорого)[/b]: [font=monospace]IsValidEntPointer()[/font] делает полный поиск в системе сущностей. Избегайте в циклах или частых проверках.
+[/list]
 
-2. **Проверка хендла (быстро)**: `IsValidEntHandle()` легковесна и эффективна. Предпочитайте это для проверки.
+[list=1]
+[*][b]Проверка хендла (быстро)[/b]: [font=monospace]IsValidEntHandle()[/font] легковесна и эффективна. Предпочитайте это для проверки.
+[/list]
 
-3. **Накладные расходы на конвертацию**: Конвертация между типами имеет минимальные накладные расходы, но избегайте ненужных конвертаций в плотных циклах.
+[list=1]
+[*][b]Накладные расходы на конвертацию[/b]: Конвертация между типами имеет минимальные накладные расходы, но избегайте ненужных конвертаций в плотных циклах.
+[/list]
 
-4. **Доступ через указатель**: Прямой доступ через указатель самый быстрый, но безопасен только в пределах одного тика.
+[list=1]
+[*][b]Доступ через указатель[/b]: Прямой доступ через указатель самый быстрый, но безопасен только в пределах одного тика.
+[/list]
 
-5. **Хранение хендлов**: Хендлы - это просто целые числа (4 байта), очень эффективно для хранения.
+[list=1]
+[*][b]Хранение хендлов[/b]: Хендлы - это просто целые числа (4 байта), очень эффективно для хранения.
+[/list]
 
-### Сравнение производительности
-[/code]csharp
+[size=16][b]Сравнение производительности[/b][/size]
+[code=csharp]
 // ⚠️ МЕДЛЕННО: Проверка 100 сущностей с IsValidEntPointer
 for (int i = 0; i < 100; i++)
 {
@@ -752,22 +741,24 @@ for (int i = 0; i < 100; i++)
         ProcessEntity(entity);
     }
 }
-[code]
+[/code]
 
-## Лучшие практики
+[size=20][b]Лучшие практики[/b][/size]
 
-1. ✅ **Хранить хендлы** для долгосрочных ссылок на сущности
-2. ✅ **Использовать указатели** для немедленных операций в пределах одного тика
-3. ✅ **Проверять с помощью `IsValidEntHandle()`** - это быстро и эффективно
-4. ✅ **Использовать слоты игроков** для функциональности, специфичной для игрока (знакомо CS-сообществу)
-5. ✅ **Конвертировать указатель в хендл** перед проверкой, если у вас есть только указатель
-6. ❌ **Не использовать `IsValidEntPointer()`** в циклах или критичном к производительности коде - это дорого!
-7. ❌ **Не хранить указатели** между тиками
-8. ❌ **Не предполагать, что хендлы всегда валидны** - сущности могут быть удалены
-9. ❌ **Не делать двойную проверку** и хендла, и указателя - проверки хендла достаточно
+[list=1]
+[*]✅ [b]Хранить хендлы[/b] для долгосрочных ссылок на сущности
+[*]✅ [b]Использовать указатели[/b] для немедленных операций в пределах одного тика
+[*]✅ [b]Проверять с помощью [font=monospace]IsValidEntHandle()[/font][/b] - это быстро и эффективно
+[*]✅ [b]Использовать слоты игроков[/b] для функциональности, специфичной для игрока (знакомо CS-сообществу)
+[*]✅ [b]Конвертировать указатель в хендл[/b] перед проверкой, если у вас есть только указатель
+[*]❌ [b]Не использовать [font=monospace]IsValidEntPointer()[/font][/b] в циклах или критичном к производительности коде - это дорого!
+[*]❌ [b]Не хранить указатели[/b] между тиками
+[*]❌ [b]Не предполагать, что хендлы всегда валидны[/b] - сущности могут быть удалены
+[*]❌ [b]Не делать двойную проверку[/b] и хендла, и указателя - проверки хендла достаточно
+[/list]
 
-## Распространенные невалидные значения хендлов
-[/code]csharp
+[size=20][b]Распространенные невалидные значения хендлов[/b][/size]
+[code=csharp]
 // Эти константы указывают на невалидные/специальные хендлы:
 const int INVALID_EHANDLE_INDEX = -1;
 const int INVALID_ENTITY_INDEX = -1;
@@ -785,7 +776,7 @@ if (playerSlot < 0 || playerSlot >= 64)
     PrintToServer("Invalid player slot\n");
     return;
 }
-[font=monospace]`[/font]
+[/code]
 
 [size=20][b]Устранение неполадок[/b][/size]
 

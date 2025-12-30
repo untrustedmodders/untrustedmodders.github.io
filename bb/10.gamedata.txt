@@ -82,7 +82,9 @@ public unsafe class Sample : Plugin
     }
 }
 [/code]
-[/spoiler]div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[/spoiler]
+
+[spoiler=c++]
 [code=cpp]
 #include <plugify/cpp_plugin.hpp>
 #include <filesystem>
@@ -123,6 +125,8 @@ public:
     }
 };
 [/code]
+[/spoiler]
+
 [spoiler=python]
 [code=python]
 import os
@@ -157,7 +161,8 @@ class Sample(Plugin):
             self.game_data = None
 [/code]
 [/spoiler]
-::div{label="go" icon="vscode-icons:file-type-go"}
+
+[spoiler=go]
 [code=go]
 package main
 
@@ -199,6 +204,8 @@ func init() {
     })
 }
 [/code]
+[/spoiler]
+
 [spoiler=js]
 [code=js]
 import { Plugin } from 'plugify';
@@ -239,7 +246,8 @@ export class Sample extends Plugin {
 }
 [/code]
 [/spoiler]
-::div{label="lua" icon="vscode-icons:file-type-lua"}
+
+[spoiler=lua]
 [code=lua]
 local plugify = require 'plugify'
 local Plugin = plugify.Plugin
@@ -285,12 +293,11 @@ local M = {}
 M.Sample = Sample
 return M
 [/code]
-
+[/spoiler]
 
 [size=20][b]Структура схемы JSON[/b][/size]
 
 Файлы GameData используют формат JSON с платформозависимыми конфигурациями. Вот базовая структура:
-
 [code=json]
 {
   "Signatures": {
@@ -406,7 +413,9 @@ public unsafe class Sample : Plugin
     }
 }
 [/code]
-[/spoiler]div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[/spoiler]
+
+[spoiler=c++]
 [code=cpp]
 #include <plugify/cpp_plugin.hpp>
 #include "s2sdk.hpp"
@@ -446,6 +455,8 @@ public:
     }
 };
 [/code]
+[/spoiler]
+
 [spoiler=python]
 [code=python]
 from plugify.plugin import Plugin
@@ -481,7 +492,8 @@ class Sample(Plugin):
             self.game_config = None
 [/code]
 [/spoiler]
-::div{label="go" icon="vscode-icons:file-type-go"}
+
+[spoiler=go]
 [code=go]
 package main
 
@@ -525,6 +537,8 @@ func init() {
     })
 }
 [/code]
+[/spoiler]
+
 [spoiler=js]
 [code=js]
 import { Plugin } from 'plugify';
@@ -566,7 +580,8 @@ export class Sample extends Plugin {
 }
 [/code]
 [/spoiler]
-::div{label="lua" icon="vscode-icons:file-type-lua"}
+
+[spoiler=lua]
 [code=lua]
 local plugify = require 'plugify'
 local Plugin = plugify.Plugin
@@ -614,7 +629,7 @@ local M = {}
 M.Sample = Sample
 return M
 [/code]
-
+[/spoiler]
 
 [quote][b]Info:[/b] [b]Ключевое отличие:[/b] С ООП-подходом вам не нужно передавать дескриптор gamedata в каждый вызов метода. Объект [font=monospace]GameConfig[/font] инкапсулирует дескриптор и предоставляет методы-члены, которые автоматически используют его.[/quote]
 
@@ -657,7 +672,9 @@ if (address != IntPtr.Zero)
 // Search all loaded configs for signature
 nint signatureAll = GetGameConfigSignatureAll("SignatureName");
 [/code]
-[/spoiler]div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[/spoiler]
+
+[spoiler=c++]
 [code=cpp]
 // Get single signature
 void* address = GetGameConfigSignature(gameData, "SignatureName");
@@ -669,6 +686,8 @@ if (address != nullptr) {
 // Search all loaded configs for signature
 void* signatureAll = GetGameConfigSignatureAll("SignatureName");
 [/code]
+[/spoiler]
+
 [spoiler=python]
 [code=python]
 # Get single signature
@@ -686,7 +705,6 @@ signature_all = s2.GetGameConfigSignatureAll("SignatureName")
 Смещения - это числовые значения, представляющие позиции в памяти или смещения полей структур. Они зависят от платформы.
 
 [size=16][b]Определение смещений[/b][/size]
-
 [code=json]
 {
   "Offsets": {
@@ -717,7 +735,9 @@ int offsetAll = GetGameConfigOffsetAll("HealthOffset");
 int entityHandle = PlayerSlotToEntHandle(0);
 SetEntData(entityHandle, healthOffset, 200, 4, true, 0);
 [/code]
-[/spoiler]div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[/spoiler]
+
+[spoiler=c++]
 [code=cpp]
 // Get single offset
 int healthOffset = GetGameConfigOffset(gameData, "HealthOffset");
@@ -730,6 +750,8 @@ int offsetAll = GetGameConfigOffsetAll("HealthOffset");
 int entityHandle = PlayerSlotToEntHandle(0);
 SetEntData(entityHandle, healthOffset, 200, 4, true, 0);
 [/code]
+[/spoiler]
+
 [spoiler=python]
 [code=python]
 # Get single offset
@@ -760,7 +782,6 @@ s2.SetEntData(entity_handle, health_offset, 200, 4, True, 0)
 [size=16][b]Определение адресов[/b][/size]
 
 Адреса определяются как [b]массивы шагов действий[/b] для каждой платформы:
-
 [code=json]
 {
   "Addresses": {
@@ -832,7 +853,9 @@ if (globalVarsAddr != IntPtr.Zero)
 // Search all loaded configs for address
 nint addressAll = GetGameConfigAddressAll("GlobalVars");
 [/code]
-[/spoiler]div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[/spoiler]
+
+[spoiler=c++]
 [code=cpp]
 // Get single address
 void* globalVarsAddr = GetGameConfigAddress(gameData, "GlobalVars");
@@ -847,6 +870,8 @@ if (globalVarsAddr != nullptr) {
 // Search all loaded configs for address
 void* addressAll = GetGameConfigAddressAll("GlobalVars");
 [/code]
+[/spoiler]
+
 [spoiler=python]
 [code=python]
 # Get single address
@@ -871,7 +896,6 @@ address_all = s2.GetGameConfigAddressAll("GlobalVars")
 [size=16][b]Определение патчей[/b][/size]
 
 Патчи ссылаются на адрес (из разделов Addresses или Signatures) и указывают байты патча для записи:
-
 [code=json]
 {
   "Patches": {
@@ -914,7 +938,9 @@ if (patchAddr != IntPtr.Zero)
 // Search all loaded configs for patch
 nint patchAll = GetGameConfigPatchAll("DisableValidation");
 [/code]
-[/spoiler]div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[/spoiler]
+
+[spoiler=c++]
 [code=cpp]
 // Get single patch address (where it was applied)
 void* patchAddr = GetGameConfigPatch(gameData, "DisableValidation");
@@ -926,6 +952,8 @@ if (patchAddr != nullptr) {
 // Search all loaded configs for patch
 void* patchAll = GetGameConfigPatchAll("DisableValidation");
 [/code]
+[/spoiler]
+
 [spoiler=python]
 [code=python]
 # Get single patch address (where it was applied)
@@ -943,7 +971,6 @@ patch_all = s2.GetGameConfigPatchAll("DisableValidation")
 Виртуальные таблицы (VTables) используются для поиска виртуальных функций в объектах C++. Используйте их для поиска указателей на функции в виртуальных таблицах классов.
 
 [size=16][b]Определение виртуальных таблиц[/b][/size]
-
 [code=json]
 {
   "VTables": {
@@ -982,7 +1009,9 @@ if (vtableAddr != IntPtr.Zero)
 // Search all loaded configs for vtable
 nint vtableAll = GetGameConfigVTableAll("CBaseEntity");
 [/code]
-[/spoiler]div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[/spoiler]
+
+[spoiler=c++]
 [code=cpp]
 // Get single vtable
 void* vtableAddr = GetGameConfigVTable(gameData, "CBaseEntity");
@@ -997,6 +1026,8 @@ if (vtableAddr != nullptr) {
 // Search all loaded configs for vtable
 void* vtableAll = GetGameConfigVTableAll("CBaseEntity");
 [/code]
+[/spoiler]
+
 [spoiler=python]
 [code=python]
 # Get single vtable
@@ -1078,7 +1109,9 @@ public unsafe class GameDataExample : Plugin
     }
 }
 [/code]
-[/spoiler]div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[/spoiler]
+
+[spoiler=c++]
 [code=cpp]
 #include <plugify/cpp_plugin.hpp>
 #include "s2sdk.hpp"
@@ -1142,6 +1175,8 @@ public:
     }
 };
 [/code]
+[/spoiler]
+
 [spoiler=python]
 [code=python]
 from plugify.plugin import Plugin
@@ -1196,7 +1231,8 @@ class GameDataExample(Plugin):
             s2.PrintToServer("GameData closed.\n")
 [/code]
 [/spoiler]
-::div{label="go" icon="vscode-icons:file-type-go"}
+
+[spoiler=go]
 [code=go]
 package main
 
@@ -1258,6 +1294,8 @@ func init() {
     })
 }
 [/code]
+[/spoiler]
+
 [spoiler=js]
 [code=js]
 import { Plugin } from 'plugify';
@@ -1318,7 +1356,8 @@ export class GameDataExample extends Plugin {
 }
 [/code]
 [/spoiler]
-::div{label="lua" icon="vscode-icons:file-type-lua"}
+
+[spoiler=lua]
 [code=lua]
 local plugify = require 'plugify'
 local Plugin = plugify.Plugin
@@ -1385,7 +1424,7 @@ local M = {}
 M.GameDataExample = GameDataExample
 return M
 [/code]
-
+[/spoiler]
 
 [size=20][b]Справочник методов[/b][/size]
 
@@ -1475,7 +1514,6 @@ return M
 [size=16][b]Сигнатуры на основе символов[/b][/size]
 
 Для экспортируемых функций используйте префикс [font=monospace]@[/font] для ссылки по имени символа:
-
 [code=json]
 {
   "Signatures": {
@@ -1496,7 +1534,6 @@ return M
 [size=16][b]Многоуровневое разрешение адресов[/b][/size]
 
 Комбинируйте [font=monospace]read[/font] со смещениями для следования цепочкам указателей:
-
 [code=json]
 {
   "Addresses": {
@@ -1528,7 +1565,6 @@ return M
 [size=16][b]Адреса с относительным смещением (read_offs32)[/b][/size]
 
 Используйте [font=monospace]read_offs32[/font] для RIP-относительной адресации (распространено в x64). Это читает 32-битное относительное смещение и вычисляет абсолютный адрес:
-
 [code=json]
 {
   "Addresses": {

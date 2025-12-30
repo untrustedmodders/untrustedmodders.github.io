@@ -84,8 +84,10 @@
   }
   
 [/code]
-[/spoiler]div{label="c++" icon="vscode-icons:file-type-cpp3"}
-  [code=cpp]
+[/spoiler]
+
+[spoiler=c++]
+[code=cpp]
   #include <plg/plugin.hpp>
   #include "s2sdk.hpp"
 
@@ -103,6 +105,8 @@
   }
   
 [/code]
+[/spoiler]
+
 [spoiler=python]
 [code=python]
   from plugify.plugin import Plugin
@@ -120,8 +124,9 @@
   
 [/code]
 [/spoiler]
-::div{label="go" icon="vscode-icons:file-type-go"}
-  [code=go]
+
+[spoiler=go]
+[code=go]
   package main
 
   import (
@@ -141,6 +146,8 @@
   }
   
 [/code]
+[/spoiler]
+
 [spoiler=js]
 [code=js]
   import { Plugin } from 'plugify';
@@ -158,8 +165,9 @@
   
 [/code]
 [/spoiler]
-::div{label="lua" icon="vscode-icons:file-type-lua"}
-  [code=lua]
+
+[spoiler=lua]
+[code=lua]
   local plugify = require 'plugify'
   local Plugin = plugify.Plugin
   local s2 = require 's2sdk'
@@ -180,13 +188,13 @@
   return M
   
 [/code]
-
+[/spoiler]
 
 [size=20][b]Доступ к параметрам событий[/b][/size]
 
 [spoiler=С классами (рекомендуется)]
 Доступ к параметрам событий с использованием типизированных методов на экземпляре EventInfo:
-  [code=csharp]
+[code=csharp]
   // Чтение параметров событий
   int userid = event.GetInt("userid");
   float damage = event.GetFloat("damage");
@@ -201,7 +209,7 @@
 [/code]
 
   Установка параметров событий столь же проста:
-  [code=csharp]
+[code=csharp]
   // Установка параметров событий
   event.SetInt("userid", 123);
   event.SetFloat("damage", 50.0f);
@@ -217,7 +225,7 @@
 
 [spoiler=Без классов]
 Доступ к параметрам событий с использованием явных функций с дескриптором события:
-  [code=csharp]
+[code=csharp]
   // Чтение параметров событий
   int userid = GetEventInt(event, "userid");
   float damage = GetEventFloat(event, "damage");
@@ -232,7 +240,7 @@
 [/code]
 
   Установка параметров событий требует явных вызовов функций:
-  [code=csharp]
+[code=csharp]
   // Установка параметров событий
   SetEventInt(event, "userid", 123);
   SetEventFloat(event, "damage", 50.0f);
@@ -250,7 +258,7 @@
 
 [spoiler=С классами (рекомендуется)]
 Создавайте и запускайте пользовательские события используя класс EventInfo:
-  [code=csharp]
+[code=csharp]
   // Создание нового события
   using (var customEvent = new EventInfo("player_hurt"))
   {
@@ -272,7 +280,7 @@
 
 [spoiler=Без классов]
 Создавайте и запускайте пользовательские события используя явные функции:
-  [code=csharp]
+[code=csharp]
   // Создание нового события
   nint customEvent = CreateEvent("player_hurt");
 
@@ -297,7 +305,7 @@
 
 [spoiler=С классами (рекомендуется)]
 Предотвращение трансляции события клиентам:
-  [code=csharp]
+[code=csharp]
   event.SetBroadcast(false);
   
 [/code]
@@ -305,7 +313,7 @@
 
 [spoiler=Без классов]
 Предотвращение трансляции события клиентам:
-  [code=csharp]
+[code=csharp]
   SetEventBroadcast(event, false);
   
 [/code]

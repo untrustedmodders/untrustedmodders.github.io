@@ -14,7 +14,7 @@
 
 [spoiler=С классами (рекомендуется)]
 Используйте статический метод [font=monospace]ConVar.Find[/font] для получения экземпляра ConVar:
-  [code=csharp]
+[code=csharp]
   var cheatsCvar = ConVar.Find("sv_cheats");
   if (cheatsCvar != null && cheatsCvar.Valid()) {
       // Используйте экземпляр ConVar
@@ -25,7 +25,7 @@
 
 [spoiler=Без классов]
 Используйте функцию [font=monospace]FindConVar[/font] для получения дескриптора:
-  [code=csharp]
+[code=csharp]
   var cheatsCvar = FindConVar("sv_cheats");
   
 [/code]
@@ -35,7 +35,7 @@
 
 [spoiler=С классами (рекомендуется)]
 Чтение и установка значений более интуитивны с методами:
-  [code=csharp]
+[code=csharp]
   var cheatsCvar = ConVar.Find("sv_cheats");
 
   // Чтение значения с использованием типизированных методов
@@ -52,7 +52,7 @@
 
 [spoiler=Без классов]
 Чтение и установка требует явной передачи дескриптора:
-  [code=csharp]
+[code=csharp]
   var cheatsCvar = FindConVar("sv_cheats");
 
   // Чтение значения
@@ -71,7 +71,7 @@
 
 [spoiler=С классами (рекомендуется)]
 Строковые значения обрабатываются через типизированные методы:
-  [code=csharp]
+[code=csharp]
   var stringCvar = ConVar.Find("sv_skyname");
 
   // Получение строкового значения
@@ -86,7 +86,7 @@
 
 [spoiler=Без классов]
 Строковые значения требуют явного преобразования типов:
-  [code=csharp]
+[code=csharp]
   var stringCvar = FindConVar("sv_skyname");
 
   // Получение строкового значения
@@ -103,7 +103,7 @@
 
 [spoiler=С классами (рекомендуется)]
 Создавайте ConVars используя конструктор класса с автоматическим определением типа:
-  [code=csharp]
+[code=csharp]
   // Создание различных типов ConVars
   var stringCvar = new ConVar("my_plugin_name", "DefaultName", "Player name", ConVarFlags.None);
   var intCvar = new ConVar("my_plugin_maxplayers", 32, "Max players", ConVarFlags.None);
@@ -121,7 +121,7 @@
 
 [spoiler=Без классов]
 Создавайте ConVars используя функции для конкретных типов:
-  [code=csharp]
+[code=csharp]
   // Создание различных типов ConVars
   var stringCvar = CreateConVarString("my_plugin_name", "DefaultName", "Player name", ConVarFlags.None);
   var intCvar = CreateConVarInt32("my_plugin_maxplayers", 32, "Max players", ConVarFlags.None);

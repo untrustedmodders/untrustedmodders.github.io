@@ -61,7 +61,9 @@ public unsafe class Sample : Plugin
     }
 }
 [/code]
-[/spoiler]div{label="c++" icon="vscode-icons:file-type-cpp3"}
+[/spoiler]
+
+[spoiler=c++]
 [code=cpp]
 #include <plugify/cpp_plugin.hpp>
 #include "s2sdk.hpp"
@@ -88,6 +90,8 @@ public:
     }
 };
 [/code]
+[/spoiler]
+
 [spoiler=python]
 [code=python]
 from plugify.plugin import Plugin
@@ -107,7 +111,8 @@ class Sample(Plugin):
         s2.PrintToServer(f"TextMsg intercepted: {text}\n")
 [/code]
 [/spoiler]
-::div{label="go" icon="vscode-icons:file-type-go"}
+
+[spoiler=go]
 [code=go]
 package main
 
@@ -135,6 +140,8 @@ func init() {
     })
 }
 [/code]
+[/spoiler]
+
 [spoiler=js]
 [code=js]
 import { Plugin } from 'plugify';
@@ -159,7 +166,8 @@ export class Sample extends Plugin {
 }
 [/code]
 [/spoiler]
-::div{label="lua" icon="vscode-icons:file-type-lua"}
+
+[spoiler=lua]
 [code=lua]
 local plugify = require 'plugify'
 local Plugin = plugify.Plugin
@@ -188,13 +196,13 @@ local M = {}
 M.Sample = Sample
 return M
 [/code]
-
+[/spoiler]
 
 [size=20][b]Создание и отправка User Messages[/b][/size]
 
 [spoiler=С классами (Рекомендуется)]
 Создавайте user messages используя класс [font=monospace]UserMessage[/font] с автоматической очисткой:
-  [code=csharp]
+[code=csharp]
   // Создать из имени сообщения (наиболее распространенный способ)
   using (var msg = new UserMessage("TextMsg"))
   {
@@ -221,7 +229,7 @@ return M
 
 [spoiler=Без классов]
 Создавайте user messages используя явные функции:
-  [code=csharp]
+[code=csharp]
   // Метод 1: Из имени сообщения (наиболее распространенный)
   nint msg = UserMessageCreateFromName("TextMsg");
 
@@ -459,21 +467,24 @@ User messages поддерживают различные типы данных.
   using (var msg = new UserMessage("Fade"))
   {
       // Записать цвет (упакованный RGBA)
-      msg.SetColor("clr", 0xFF0000FF);  // Красный с полной альфой
+      msg.SetColor("clr", new Vector4(1.0f, 0.0f, 0.0f, 1.0f));  // Красный с полной альфой
 
       // Создать цвет из компонентов
-      int r = 255, g = 128, b = 0, a = 255;
-      int color = (r << 24) | (g << 16) | (b << 8) | a;
+      float r = 1.0f;
+      float g = 0.5f;
+      float b = 0.0f;
+      float a = 1.0f;
+      var color = new Vector4(r, g, b, a);
       msg.SetColor("clr", color);
 
       // Прочитать цвет (в callback-перехватчиках)
-      int packedColor = msg.GetColor("clr");
+      Vector4 clr = msg.GetColor("clr");
 
       // Извлечь компоненты
-      int red = (packedColor >> 24) & 0xFF;
-      int green = (packedColor >> 16) & 0xFF;
-      int blue = (packedColor >> 8) & 0xFF;
-      int alpha = packedColor & 0xFF;
+      float red   = clr.X;
+      float green = clr.Y;
+      float blue  = clr.Z;
+      float alpha = clr.W;
   }
   
 [/code]
@@ -482,10 +493,10 @@ User messages поддерживают различные типы данных.
 [spoiler=Без классов]
 [code=csharp]
   // Прочитать цвет (упакованный RGBA)
-  int color = PbReadColor(msg, "color", 0);
+  Vector4 color = PbReadColor(msg, "color", default);
 
   // Записать цвет
-  PbSetColor(msg, "color", 0xFF0000FF);  // Красный с полной альфой
+  PbSetColor(msg, "color", new Vector4(1.0f, 0.0f, 0.0f, 1.0f));  // Красный с полной альфой
   
 [/code]
 [/spoiler]
@@ -730,7 +741,9 @@ public unsafe class ChatMessage : Plugin
     }
 }
 [/code]
-[/spoiler]div{label="Без классов" icon="lucide:code"}
+[/spoiler]
+
+[spoiler=Без классов]
 [code=csharp]
 using Plugify;
 using static s2sdk.s2sdk;
@@ -777,7 +790,7 @@ public unsafe class ChatMessage : Plugin
     }
 }
 [/code]
-
+[/spoiler]
 
 [size=16][b]Пример 2: Отправка подсказки конкретному игроку[/b][/size]
 
@@ -827,7 +840,9 @@ public unsafe class HintSystem : Plugin
     }
 }
 [/code]
-[/spoiler]div{label="Без классов" icon="lucide:code"}
+[/spoiler]
+
+[spoiler=Без классов]
 [code=csharp]
 using Plugify;
 using static s2sdk.s2sdk;
@@ -873,7 +888,7 @@ public unsafe class HintSystem : Plugin
     }
 }
 [/code]
-
+[/spoiler]
 
 [size=16][b]Пример 3: Эффект затемнения экрана[/b][/size]
 
@@ -927,7 +942,9 @@ public unsafe class FadeEffect : Plugin
     }
 }
 [/code]
-[/spoiler]div{label="Без классов" icon="lucide:code"}
+[/spoiler]
+
+[spoiler=Без классов]
 [code=csharp]
 using System.Numerics;
 using Plugify;
@@ -977,7 +994,7 @@ public unsafe class FadeEffect : Plugin
     }
 }
 [/code]
-
+[/spoiler]
 
 [size=16][b]Пример 4: Показать пользовательское меню[/b][/size]
 
@@ -1028,7 +1045,9 @@ public unsafe class MenuSystem : Plugin
     }
 }
 [/code]
-[/spoiler]div{label="Без классов" icon="lucide:code"}
+[/spoiler]
+
+[spoiler=Без классов]
 [code=csharp]
 using Plugify;
 using static s2sdk.s2sdk;
@@ -1075,7 +1094,7 @@ public unsafe class MenuSystem : Plugin
     }
 }
 [/code]
-
+[/spoiler]
 
 [size=16][b]Пример 5: Перехват и изменение сообщений[/b][/size]
 
@@ -1123,7 +1142,9 @@ public unsafe class MessageFilter : Plugin
     }
 }
 [/code]
-[/spoiler]div{label="Без классов" icon="lucide:code"}
+[/spoiler]
+
+[spoiler=Без классов]
 [code=csharp]
 using Plugify;
 using static s2sdk.s2sdk;
@@ -1162,7 +1183,7 @@ public unsafe class MessageFilter : Plugin
     }
 }
 [/code]
-
+[/spoiler]
 
 [size=16][b]Пример 6: Отправка данных с повторяющимися полями[/b][/size]
 
@@ -1215,7 +1236,9 @@ public unsafe class RepeatedFieldDemo : Plugin
     }
 }
 [/code]
-[/spoiler]div{label="Без классов" icon="lucide:code"}
+[/spoiler]
+
+[spoiler=Без классов]
 [code=csharp]
 using Plugify;
 using static s2sdk.s2sdk;
@@ -1265,7 +1288,7 @@ public unsafe class RepeatedFieldDemo : Plugin
     }
 }
 [/code]
-
+[/spoiler]
 
 [size=20][b]Отладка User Messages[/b][/size]
 
@@ -1282,7 +1305,9 @@ using (var msg = new UserMessage("TextMsg"))
     PrintToServer($"Message debug: {debugStr}\n");
 } // Автоматически уничтожается
 [/code]
-[/spoiler]div{label="Без классов" icon="lucide:code"}
+[/spoiler]
+
+[spoiler=Без классов]
 [code=csharp]
 nint msg = UserMessageCreateFromName("TextMsg");
 PbSetString(msg, "text", "Debug test");
@@ -1293,7 +1318,7 @@ PrintToServer($"Message debug: {debugStr}\n");
 
 UserMessageDestroy(msg);
 [/code]
-
+[/spoiler]
 
 [size=16][b]Проверка существования поля[/b][/size]
 
@@ -1309,7 +1334,9 @@ using (var msg = new UserMessage("TextMsg"))
     }
 } // Автоматически уничтожается
 [/code]
-[/spoiler]div{label="Без классов" icon="lucide:code"}
+[/spoiler]
+
+[spoiler=Без классов]
 [code=csharp]
 nint msg = UserMessageCreateFromName("TextMsg");
 
@@ -1322,7 +1349,7 @@ if (UserMessageHasField(msg, "optional_field"))
 
 UserMessageDestroy(msg);
 [/code]
-
+[/spoiler]
 
 [size=20][b]Советы и лучшие практики[/b][/size]
 

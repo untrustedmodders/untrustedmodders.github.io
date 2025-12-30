@@ -2,7 +2,6 @@
 Сначала давайте посмотрим, что требуется для простой команды. Команды регистрируются с помощью функции AddConsoleCommand. Им требуется имя, описание, функция обратного вызова и флаги команды.
 
 Функция обратного вызова вызывается каждый раз при использовании команды. Нажмите здесь, чтобы увидеть её прототип. Пример:
-
 [code=csharp]
 public void OnPluginStart()
 {
@@ -21,7 +20,6 @@ public ResultType Command_MySlap(int caller, CommandCallingContext context, stri
 Поскольку вы этого не сделали, сервер считает, что вы не хотите, чтобы движок Source2 знал о регистрации команды, и обрабатывает это соответствующим образом.
 Причина, по которой сервер ожидает, что ваша функция вернёт [font=monospace]ResultType.Handled[/font], заключается в теге Result, который вы указали в прототипе функции.
 Тег Result указывает, что [font=monospace]Command_MySlap[/font] должна вернуть одно из четырёх значений. См. перечисление Result в API, чтобы узнать больше об этих типах возврата и когда их использовать.
-
 [code=csharp]
 public ResultType Command_MySlap(int caller, CommandCallingContext context, string[] arguments)
 {
@@ -169,7 +167,6 @@ public ResultType Command_MySlap(int caller, CommandCallingContext context, stri
 [size=20][b]Доступ к параметрам команды[/b][/size]
 
 Массив [font=monospace]arguments[/font] предоставляет доступ к параметрам вызываемой команды. Первым параметром всегда будет вызываемая команда. Значения в кавычках возвращаются без кавычек, например:
-
 [code=csharp]
 public void OnCommand(int caller, CommandCallingContext context, string[] arguments)
 {
@@ -182,7 +179,6 @@ public void OnCommand(int caller, CommandCallingContext context, string[] argume
         Second Argument: {command[1]}");
 }
 [/code]
-
 [code=shell]
 > custom_command "Test Quoted" 5 13
 
