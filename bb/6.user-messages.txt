@@ -145,7 +145,7 @@ func init() {
 [spoiler=js]
 [code=js]
 import { Plugin } from 'plugify';
-import { s2 } from ':s2sdk';
+import * as s2 from ':s2sdk';
 
 export class Sample extends Plugin {
     pluginStart() {

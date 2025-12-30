@@ -7,8 +7,7 @@
 
 [list]
 [*]Они почти всегда информационные. То есть блокирование player_death не остановит смерть игрока. Это может заблокировать сообщение в HUD или консоли или что-то еще незначительное.
-[*]Они почти всегда используют userids вместо слотов клиентов.
-[*]То, что событие находится в файле ресурсов, не означает, что оно когда-либо вызывается или работает так, как вы ожидаете. Моды печально известны тем, что неправильно документируют функциональность своих событий.
+[*]То, что событие находится в файле ресурсов, не означает, что оно когда-либо вызывается или работает так, как вы ожидаете.
 [/list]
 
 [quote][b]Info:[/b] [b]Новое[/b]: Класс [font=monospace]EventInfo[/font] предоставляет более чистый способ работы с игровыми событиями, с автоматическим управлением ресурсами и типизированными методами.[/quote]
@@ -27,11 +26,8 @@
       EventInfo event = new EventInfo(@event);
   
       // Используйте типизированные методы на экземпляре EventInfo
-      int victim_id = event.GetInt("userid");
-      int attacker_id = event.GetInt("attacker");
-
-      int victim = victim_id + 1;
-      int attacker = attacker_id + 1;
+      int victim = event.GetPlayerSlot("userid");
+      int attacker = event.GetPlayerSlot("attacker");
 
       /* CODE */
   }
@@ -49,11 +45,8 @@
   public static void Event_PlayerDeath(string name, nint event, bool dontBroadcast)
   {
       // Используйте функции с явным дескриптором события
-      int victim_id = GetEventInt(event, "userid");
-      int attacker_id = GetEventInt(event, "attacker");
-
-      int victim = victim_id + 1;
-      int attacker = attacker_id + 1;
+      int victim = GetEventPlayerSlot(event, "userid");
+      int attacker = GetEventPlayerSlot(event, "attacker");
 
       /* CODE */
   }
@@ -76,7 +69,7 @@
       {
           HookEvent("player_death", (string name, nint event, bool dontBroadcast) =>
           {
-              int userid = GetEventInt(event, "userid");
+              int playerSlot = GetEventPlayerSlot(event, "userid");
               PrintToServer("event called.\n");
               return ResultType.Continue;
           }, HookMode.Post);
@@ -97,7 +90,7 @@
   public:
       void OnPluginStart() override {
           HookEvent("player_death", [](const plg::string& name, void* event, bool dontBroadcast) -> ResultType {
-                  int userid = GetEventInt(event, "userid");
+                  int playerSlot = GetEventPlayerSlot(event, "userid");
                   PrintToServer("event called.\n");
                   return ResultType.Continue;
               }, HookMode::Post);
@@ -117,7 +110,7 @@
       s2.HookEvent("player_death", lambda name, event, dontBroadcast: (
           ResultType.Continue
           after (
-            userid := s2.GetEventInt(event, "userid"),
+            playerSlot := s2.GetEventPlayerSlot(event, "userid"),
                    s2.PrintToServer("event called.\n")
             )[1]
       ), s2.HookMode.Post)
@@ -138,7 +131,7 @@
   func init() {
       plugify.OnPluginStart(func() {
           s2sdk.HookEvent("player_death", func(name string, event uintptr, dontBroadcast bool) {
-                  userid := s2sdk.GetEventInt(event, "userid");
+                  playerSlot := s2sdk.GetEventPlayerSlot(event, "userid");
                   s2sdk.PrintToServer("event called.\n");
                   return s2sdk.ResultType.Continue;
               }, s2sdk.HookMode.Post)
@@ -151,12 +144,12 @@
 [spoiler=js]
 [code=js]
   import { Plugin } from 'plugify';
-  import { s2 } from ':s2sdk';
+  import * as s2 from ':s2sdk';
 
   export class Sample extends Plugin {
       pluginStart() {
           s2.HookEvent("player_death", (name, event, dontBroadcast) => {
-                  const userid = s2.GetEventInt(event, "userid");
+                  const playerSlot = s2.GetEventPlayerSlot(event, "userid");
                   s2.PrintToServer("event called.\n");
                   return s2.ResultType.Continue;
               }, s2.HookMode.Post);
@@ -177,7 +170,7 @@
 
   function Sample:plugin_start()
       s2:HookEvent("player_death", function(name, event, dontBroadcast)
-              local userid = s2:GetEventInt(event, "userid");
+              local playerSlot = s2:GetEventPlayerSlot(event, "userid");
               s2:PrintToServer("event called.\n");
               return s2:ResultType.Continue;
           end, s2.HookMode.Post)
@@ -196,15 +189,15 @@
 Доступ к параметрам событий с использованием типизированных методов на экземпляре EventInfo:
 [code=csharp]
   // Чтение параметров событий
-  int userid = event.GetInt("userid");
+  int playerSlot = event.GetPlayerSlot("userid");
   float damage = event.GetFloat("damage");
   string weaponName = event.GetString("weapon");
   bool headshot = event.GetBool("headshot");
 
   // Получение ссылок на сущности
-  int playerController = event.GetPlayerController("userid");
-  int playerPawn = event.GetPlayerPawn("userid");
-  int entity = event.GetEntity("entityid");
+  nint playerController = event.GetPlayerController("userid");
+  nint playerPawn = event.GetPlayerPawn("userid");
+  nint entity = event.GetEntity("entityid");
   
 [/code]
 
@@ -227,15 +220,15 @@
 Доступ к параметрам событий с использованием явных функций с дескриптором события:
 [code=csharp]
   // Чтение параметров событий
-  int userid = GetEventInt(event, "userid");
+  int playerSlot = GetEventPlayerSlot(event, "userid");
   float damage = GetEventFloat(event, "damage");
   string weaponName = GetEventString(event, "weapon");
   bool headshot = GetEventBool(event, "headshot");
 
   // Получение ссылок на сущности
-  int playerController = GetEventPlayerController(event, "userid");
-  int playerPawn = GetEventPlayerPawn(event, "userid");
-  int entity = GetEventEntity(event, "entityid");
+  nint playerController = GetEventPlayerController(event, "userid");
+  nint playerPawn = GetEventPlayerPawn(event, "userid");
+  nint entity = GetEventEntity(event, "entityid");
   
 [/code]
 
@@ -333,7 +326,7 @@
   private static ResultType OnPlayerDeathPre(string name, nint @event, bool dontBroadcast)
   {
       EventInfo event = new EventInfo(@event);
-      int victim = event.GetInt("userid");
+      int victim = event.GetPlayerSlot("userid");
 
       // Отмена события смерти для игроков-администраторов
       if (IsPlayerAdmin(victim))
@@ -357,7 +350,7 @@
 
   private static ResultType OnPlayerDeathPre(string name, nint event, bool dontBroadcast)
   {
-      int victim = GetEventInt(event, "userid");
+      int victim = GetEventPlayerSlot(event, "userid");
 
       // Отмена события смерти для игроков-администраторов
       if (IsPlayerAdmin(victim))

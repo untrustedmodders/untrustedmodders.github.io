@@ -132,7 +132,7 @@
 [spoiler=js]
 [code=js]
   import { Plugin } from 'plugify';
-  import { s2 } from ':s2sdk';
+  import * as s2 from ':s2sdk';
 
   export class Sample extends Plugin {
       pluginStart() {
@@ -621,7 +621,7 @@ SetTransmitInfoFullUpdate(info, fullUpdate);        // Установить фл
 
       private void Event_PlayerSpawn(string name, nint @event, bool dontBroadcast)
       {
-          int playerSlot = GetEventInt(@event, "userid", 0);
+          int playerSlot = GetEventPlayerSlot(@event, "userid", 0);
 
           // Отметить игрока для полного обновления при следующей передаче
           playersNeedingFullUpdate.Add(playerSlot);
