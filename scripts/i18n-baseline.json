@@ -8,12 +8,6 @@
     "4.languages/7.dlang/5.build-module.md",
     "4.languages/7.dlang/6.using-classes.md",
     "4.languages/7.dlang/7.debugging.md",
-    "4.languages/8.rust/1.installation.md",
-    "4.languages/8.rust/2.first-plugin.md",
-    "4.languages/8.rust/3.export-functions.md",
-    "4.languages/8.rust/4.import-functions.md",
-    "4.languages/8.rust/5.build-module.md",
-    "4.languages/8.rust/6.using-classes.md",
-    "4.languages/8.rust/7.debugging.md"
+    "6.plugins/5.s2sdk/3.guides/12.menus.md"
   ]
 }
