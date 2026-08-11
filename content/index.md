@@ -65,7 +65,7 @@ icon: vscode-icons:file-type-csharp2
 to: /languages/csharp/quick-start
 target: _blank
 ---
-Create **cross-platform plugins** with C#. Seamlessly integrate with .NET and Mono frameworks.
+Create **cross-platform plugins** with C#. Seamlessly integrate with the .NET runtime.
 ::
 
 ::card
@@ -120,8 +120,9 @@ icon: vscode-icons:file-type-dlang
 to: /languages/dlang/quick-start
 target: _blank
 ---
-Explore **high-performance systems programming** with Dlang. Ideal for low-level plugin development.
+*Coming soon.* Explore **high-performance systems programming** with Dlang. Ideal for low-level plugin development.
 ::
+
 ::
 
 ::card-group{:cols="1"}
@@ -207,7 +208,6 @@ target: _blank
 Launch **Counter-Strike 2** or **Deadlock** with Plugify injected, allowing you to run and manage plugins effortlessly.
 ::
 ::
-
 
 ### Additional Tutorials
 ::card-group
