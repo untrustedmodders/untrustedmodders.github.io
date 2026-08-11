@@ -1,0 +1,38 @@
+name: Docs Checks
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - run: npm ci
+
+      # Validates every .pplugin/.pmodule/.pconfig example in the docs against
+      # the schemas shipped in the plugify repo. Independent of the build, so
+      # it still reports if the build breaks.
+      - name: Manifest examples match the Plugify schemas
+        run: node scripts/check-manifests.mjs
+
+      - name: Every page exists in every locale
+        run: node scripts/check-i18n-parity.mjs
+
+      - name: Build
+        run: npm run build
+
+      # Runs against .output/public so the theme's real routing (directory
+      # redirects, i18n prefixes) is the source of truth, not a guess.
+      - name: Internal links resolve
+        run: node scripts/check-links.mjs
