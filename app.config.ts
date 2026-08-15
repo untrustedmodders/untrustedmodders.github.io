@@ -58,8 +58,7 @@ export default defineAppConfig({
         {
           title: 'Guides',
           to: '/plugins/s2sdk/guides',
-          target: '_self',
-          showLinkIcon: true
+          target: '_self'
         },
         {
           title: 'Generator',
