@@ -56,58 +56,10 @@ export default defineAppConfig({
           ],
         },
         {
-          title: 'S2SDK Guides',
-          links: [
-            {
-              title: 'Console Commands',
-              to: '/plugins/s2sdk/guides/console-commands',
-              description: 'How to add a new console command.',
-              target: '_self',
-              icon: 'lucide:terminal-square'
-            },
-            {
-              title: 'Console Variables',
-              to: '/plugins/s2sdk/guides/console-variables',
-              description: 'How to read & write console variables (ConVars).',
-              target: '_self',
-              icon: 'lucide:sliders'
-            },
-            {
-              title: 'Game Events',
-              to: '/plugins/s2sdk/guides/game-events',
-              description: 'How to listen to Source 2 style game events.',
-              target: '_self',
-              icon: 'lucide:radio'
-            },
-            {
-              title: 'Global Listeners',
-              to: '/plugins/s2sdk/guides/global-listeners',
-              description: 'How to subscribe to CounterStrikeSharp global listeners.',
-              target: '_self',
-              icon: 'lucide:ear'
-            },
-            {
-              title: 'Entity Schemas',
-              to: '/plugins/s2sdk/guides/entity-schemas',
-              description: 'How to read and modify Source 2 entity schemas and network state.',
-              target: '_self',
-              icon: 'lucide:cog'
-            },
-            {
-              title: 'User Messages',
-              to: '/plugins/s2sdk/guides/user-messages',
-              description: 'How to send and receive protobuf user messages between server and clients.',
-              target: '_self',
-              icon: 'lucide:message-square'
-            },
-            {
-              title: 'CS_Script Integration',
-              to: '/plugins/s2sdk/guides/cs_script-integration',
-              description: 'How to integrate Valve\'s CS_Script system with Plugify plugins.',
-              target: '_self',
-              icon: 'lucide:code-xml'
-            }
-          ]
+          title: 'Guides',
+          to: '/plugins/s2sdk/guides',
+          target: '_self',
+          showLinkIcon: true
         },
         {
           title: 'Generator',
