@@ -24,7 +24,7 @@ import Ajv from "ajv";
 
 const CONTENT = "content";
 const SCHEMA_BASE = "https://raw.githubusercontent.com/untrustedmodders/plugify/main/schemas";
-const SCHEMAS = { pplugin: "plugin.schema.json", pmodule: "language-module.schema.json", pconfig: "config.schema.json" };
+const SCHEMAS = { pplugin: "plugin.schema.json", pmodule: "module.schema.json", pconfig: "config.schema.json" };
 
 const CACHE = path.join(".cache", "plugify-schemas");
 
