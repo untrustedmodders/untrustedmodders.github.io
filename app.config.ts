@@ -67,7 +67,7 @@ export default defineAppConfig({
           showLinkIcon: true,
         },
         {
-          title: 'API Hub',
+          title: 'Hub',
           to: 'https://api.plugify.net/',
           target: '_self',
           showLinkIcon: true,
