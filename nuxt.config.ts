@@ -43,9 +43,6 @@ export default defineNuxtConfig({
       },
     ],
   },
-  sitemap: {
-    i18n: true
-  },
   icon: {
     clientBundle: {
       scan: {
@@ -77,9 +74,9 @@ export default defineNuxtConfig({
   },
   vite: {
     optimizeDeps: {
-      // mermaid imports the CJS dayjs as a default export; fixed the same way
-      // upstream in shadcn-docs-nuxt 1.2 (ZTL-UwU/shadcn-docs-nuxt#205)
-      include: ['mermaid'],
+      // Vite's dev scanner picks up the theme's build-time tailwind plugin as a
+      // client dependency and then fails to bundle its native oxide binary
+      exclude: ['@tailwindcss/vite'],
     },
   },
   compatibilityDate: '2025-12-26',

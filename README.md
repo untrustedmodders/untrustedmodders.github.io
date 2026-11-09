@@ -6,7 +6,7 @@ Built with Nuxt and the [shadcn-docs-nuxt](https://github.com/ZTL-UwU/shadcn-doc
 
 ## Development
 
-Requires Node.js 20 (see `.nvmrc`).
+Requires Node.js 22.21+ or 24.11+ (see `.nvmrc`).
 
 ```bash
 npm ci
