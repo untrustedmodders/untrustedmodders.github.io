@@ -1,49 +1,33 @@
-# shadcn-docs-nuxt Minimal Starter
+# plugify.net
 
-Starter template for [shadcn-docs-nuxt](https://github.com/ZTL-UwU/shadcn-docs-nuxt).
+Documentation site for [Plugify](https://github.com/untrustedmodders/plugify), published at https://plugify.net.
 
-## Setup
+Built with Nuxt and the [shadcn-docs-nuxt](https://github.com/ZTL-UwU/shadcn-docs-nuxt) theme. Pages live in `content/` (English) and `content/ru/` (Russian).
 
-Make sure to install the dependencies:
+## Development
 
-```bash
-# yarn
-yarn install
-
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on http://localhost:3000
+Requires Node.js 20 (see `.nvmrc`).
 
 ```bash
+npm ci
 npm run dev
 ```
 
-## Production
+The dev server runs on http://localhost:3000.
 
-[![Deploy to NuxtHub](https://hub.nuxt.com/button.svg)](https://hub.nuxt.com/new?repo=ZTL-UwU/shadcn-docs-nuxt-starter)
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FZTL-UwU%2Fshadcn-docs-nuxt-starter)
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https%3A%2F%2Fgithub.com%2FZTL-UwU%2Fshadcn-docs-nuxt-starter)
-
-Build the application for production:
+## Checks
 
 ```bash
-npm run build
+npm run check
 ```
 
-Locally preview production build:
+Runs, in order:
 
-```bash
-npm run preview
-```
+- `check:manifests` — validates every `.pplugin` / `.pmodule` / `.pconfig` example in the docs against the Plugify JSON schemas;
+- `check:i18n` — every English page has a Russian counterpart with the same structure (known gaps are listed in `scripts/i18n-baseline.json`);
+- `generate` — builds the static site into `.output/public`;
+- `check:links` — every internal link resolves in the built site.
 
-Checkout the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Deployment
+
+Pushing to `main` runs `.github/workflows/deploy.yml`: the checks above, then deployment to GitHub Pages. Pull requests run the same checks without deploying.

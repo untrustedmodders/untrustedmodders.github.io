@@ -13,7 +13,7 @@ export default defineAppConfig({
       radius: 0.5,
     },
     header: {
-      title: 'shadcn-docs-starter',
+      title: 'Plugify',
       showTitle: false,
       darkModeToggle: true,
       logo: {
@@ -38,19 +38,16 @@ export default defineAppConfig({
               title: 'Use Cases',
               to: '/use-cases/integrations',
               description: 'Explore real-world applications and scenarios for Plugify.',
-              target: '_self',
               icon: 'lucide:briefcase'
             }, {
               title: 'Languages',
               to: '/languages/languages',
               description: 'See supported programming languages and compatibility details.',
-              target: '_self',
               icon: 'lucide:code'
             }, {
               title: 'Developer Guides',
               to: '/developer-guides/writing-language-module',
               description: 'Step-by-step guides for developers integrating Plugify.',
-              target: '_self',
               icon: 'lucide:hammer'
             }
           ],
@@ -58,18 +55,17 @@ export default defineAppConfig({
         {
           title: 'Guides',
           to: '/plugins/s2sdk/guides',
-          target: '_self'
         },
         {
           title: 'Generator',
           to: 'https://gen.plugify.net/',
-          target: '_self',
+          target: '_blank',
           showLinkIcon: true,
         },
         {
           title: 'Hub',
           to: 'https://api.plugify.net/',
-          target: '_self',
+          target: '_blank',
           showLinkIcon: true,
         }
       ],
@@ -85,24 +81,6 @@ export default defineAppConfig({
         }
       ],
     },
-    i18n: {
-      baseUrl: 'https://plugify.net/',
-      detectBrowserLanguage: false,
-      strategy: 'prefix_except_default',
-      defaultLocale: 'en',
-      locales: [
-        {
-          code: 'en',
-          name: 'English',
-          language: 'en-US',
-        },
-        {
-          code: 'ru',
-          name: 'Русский',
-          language: 'ru-RU',
-        },
-      ],
-    },
     aside: {
       useLevel: true,
       collapse: false,
@@ -112,7 +90,7 @@ export default defineAppConfig({
       showTitle: true,
       editLink: {
         enable: true,
-        pattern: 'https://github.com/untrustedmodders/untrustedmodders.github.io/tree/main/content/:path',
+        pattern: 'https://github.com/untrustedmodders/untrustedmodders.github.io/edit/main/content/:path',
         text: 'Edit this page on GitHub',
         icon: 'lucide:square-pen',
         placement: ['docsFooter', 'toc'],

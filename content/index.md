@@ -1,5 +1,6 @@
 ---
 title: Home
+description: "A modern C++ plugin manager with multi-language support: build plugins in C++, C#, Python, Go, Lua, Rust, JavaScript and more."
 navigation: false
 ---
 
@@ -17,7 +18,6 @@ announcement:
 actions:
   - name: Documentation
     to: /introduction/quick-start
-    target: _blank
   - name: GitHub
     variant: outline
     to: https://github.com/untrustedmodders
@@ -41,7 +41,6 @@ title: Python
 description: 
 icon: vscode-icons:file-type-python
 to: /languages/python/quick-start
-target: _blank
 ---
 Build **scriptable plugins** with Python. Perfect for rapid prototyping and integrating with existing Python libraries.
 ::
@@ -52,7 +51,6 @@ title: C++
 description: 
 icon: vscode-icons:file-type-cpp3
 to: /languages/cpp/quick-start
-target: _blank
 ---
 Leverage **native performance** with C++. Ideal for high-performance plugins and game modding.
 ::
@@ -63,7 +61,6 @@ title: C#
 description: 
 icon: vscode-icons:file-type-csharp2
 to: /languages/csharp/quick-start
-target: _blank
 ---
 Create **cross-platform plugins** with C#. Seamlessly integrate with the .NET runtime.
 ::
@@ -74,7 +71,6 @@ title: JavaScript
 description: 
 icon: vscode-icons:file-type-js-official
 to: /languages/javascript/quick-start
-target: _blank
 ---
 Build **dynamic plugins** with JavaScript. Harness the power of the V8 engine for scripting and automation.
 ::
@@ -85,7 +81,6 @@ title: Golang
 description: 
 icon: vscode-icons:file-type-go
 to: /languages/golang/quick-start
-target: _blank
 ---
 Develop **efficient and concurrent plugins** with Go. Perfect for scalable and high-performance applications.
 ::
@@ -96,7 +91,6 @@ title: Lua
 description: 
 icon: vscode-icons:file-type-lua
 to: /languages/lua/quick-start
-target: _blank
 ---
 Explore **lightweight and embeddable scripting** with Lua. Ideal for game scripting and plugin development.
 ::
@@ -107,7 +101,6 @@ title: Rust
 description: 
 icon: vscode-icons:file-type-rust
 to: /languages/rust/quick-start
-target: _blank
 ---
 Explore **high-performance systems programming** with Rust. Ideal for low-level plugin development.
 ::
@@ -118,7 +111,6 @@ title: Dlang
 description: 
 icon: vscode-icons:file-type-dlang
 to: /languages/dlang/quick-start
-target: _blank
 ---
 *Coming soon.* Explore **high-performance systems programming** with Dlang. Ideal for low-level plugin development.
 ::
@@ -145,7 +137,6 @@ title: Features
 description: 
 icon: lucide:sparkles
 to: /introduction/features
-target: _blank
 ---
 Discover the **key features** that make Plugify a powerful tool for plugin development.
 ::
@@ -156,7 +147,6 @@ title: Architecture
 description: 
 icon: lucide:layers
 to: /introduction/architecture
-target: _blank
 ---
 Learn how Plugify works under the hood with a **high-level overview** of its architecture.
 ::
@@ -167,7 +157,6 @@ title: Installation
 description: 
 icon: lucide:download
 to: /essentials/installation
-target: _blank
 ---
 Get started with Plugify by following the **installation guide** for your platform.
 ::
@@ -178,7 +167,6 @@ title: Building and Integrating
 description: 
 icon: lucide:wrench
 to: /essentials/integrating
-target: _blank
 ---
 Learn how to **build and integrate** Plugify into your own projects.
 ::
@@ -192,7 +180,6 @@ title: Metamod Plugin
 description: 
 icon: lucide:square-m
 to: /use-cases/metamod-plugin
-target: _blank
 ---
 Integrate Plugify as a **Metamod plugin** for Source2, enabling seamless in-game plugin execution.
 ::
@@ -203,7 +190,6 @@ title: Standalone Launcher
 description: 
 icon: lucide:play-circle
 to: /use-cases/standalone-launcher
-target: _blank
 ---
 Launch **Counter-Strike 2** or **Deadlock** with Plugify injected, allowing you to run and manage plugins effortlessly.
 ::
@@ -217,7 +203,6 @@ title: Module Development
 description: 
 icon: lucide:package-plus
 to: /developer-guides/writing-language-module
-target: _blank
 ---
 **Extend Plugify** by creating new language modules. Support your favorite programming language today!
 ::
@@ -228,7 +213,6 @@ title: Runtime Marshalling
 description: 
 icon: lucide:rotate-3d
 to: /developer-guides/runtime-marshalling
-target: _blank
 ---
 **Optimize inter-language communication** with efficient marshalling techniques.
 ::
@@ -242,7 +226,6 @@ title: Community & Support
 description: 
 icon: lucide:message-circle
 to: /community-support/join-community
-target: _blank
 ---
 Join the Plugify community on **Discord** and get help from developers and contributors.
 ::
@@ -252,7 +235,6 @@ title: Showcase & Case Studies
 description: 
 icon: lucide:eye
 to: /community-support/showcase
-target: _blank
 ---
 Explore **real-world projects** using Plugify and see how others are leveraging its power.
 ::
@@ -262,7 +244,6 @@ title: Contribute to Plugify
 description: 
 icon: lucide:github
 to: /developer-guides/contributing
-target: _blank
 ---
 Help improve Plugify by contributing to the **open-source project**. Learn how to get started.
 ::
@@ -272,7 +253,6 @@ title: FAQ
 description: 
 icon: lucide:help-circle
 to: /introduction/faq
-target: _blank
 ---
 Find answers to **frequently asked questions** about Plugify.
 ::

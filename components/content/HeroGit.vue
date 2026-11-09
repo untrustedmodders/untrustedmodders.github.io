@@ -82,10 +82,39 @@ const release = ref<GitHubRelease | null>(null);
 const loading = ref(true);
 const error = ref<string | null>(null);
 
+// Unauthenticated GitHub API allows 60 requests/hour per IP, so the answer is
+// cached in the browser instead of being fetched on every visit.
+const CACHE_TTL_MS = 60 * 60 * 1000;
+
+const readCache = (key: string): GitHubRelease | null => {
+  try {
+    const cached = JSON.parse(localStorage.getItem(key) ?? 'null');
+    return cached && Date.now() - cached.time < CACHE_TTL_MS ? cached.release : null;
+  } catch {
+    return null;
+  }
+};
+
+const writeCache = (key: string, value: GitHubRelease) => {
+  try {
+    localStorage.setItem(key, JSON.stringify({ time: Date.now(), release: value }));
+  } catch {
+    // Storage unavailable (private mode, blocked site data) — just skip caching
+  }
+};
+
 const fetchLatestRelease = async () => {
   loading.value = true;
   error.value = null;
   release.value = null;
+
+  const cacheKey = `latest-release:${props.git.owner}/${props.git.repo}`;
+  const cached = readCache(cacheKey);
+  if (cached) {
+    release.value = cached;
+    loading.value = false;
+    return;
+  }
 
   try {
     const response = await fetch(`https://api.github.com/repos/${props.git.owner}/${props.git.repo}/releases/latest`);
@@ -97,6 +126,7 @@ const fetchLatestRelease = async () => {
       tag: data.tag_name,
       url: data.html_url
     };
+    writeCache(cacheKey, release.value);
   } catch (err) {
     error.value = 'Failed to load latest release';
   } finally {

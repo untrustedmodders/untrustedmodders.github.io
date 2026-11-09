@@ -7,34 +7,80 @@ export default defineNuxtConfig({
     '@nuxtjs/robots'
   ],
   nitro: {
-    static: true,
     prerender: {
-      routes: ['/sitemap.xml', '/robots.txt'],
+      routes: ['/robots.txt'],
       ignore: ['/ru/sitemap.xml']
     }
   },
   site: {
-    url: 'https://plugify.net', 
-    name: 'Plugify - A Modern C++ Plugin and Package Manager with Multi-Language Support. Customizable. Compatible. Open Source.'
+    url: 'https://plugify.net',
+    name: 'Plugify',
+    // GitHub Pages serves every page as a directory and 301s the slashless URL
+    trailingSlash: true
   },
-  i18n: { 
-    defaultLocale: 'en', 
-    locales: [ 
-      { 
-        code: 'en', 
-        name: 'English', 
-        language: 'en-US', 
+  experimental: {
+    defaults: {
+      nuxtLink: {
+        trailingSlash: 'append'
+      }
+    }
+  },
+  i18n: {
+    baseUrl: 'https://plugify.net',
+    strategy: 'prefix_except_default',
+    detectBrowserLanguage: false,
+    defaultLocale: 'en',
+    locales: [
+      {
+        code: 'en',
+        name: 'English',
+        language: 'en-US',
       },
-      { 
-        code: 'ru', 
-        name: 'Russian', 
-        language: 'ru-RU', 
-      }, 
-    ], 
+      {
+        code: 'ru',
+        name: 'Русский',
+        language: 'ru-RU',
+      },
+    ],
   },
   sitemap: {
-	hostname: 'https://plugify.net',
-	i18n: true
+    i18n: true
+  },
+  icon: {
+    clientBundle: {
+      scan: {
+        globInclude: ['**/*.{vue,jsx,tsx,md,mdc,mdx,yml,yaml}', 'app.config.ts'],
+      },
+      // Used by the shadcn-docs-nuxt theme, which the scanner skips (node_modules)
+      icons: [
+        'lucide:arrow-left', 'lucide:arrow-right', 'lucide:arrow-up', 'lucide:arrow-up-right',
+        'lucide:bookmark', 'lucide:check', 'lucide:chevron-down', 'lucide:chevron-right',
+        'lucide:chevron-up', 'lucide:chevrons-down-up', 'lucide:chevrons-up-down', 'lucide:circle-x',
+        'lucide:clipboard', 'lucide:external-link', 'lucide:file', 'lucide:folder', 'lucide:languages',
+        'lucide:loader', 'lucide:loader-circle', 'lucide:menu', 'lucide:monitor', 'lucide:moon',
+        'lucide:paintbrush', 'lucide:search', 'lucide:square-pen', 'lucide:sun', 'lucide:terminal',
+        'lucide:x', 'lucide:refresh-ccw',
+      ],
+      sizeLimitKb: 1024,
+    },
+  },
+  // The site only uses system fonts; without this every build polls all font providers
+  fonts: {
+    providers: {
+      google: false,
+      googleicons: false,
+      bunny: false,
+      fontshare: false,
+      fontsource: false,
+      adobe: false,
+    },
+  },
+  vite: {
+    optimizeDeps: {
+      // mermaid imports the CJS dayjs as a default export; fixed the same way
+      // upstream in shadcn-docs-nuxt 1.2 (ZTL-UwU/shadcn-docs-nuxt#205)
+      include: ['mermaid'],
+    },
   },
   compatibilityDate: '2025-12-26',
   content: {
@@ -44,7 +90,7 @@ export default defineNuxtConfig({
         default: 'github-light',
         dark: 'github-dark',
       },
-      preload: ['json', 'mermaid', 'xml', 'toml', 'js', 'ts', 'html', 'css', 'vue', 'diff', 'shell', 'markdown', 'yaml', 'bash', 'ini', 'python', 'cpp', 'csharp', 'go', 'cmake', 'lua', 'rs', 'd'],
+      preload: ['json', 'jsonc', 'mermaid', 'xml', 'toml', 'js', 'ts', 'shell', 'markdown', 'yaml', 'bash', 'c', 'cpp', 'csharp', 'python', 'go', 'cmake', 'lua', 'rs', 'd'],
     },
   },
 });

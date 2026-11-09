@@ -334,6 +334,9 @@ export default defineI18nConfig(() => ({
       'See supported programming languages and compatibility details.': 'Посмотрите поддерживаемые языки программирования и детали совместимости.',
       'Developer Guides': 'Для разработчиков',
       'Step-by-step guides for developers integrating Plugify.': 'Пошаговые руководства для разработчиков по интеграции Plugify.',
+      'Guides': 'Мануалы',
+      'Generator': 'Генератор',
+      'Hub': 'Хаб',
 
       // S2SDK Guides
       'S2SDK Guides': 'Мануалы S2SDK',

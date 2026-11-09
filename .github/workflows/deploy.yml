@@ -1,39 +1,68 @@
 # https://github.com/actions/deploy-pages#usage
 name: Deploy to GitHub Pages
+
 on:
   workflow_dispatch:
+  pull_request:
   push:
     branches:
       - main
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: corepack enable
+
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
-      # Pick your own package manager and build script
-      - run: npm install
-      - run: npm run build
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      # Validates every .pplugin/.pmodule/.pconfig example in the docs against
+      # the schemas shipped in the plugify repo. Independent of the build, so
+      # it still reports if the build breaks.
+      # Non-blocking until the existing docs issues are fixed: failures show up
+      # as warnings on the run but do not stop the deploy.
+      - name: Manifest examples match the Plugify schemas
+        continue-on-error: true
+        run: node scripts/check-manifests.mjs
+
+      - name: Every page exists in every locale
+        continue-on-error: true
+        run: node scripts/check-i18n-parity.mjs
+
+      - name: Build
+        run: npm run generate
+
+      # Runs against .output/public so the theme's real routing (directory
+      # redirects, i18n prefixes) is the source of truth, not a guess.
+      - name: Internal links resolve
+        run: node scripts/check-links.mjs
+
       - name: Upload artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./.output/public
-  # Deployment job
+
+  # Only reached when every check above passed
   deploy:
-    # Add a dependency to the build job
+    if: github.event_name != 'pull_request'
     needs: build
     # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
     permissions:
       pages: write      # to deploy to Pages
       id-token: write   # to verify the deployment originates from an appropriate source
-    # Deploy to the github_pages environment
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    # Specify runner + deployment step
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
