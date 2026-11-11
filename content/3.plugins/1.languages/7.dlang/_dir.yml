@@ -1,0 +1,4 @@
+title: DLang
+icon: vscode-icons:file-type-dlang
+navigation.redirect: /plugins/languages/dlang/quick-start
+collapse: true

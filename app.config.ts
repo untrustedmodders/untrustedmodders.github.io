@@ -1,7 +1,7 @@
 export default defineAppConfig({
   shadcnDocs: {
     site: {
-      name: 'plugify',
+      name: 'Plugify',
       description: 'A Modern C++ Plugin and Package Manager with Multi-Language Support. Customizable. Compatible. Open Source.',
       ogImage: '/hero.png',
       ogImageComponent: 'ShadcnDocs',
@@ -22,52 +22,53 @@ export default defineAppConfig({
       },
       nav: [
         {
-          title: 'Docs',
+          title: 'Builds',
+          to: '/builds',
+          showLinkIcon: false,
+        },
+        {
+          title: 'Plugins',
+          to: '/plugins',
+          showLinkIcon: false,
+        },
+        {
+          title: 'Core',
+          to: '/core',
+          showLinkIcon: false,
+        },
+        {
+          title: 'More',
           links: [
             {
-              title: 'Introduction',
+              title: 'Start Here',
               to: '/introduction/quick-start',
-              description: 'Learn about Plugify, its purpose, and key features.',
-              icon: 'lucide:rocket'
+              description: 'What Plugify is and where to begin.',
+              icon: 'lucide:rocket',
             }, {
-              title: 'Essentials',
-              to: '/essentials/installation',
-              description: 'A high-level overview of Plugify\'s core components.',
-              icon: 'lucide:package'
+              title: 'S2SDK Guides',
+              to: '/plugins/s2sdk/guides',
+              description: 'Commands, events, schemas and more for CS2 plugins.',
+              icon: 'lucide:book-open-text',
             }, {
-              title: 'Use Cases',
-              to: '/use-cases/integrations',
-              description: 'Explore real-world applications and scenarios for Plugify.',
-              icon: 'lucide:briefcase'
+              title: 'Community',
+              to: '/community-support/join-community',
+              description: 'Discord, showcase and feature requests.',
+              icon: 'lucide:users',
             }, {
-              title: 'Languages',
-              to: '/languages/languages',
-              description: 'See supported programming languages and compatibility details.',
-              icon: 'lucide:code'
+              title: 'API Hub',
+              to: 'https://api.plugify.net/',
+              target: '_blank',
+              description: 'Browse the API of any plugin manifest.',
+              icon: 'lucide:library',
             }, {
-              title: 'Developer Guides',
-              to: '/developer-guides/writing-language-module',
-              description: 'Step-by-step guides for developers integrating Plugify.',
-              icon: 'lucide:hammer'
+              title: 'Generator',
+              to: 'https://gen.plugify.net/',
+              target: '_blank',
+              description: 'Generate language bindings from a plugin manifest.',
+              icon: 'lucide:wand-sparkles',
             }
           ],
         },
-        {
-          title: 'Guides',
-          to: '/plugins/s2sdk/guides',
-        },
-        {
-          title: 'Generator',
-          to: 'https://gen.plugify.net/',
-          target: '_blank',
-          showLinkIcon: true,
-        },
-        {
-          title: 'Hub',
-          to: 'https://api.plugify.net/',
-          target: '_blank',
-          showLinkIcon: true,
-        }
       ],
       links: [
         {
@@ -93,7 +94,7 @@ export default defineAppConfig({
         pattern: 'https://github.com/untrustedmodders/untrustedmodders.github.io/edit/main/content/:path',
         text: 'Edit this page on GitHub',
         icon: 'lucide:square-pen',
-        placement: ['docsFooter', 'toc'],
+        placement: ['docsFooter'],
       },
       codeIcon: {
         'package.json': 'vscode-icons:file-type-node',
@@ -167,22 +168,6 @@ export default defineAppConfig({
     toc: {
       enable: true,
       title: 'On This Page',
-      links: [{
-        title: 'Star on GitHub',
-        icon: 'lucide:star',
-        to: 'https://github.com/untrustedmodders/plugify',
-        target: '_blank',
-      }, {
-        title: 'Create Issues',
-        icon: 'lucide:circle-dot',
-        to: 'https://github.com/untrustedmodders/plugify/issues',
-        target: '_blank',
-      }, {
-        title: 'Become a Sponsor',
-        icon: 'lucide:hand-heart',
-        to: 'https://github.com/orgs/untrustedmodders/sponsoring',
-        target: '_blank',
-      }],
     },
     search: {
       enable: true,

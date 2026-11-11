@@ -11,18 +11,18 @@ git:
   repo: 'plugify'
 announcement:
   title: 'Release'
-  description: 'New features, bug fixes, and improved performance! Check out the latest release.'
   icon: '🎉'
   to: https://github.com/untrustedmodders/plugify/releases/latest
   target: _blank
 actions:
-  - name: Documentation
+  - name: Get Started
     to: /introduction/quick-start
+    rightIcon: 'lucide:arrow-right'
   - name: GitHub
     variant: outline
-    to: https://github.com/untrustedmodders
-    leftIcon: 'lucide:github'
-    background: 'linear-gradient(45deg, #1e3a8a, #2563eb)'
+    to: https://github.com/untrustedmodders/plugify
+    target: _blank
+    leftIcon: 'simple-icons:github'
 ---
 
 #title
@@ -30,230 +30,119 @@ Welcome to Plugify
 
 #description
 A **Modern C++ Plugin Manager** with **Multi-Language Support**. :br 
-**Customizable. Compatible. Open Source.** Build plugins in C++, C#, Python, Go, Lua, D, Rust, JavaScript/TypeScript and more — all in one ecosystem.
+**Customizable. Compatible. Open Source.** Build plugins in C++, C#, Python, Go, Lua, D, Rust, JavaScript/TypeScript and more, all in one ecosystem.
 ::
 
-### Language Modules Quickstarts
-::card-group
+::card-group{cols=3}
+::card
+---
+title: Plugins
+icon: lucide:plug
+to: /plugins
+---
+Write plugins in **any supported language** and let them call each other.
+::
+
+::card
+---
+title: Builds
+icon: lucide:package-open
+to: /builds
+---
+Ready-to-run packs: the host, language modules and base plugins in **one archive**.
+::
+
+::card
+---
+title: Core
+icon: lucide:cpu
+to: /core
+---
+Embed Plugify in your own app or add a **new language module**.
+::
+::
+
+## Languages
+
+::card-group{cols=4 class="grid-cols-2 [&_h3]:text-base [&_.p-6]:p-4"}
 ::card
 ---
 title: Python
-description: 
 icon: vscode-icons:file-type-python
-to: /languages/python/quick-start
+to: /plugins/languages/python/quick-start
+horizontal: true
+showLinkIcon: false
 ---
-Build **scriptable plugins** with Python. Perfect for rapid prototyping and integrating with existing Python libraries.
 ::
 
 ::card
 ---
 title: C++
-description: 
 icon: vscode-icons:file-type-cpp3
-to: /languages/cpp/quick-start
+to: /plugins/languages/cpp/quick-start
+horizontal: true
+showLinkIcon: false
 ---
-Leverage **native performance** with C++. Ideal for high-performance plugins and game modding.
 ::
 
 ::card
 ---
 title: C#
-description: 
 icon: vscode-icons:file-type-csharp2
-to: /languages/csharp/quick-start
+to: /plugins/languages/csharp/quick-start
+horizontal: true
+showLinkIcon: false
 ---
-Create **cross-platform plugins** with C#. Seamlessly integrate with the .NET runtime.
 ::
 
 ::card
 ---
 title: JavaScript
-description: 
 icon: vscode-icons:file-type-js-official
-to: /languages/javascript/quick-start
+to: /plugins/languages/javascript/quick-start
+horizontal: true
+showLinkIcon: false
 ---
-Build **dynamic plugins** with JavaScript. Harness the power of the V8 engine for scripting and automation.
 ::
 
 ::card
 ---
-title: Golang
-description: 
+title: Go
 icon: vscode-icons:file-type-go
-to: /languages/golang/quick-start
+to: /plugins/languages/golang/quick-start
+horizontal: true
+showLinkIcon: false
 ---
-Develop **efficient and concurrent plugins** with Go. Perfect for scalable and high-performance applications.
 ::
 
 ::card
 ---
 title: Lua
-description: 
 icon: vscode-icons:file-type-lua
-to: /languages/lua/quick-start
+to: /plugins/languages/lua/quick-start
+horizontal: true
+showLinkIcon: false
 ---
-Explore **lightweight and embeddable scripting** with Lua. Ideal for game scripting and plugin development.
 ::
 
 ::card
 ---
 title: Rust
-description: 
 icon: vscode-icons:file-type-rust
-to: /languages/rust/quick-start
+to: /plugins/languages/rust/quick-start
+horizontal: true
+showLinkIcon: false
 ---
-Explore **high-performance systems programming** with Rust. Ideal for low-level plugin development.
 ::
 
 ::card
 ---
-title: Dlang
-description: 
+title: D
 icon: vscode-icons:file-type-dlang
-to: /languages/dlang/quick-start
+to: /plugins/languages/dlang/quick-start
+horizontal: true
+showLinkIcon: false
 ---
-*Coming soon.* Explore **high-performance systems programming** with Dlang. Ideal for low-level plugin development.
 ::
 
-::
-
-::card-group{:cols="1"}
-::card
----
-title: Couldn't find the module you need?
-icon: lucide:code
-to: /developer-guides/writing-language-module
----
-Contribute by creating your own language module!
-::
-::
-
-### Getting Started
-
-::card-group
-::card
----
-title: Features
-description: 
-icon: lucide:sparkles
-to: /introduction/features
----
-Discover the **key features** that make Plugify a powerful tool for plugin development.
-::
-
-::card
----
-title: Architecture
-description: 
-icon: lucide:layers
-to: /introduction/architecture
----
-Learn how Plugify works under the hood with a **high-level overview** of its architecture.
-::
-
-::card
----
-title: Installation
-description: 
-icon: lucide:download
-to: /essentials/installation
----
-Get started with Plugify by following the **installation guide** for your platform.
-::
-
-::card
----
-title: Building and Integrating
-description: 
-icon: lucide:wrench
-to: /essentials/integrating
----
-Learn how to **build and integrate** Plugify into your own projects.
-::
-::
-
-### Use Cases
-::card-group
-::card
----
-title: Metamod Plugin
-description: 
-icon: lucide:square-m
-to: /use-cases/metamod-plugin
----
-Integrate Plugify as a **Metamod plugin** for Source2, enabling seamless in-game plugin execution.
-::
-
-::card
----
-title: Standalone Launcher
-description: 
-icon: lucide:play-circle
-to: /use-cases/standalone-launcher
----
-Launch **Counter-Strike 2** or **Deadlock** with Plugify injected, allowing you to run and manage plugins effortlessly.
-::
-::
-
-### Additional Tutorials
-::card-group
-::card
----
-title: Module Development
-description: 
-icon: lucide:package-plus
-to: /developer-guides/writing-language-module
----
-**Extend Plugify** by creating new language modules. Support your favorite programming language today!
-::
-
-::card
----
-title: Runtime Marshalling
-description: 
-icon: lucide:rotate-3d
-to: /developer-guides/runtime-marshalling
----
-**Optimize inter-language communication** with efficient marshalling techniques.
-::
-::
-
-### Community & Support
-::card-group
-::card
----
-title: Community & Support
-description: 
-icon: lucide:message-circle
-to: /community-support/join-community
----
-Join the Plugify community on **Discord** and get help from developers and contributors.
-::
-::card
----
-title: Showcase & Case Studies
-description: 
-icon: lucide:eye
-to: /community-support/showcase
----
-Explore **real-world projects** using Plugify and see how others are leveraging its power.
-::
-::card
----
-title: Contribute to Plugify
-description: 
-icon: lucide:github
-to: /developer-guides/contributing
----
-Help improve Plugify by contributing to the **open-source project**. Learn how to get started.
-::
-::card
----
-title: FAQ
-description: 
-icon: lucide:help-circle
-to: /introduction/faq
----
-Find answers to **frequently asked questions** about Plugify.
-::
 ::

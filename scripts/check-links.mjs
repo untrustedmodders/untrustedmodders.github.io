@@ -4,7 +4,7 @@
  *
  * Checking against .output/public rather than deriving routes from filenames
  * means the theme's own routing rules (_dir.yml redirects, i18n prefixes,
- * index pages) are ground truth — no heuristics to keep in sync.
+ * index pages) are ground truth, with no heuristics to keep in sync.
  *
  * Run after `npm run build`.
  */
@@ -15,7 +15,7 @@ const CONTENT = "content";
 const OUT = ".output/public";
 
 if (!fs.existsSync(OUT)) {
-  console.error(`✗ ${OUT} not found — run \`npm run build\` first.`);
+  console.error(`✗ ${OUT} not found, run \`npm run build\` first.`);
   process.exit(1);
 }
 
@@ -70,7 +70,7 @@ for (const file of files) {
 // The locale prefix is easy to drop by hand and fails silently: a Russian
 // reader is quietly handed the English page instead of a 404.
 const localeSlips = [];
-const TOP = /^\/(essentials|introduction|developer-guides|languages|use-cases|plugins|community-support)\b/;
+const TOP = /^\/(builds|core|introduction|plugins|community-support)\b/;
 for (const file of files.filter((f) => f.split(path.sep).includes("ru"))) {
   const text = fs.readFileSync(file, "utf8").replace(/\r\n/g, "\n");
   text.split("\n").forEach((line, i) => {

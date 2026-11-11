@@ -1,0 +1,5 @@
+title: Управление
+icon: lucide:sliders-horizontal
+navigation.redirect: /ru/builds/management/commands
+sidebar:
+  style: group

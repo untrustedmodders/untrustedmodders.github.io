@@ -1,0 +1,5 @@
+title: Embedding
+icon: lucide:boxes
+navigation.redirect: /core/embedding/installation
+sidebar:
+  style: group

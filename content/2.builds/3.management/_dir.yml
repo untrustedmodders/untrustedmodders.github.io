@@ -1,0 +1,5 @@
+title: Management
+icon: lucide:sliders-horizontal
+navigation.redirect: /builds/management/commands
+sidebar:
+  style: group

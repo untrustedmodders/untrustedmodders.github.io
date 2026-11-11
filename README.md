@@ -23,10 +23,10 @@ npm run check
 
 Runs, in order:
 
-- `check:manifests` — validates every `.pplugin` / `.pmodule` / `.pconfig` example in the docs against the Plugify JSON schemas;
-- `check:i18n` — every English page has a Russian counterpart with the same structure (known gaps are listed in `scripts/i18n-baseline.json`);
-- `generate` — builds the static site into `.output/public`;
-- `check:links` — every internal link resolves in the built site.
+- `check:manifests` validates every `.pplugin` / `.pmodule` / `.pconfig` example in the docs against the Plugify JSON schemas;
+- `check:i18n` checks that every English page has a Russian counterpart with the same structure (known gaps are listed in `scripts/i18n-baseline.json`);
+- `generate` builds the static site into `.output/public`;
+- `check:links` checks that every internal link resolves in the built site.
 
 ## Deployment
 

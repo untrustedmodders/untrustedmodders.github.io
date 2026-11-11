@@ -1,3 +1,14 @@
+import redirects from './data/redirects.json';
+
+// Pages that moved when the docs were regrouped by audience. Every old address
+// (and its /ru twin) is prerendered as a redirect so external links keep working.
+const redirectRules = Object.fromEntries(
+  Object.entries(redirects as Record<string, string>).flatMap(([from, to]) => [
+    [from, { redirect: `${to}/` }],
+    [`/ru${from}`, { redirect: `/ru${to}/` }],
+  ]),
+);
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -8,10 +19,11 @@ export default defineNuxtConfig({
   ],
   nitro: {
     prerender: {
-      routes: ['/robots.txt'],
+      routes: ['/robots.txt', ...Object.keys(redirectRules)],
       ignore: ['/ru/sitemap.xml']
     }
   },
+  routeRules: redirectRules,
   site: {
     url: 'https://plugify.net',
     name: 'Plugify',

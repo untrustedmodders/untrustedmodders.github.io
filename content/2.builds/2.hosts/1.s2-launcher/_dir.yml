@@ -1,0 +1,4 @@
+title: S2-Launcher
+icon: lucide:play-circle
+navigation.redirect: /builds/hosts/s2-launcher/overview
+collapse: true

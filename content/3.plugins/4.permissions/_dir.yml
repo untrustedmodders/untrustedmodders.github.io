@@ -1,0 +1,4 @@
+title: Permissions
+icon: lucide:shield-check
+navigation.redirect: /plugins/permissions/features
+collapse: true

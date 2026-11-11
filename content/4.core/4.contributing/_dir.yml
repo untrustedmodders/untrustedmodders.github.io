@@ -1,0 +1,5 @@
+title: Contributing
+icon: lucide:git-pull-request
+navigation.redirect: /core/contributing/how-to-contribute
+sidebar:
+  style: group

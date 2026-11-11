@@ -1,5 +1,5 @@
 <template>
-  <section class="mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20">
+  <section class="mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-12 md:pb-8 lg:py-16 lg:pb-10">
     <NuxtLink
         v-if="announcement"
         :to="announcement.to"
@@ -30,7 +30,7 @@
       <ContentSlot :use="$slots.description" unwrap="p" />
     </span>
 
-    <section class="flex w-full items-center justify-center space-x-4 py-4 md:pb-10">
+    <section class="flex w-full flex-wrap items-center justify-center gap-3 py-4">
       <NuxtLink
           v-for="(action, i) in actions"
           :key="i"
@@ -99,7 +99,7 @@ const writeCache = (key: string, value: GitHubRelease) => {
   try {
     localStorage.setItem(key, JSON.stringify({ time: Date.now(), release: value }));
   } catch {
-    // Storage unavailable (private mode, blocked site data) — just skip caching
+    // Storage unavailable (private mode, blocked site data), so just skip caching
   }
 };
 

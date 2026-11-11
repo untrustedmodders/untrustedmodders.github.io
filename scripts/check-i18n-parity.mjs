@@ -11,7 +11,7 @@
  * the existing backlog be cleared first. Translate something and the check
  * tells you to drop it from the baseline.
  *
- * Structural drift is a warning only — a translation may legitimately differ
+ * Structural drift is a warning only, since a translation may legitimately differ
  * in shape.
  */
 import fs from "node:fs";
@@ -76,7 +76,7 @@ for (const loc of LOCALES) {
   }
 
   if (fixed.length) {
-    console.log(`\n✗ ${fixed.length} baseline entr(y/ies) now translated — remove from ${BASELINE}:`);
+    console.log(`\n✗ ${fixed.length} baseline entr(y/ies) now translated, remove from ${BASELINE}:`);
     for (const f of fixed) console.log(`  ${f}`);
     stale += fixed.length;
   }

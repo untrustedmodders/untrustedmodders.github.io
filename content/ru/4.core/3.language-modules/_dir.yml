@@ -1,0 +1,5 @@
+title: Языковые модули
+icon: lucide:package-plus
+navigation.redirect: /ru/core/language-modules/writing-language-module
+sidebar:
+  style: group

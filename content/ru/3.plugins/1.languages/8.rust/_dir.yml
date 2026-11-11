@@ -1,0 +1,4 @@
+title: Rust
+icon: vscode-icons:file-type-rust
+navigation.redirect: /ru/plugins/languages/rust/quick-start
+collapse: true

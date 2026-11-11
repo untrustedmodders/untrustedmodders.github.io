@@ -1,0 +1,5 @@
+title: Language Modules
+icon: lucide:package-plus
+navigation.redirect: /core/language-modules/writing-language-module
+sidebar:
+  style: group

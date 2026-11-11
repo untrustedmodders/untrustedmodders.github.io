@@ -7,12 +7,12 @@
  *   ```json [my_plugin.pplugin]
  * so the check follows the docs' existing convention rather than needing
  * annotations. Schemas are fetched from the plugify repo, which means this
- * fails the moment an example drifts from the shipped schema — that drift is
+ * fails the moment an example drifts from the shipped schema; that drift is
  * exactly what the check exists to catch.
  *
  * Examples are illustrative excerpts, so absent `required` fields are ignored.
  * Wrong types and bad enum values (a misspelled parameter type) are hard
- * errors — those are the ones that mislead readers.
+ * errors, since those are the ones that mislead readers.
  *
  * KNOWN_SCHEMA_GAPS below records places where the docs are correct and the
  * *schema* is wrong. Delete an entry once the schema is fixed upstream; the
@@ -35,7 +35,7 @@ const CACHE = path.join(".cache", "plugify-schemas");
 const KNOWN_SCHEMA_GAPS = [
   {
     id: "$schema-not-allowed",
-    why: "Manifests should carry a `$schema` key for editor autocomplete — the docs' own examples do, and so does the .NET module's generated manifest — but the schemas set `additionalProperties: false` without declaring `$schema`.",
+    why: "Manifests should carry a `$schema` key for editor autocomplete (the docs' own examples do, and so does the .NET module's generated manifest), but the schemas set `additionalProperties: false` without declaring `$schema`.",
     match: (err, data) => err.keyword === "additionalProperties"
       && err.params.additionalProperty === "$schema"
       && Object.hasOwn(data, "$schema"),
@@ -136,7 +136,7 @@ for (const file of files) {
       }
 
       const at = err.instancePath || "(root)";
-      const allowed = err.params?.allowedValues ? ` — allowed: ${err.params.allowedValues.join(", ")}` : "";
+      const allowed = err.params?.allowedValues ? `; allowed: ${err.params.allowedValues.join(", ")}` : "";
       errors.push(`${where}\n    ${at} ${err.message}${allowed}`);
     }
   }
@@ -147,7 +147,7 @@ console.log(`Validated ${n} manifest example(s) across ${files.length} pages.\n`
 if (gapHits.size) {
   console.log("known schema gaps (docs are right, schema needs fixing upstream):");
   for (const { gap, count } of gapHits.values()) {
-    console.log(`  • ${gap.id} — ${count} example(s)`);
+    console.log(`  • ${gap.id}: ${count} example(s)`);
     console.log(`    ${gap.why}`);
   }
   console.log("");
