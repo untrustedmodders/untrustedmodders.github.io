@@ -1,5 +1,5 @@
-title: S2SDK Plugin
-icon: simple-icons:valve
+title: Source 2 SDK
+icon: simple-icons:sourceengine
 navigation.redirect: /ru/plugins/s2sdk/features
 sidebar:
   style: group

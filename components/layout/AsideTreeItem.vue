@@ -3,18 +3,22 @@
     <!-- Folder -->
     <div v-if="link.children">
       <template v-if="folderStyle === 'group'">
+        <!-- A group heading must not look like one of its own items -->
         <div
-          class="text-foreground/70 mt-2 flex items-center gap-2 rounded-md px-2 text-xs font-semibold outline-none"
-          :class="[link.navTruncate !== false && 'h-8']"
+          class="text-muted-foreground mt-5 flex items-center gap-2 rounded-md px-2 text-[11px] font-semibold uppercase tracking-wider outline-none"
+          :class="[link.navTruncate !== false && 'min-h-8']"
         >
           <LayoutAsideTreeItemButton :link />
         </div>
-        <LayoutAsideTree :links="link.children" :level="level" />
+        <!-- Items sit under their heading, set off by a line -->
+        <div class="border-border ml-[15px] border-l pl-2">
+          <LayoutAsideTree :links="link.children" :level="level" />
+        </div>
       </template>
       <template v-else>
         <button
           class="text-foreground/80 hover:bg-muted hover:text-primary flex w-full cursor-pointer items-center gap-2 rounded-md p-2 text-left text-sm"
-          :class="[link.navTruncate !== false && 'h-8']"
+          :class="[link.navTruncate !== false && 'min-h-8']"
           @click="isOpen = !isOpen"
         >
           <SmartIcon
@@ -43,7 +47,7 @@
       class="text-foreground/80 hover:bg-muted hover:text-primary flex items-center gap-2 rounded-md p-2 text-sm"
       :class="[
         isActive && 'bg-muted !text-primary font-medium',
-        link.navTruncate !== false && 'h-8',
+        link.navTruncate !== false && 'min-h-8',
       ]"
     >
       <LayoutAsideTreeItemButton :link />

@@ -1,7 +1,6 @@
 {
   "schema": 1,
-  "mock": true,
-  "updated": "2026-11-10T12:00:00Z",
+  "updated": "2026-11-11T06:54:09Z",
   "builds": {
     "plugify-source2": {
       "title": "Plugify Source 2",
@@ -11,14 +10,14 @@
       "repo": "untrustedmodders/plugify-builds",
       "releases": [
         {
-          "version": "1.0.1-dev.12+a1b2c3d",
-          "channel": "dev",
-          "tag": "plugify-source2-dev",
-          "date": "2026-11-10",
-          "url": "https://github.com/untrustedmodders/plugify-builds/releases/tag/plugify-source2-dev",
-          "changelog": "### Features\n\n* **source2:** bump plugify-plugin-s2sdk 3.3.1 to 3.4.0\n",
+          "version": "1.1.0",
+          "channel": "stable",
+          "tag": "plugify-source2-v1.1.0",
+          "date": "2026-11-11",
+          "url": "https://github.com/untrustedmodders/plugify-builds/releases/tag/plugify-source2-v1.1.0",
+          "changelog": "## [1.1.0](https://github.com/untrustedmodders/plugify-builds/compare/plugify-source2-v1.0.0...plugify-source2-v1.1.0) (2026-11-11)\n\n\n### Features\n\n* adopt the s2sdk 3.4.0 per-plugin config layout ([342b141](https://github.com/untrustedmodders/plugify-builds/commit/342b1414bcfcd51cf9a5c0317d97082bbc6c11fb))\n* ship plugin configs and translations in full archives ([475bc0c](https://github.com/untrustedmodders/plugify-builds/commit/475bc0c50670bfe9bdb34e7f4baeb3c6fc6cc0ba))\n* update permissions plugins to 1.0.0 config layout ([5123eeb](https://github.com/untrustedmodders/plugify-builds/commit/5123eeb09411799d7d4c8a8e248b01003c41f414))",
           "core": "3.1.0",
-          "channel_url": "https://untrustedmodders.github.io/plugify-builds/source2-dev/",
+          "channel_url": "https://untrustedmodders.github.io/plugify-builds/source2/",
           "packages": {
             "modules": [
               "plugify-module-cpp",
@@ -39,18 +38,18 @@
             {
               "name": "plugify-source2-launcher",
               "kind": "host",
-              "version": "2.5.4",
+              "version": "2.5.6",
               "repo": "untrustedmodders/plugify-source2-launcher",
-              "tag": "v2.5.4",
-              "release_url": "https://github.com/untrustedmodders/plugify-source2-launcher/releases/tag/v2.5.4"
+              "tag": "v2.5.6",
+              "release_url": "https://github.com/untrustedmodders/plugify-source2-launcher/releases/tag/v2.5.6"
             },
             {
               "name": "plugify-metamod-loader",
               "kind": "host",
-              "version": "2.1.4",
+              "version": "2.1.5",
               "repo": "untrustedmodders/plugify-metamod-loader",
-              "tag": "v2.1.4",
-              "release_url": "https://github.com/untrustedmodders/plugify-metamod-loader/releases/tag/v2.1.4"
+              "tag": "v2.1.5",
+              "release_url": "https://github.com/untrustedmodders/plugify-metamod-loader/releases/tag/v2.1.5"
             },
             {
               "name": "plugify-plugin-s2sdk",
@@ -103,18 +102,18 @@
             {
               "name": "permissions-storage",
               "kind": "plugin",
-              "version": "0.1.1",
+              "version": "1.0.0",
               "repo": "fr0nch/permissions-storage",
-              "tag": "v0.1.1",
-              "release_url": "https://github.com/fr0nch/permissions-storage/releases/tag/v0.1.1"
+              "tag": "v1.0.0",
+              "release_url": "https://github.com/fr0nch/permissions-storage/releases/tag/v1.0.0"
             },
             {
               "name": "permissions-connector-s2",
               "kind": "plugin",
-              "version": "0.1.5",
+              "version": "1.0.0",
               "repo": "fr0nch/permissions-connector-s2",
-              "tag": "v0.1.5",
-              "release_url": "https://github.com/fr0nch/permissions-connector-s2/releases/tag/v0.1.5"
+              "tag": "v1.0.0",
+              "release_url": "https://github.com/fr0nch/permissions-connector-s2/releases/tag/v1.0.0"
             },
             {
               "name": "plugify-module-cpp",
@@ -135,94 +134,310 @@
           ],
           "files": [
             {
-              "name": "plugify-source2-launcher-linux-1.0.1-dev.12-host-only.tar.gz",
+              "name": "plugify-source2-launcher-linux-1.1.0-host-only.tar.gz",
               "variant": "host-only",
               "host": "launcher",
               "os": "linux",
-              "size": 16968560,
-              "sha256": "4a76200c3078969a682eb3903a313b9939cae347aad4415e5218f4173b1c4efe",
-              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-dev/plugify-source2-launcher-linux-1.0.1-dev.12-host-only.tar.gz"
+              "size": 16955968,
+              "sha256": "7a3bb24c742e5a489b310fc55cf8b44feeb11b882aea86b851f91e1d81fd07ea",
+              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v1.1.0/plugify-source2-launcher-linux-1.1.0-host-only.tar.gz"
             },
             {
-              "name": "plugify-source2-launcher-linux-1.0.1-dev.12.tar.gz",
+              "name": "plugify-source2-launcher-linux-1.1.0.tar.gz",
               "variant": "full",
               "host": "launcher",
               "os": "linux",
-              "size": 39418413,
-              "sha256": "d55432c12d81b398befcc946717d13a7e901c345ebbfdb288d7ee9dba22b5e74",
-              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-dev/plugify-source2-launcher-linux-1.0.1-dev.12.tar.gz"
+              "size": 39914846,
+              "sha256": "2268e91da60374d4bbb2fe9e64f5c250e00714f8a065277319844aeacb5997cd",
+              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v1.1.0/plugify-source2-launcher-linux-1.1.0.tar.gz"
             },
             {
-              "name": "plugify-source2-launcher-windows-1.0.1-dev.12-host-only.zip",
+              "name": "plugify-source2-launcher-windows-1.1.0-host-only.zip",
               "variant": "host-only",
               "host": "launcher",
               "os": "windows",
-              "size": 6505545,
-              "sha256": "931fad7968c375cb3b6cd54bcbbb8b5f12260c602e79d2a975ca66c25ba87479",
-              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-dev/plugify-source2-launcher-windows-1.0.1-dev.12-host-only.zip"
+              "size": 6507709,
+              "sha256": "f04e8a1fff1263e2b3c3eca489db3bf485607fd08700e0aac4e9e48a5e9c2a80",
+              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v1.1.0/plugify-source2-launcher-windows-1.1.0-host-only.zip"
             },
             {
-              "name": "plugify-source2-launcher-windows-1.0.1-dev.12.zip",
+              "name": "plugify-source2-launcher-windows-1.1.0.zip",
               "variant": "full",
               "host": "launcher",
               "os": "windows",
-              "size": 15995860,
-              "sha256": "9ac763c28ab81c373fdc4180b3925c81854dd7b2506316cf093e014e3a147a56",
-              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-dev/plugify-source2-launcher-windows-1.0.1-dev.12.zip"
+              "size": 16359516,
+              "sha256": "4216be86849027d10a0a74055763bccc7299ed3778ae6be0eefb61528ce37208",
+              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v1.1.0/plugify-source2-launcher-windows-1.1.0.zip"
             },
             {
-              "name": "plugify-source2-metamod-linux-1.0.1-dev.12-host-only.tar.gz",
+              "name": "plugify-source2-metamod-linux-1.1.0-host-only.tar.gz",
               "variant": "host-only",
               "host": "metamod",
               "os": "linux",
-              "size": 12159554,
-              "sha256": "08fd252629accd382f056d48a9f35a2d3059727950112bd6ded5da5d7f05ad7f",
-              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-dev/plugify-source2-metamod-linux-1.0.1-dev.12-host-only.tar.gz"
+              "size": 12284510,
+              "sha256": "ccf9d00caad5f2dcff31f117f69171d197d0d2eda41056666186bd8a48016f00",
+              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v1.1.0/plugify-source2-metamod-linux-1.1.0-host-only.tar.gz"
             },
             {
-              "name": "plugify-source2-metamod-linux-1.0.1-dev.12.tar.gz",
+              "name": "plugify-source2-metamod-linux-1.1.0.tar.gz",
               "variant": "full",
               "host": "metamod",
               "os": "linux",
-              "size": 34608965,
-              "sha256": "f0889ac22fe1d31a289eaeaf5beb804acbe1c3f5d095a6a7bb826ba17628c6de",
-              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-dev/plugify-source2-metamod-linux-1.0.1-dev.12.tar.gz"
+              "size": 35243713,
+              "sha256": "6bfcee7b32f5dfa4d5acb6cf6d947c9f16ec5366531c1422208fc683bb634298",
+              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v1.1.0/plugify-source2-metamod-linux-1.1.0.tar.gz"
             },
             {
-              "name": "plugify-source2-metamod-windows-1.0.1-dev.12-host-only.zip",
+              "name": "plugify-source2-metamod-windows-1.1.0-host-only.zip",
               "variant": "host-only",
               "host": "metamod",
               "os": "windows",
-              "size": 5493746,
-              "sha256": "85f559923850518c9450361bfdc5478af2f75470298181b4806202c27e4d4136",
-              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-dev/plugify-source2-metamod-windows-1.0.1-dev.12-host-only.zip"
+              "size": 5544738,
+              "sha256": "1d9dd173c85307d119f06946d2965debf1ad22eeb2a4636ccfed77a800ed89c6",
+              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v1.1.0/plugify-source2-metamod-windows-1.1.0-host-only.zip"
             },
             {
-              "name": "plugify-source2-metamod-windows-1.0.1-dev.12.zip",
+              "name": "plugify-source2-metamod-windows-1.1.0.zip",
               "variant": "full",
               "host": "metamod",
               "os": "windows",
-              "size": 14984061,
-              "sha256": "cebdfc372805f27e30abbce7bf388307bd91e274a6ff196c4b5d3e7512ce4250",
-              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-dev/plugify-source2-metamod-windows-1.0.1-dev.12.zip"
+              "size": 15396545,
+              "sha256": "6cca099a077a6007572b7f940c080e8f5c8898d7e53f128a0cbf3df220e4ab10",
+              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v1.1.0/plugify-source2-metamod-windows-1.1.0.zip"
             },
             {
-              "name": "plugify-source2-runtime-linux-1.0.1-dev.12-host-only.tar.gz",
+              "name": "plugify-source2-runtime-linux-1.1.0-host-only.tar.gz",
               "variant": "host-only",
               "host": "runtime",
               "os": "linux",
-              "size": 16965452,
-              "sha256": "f3d1da9a4e92a1435a8b14bae4dae600bd1fca9b3a9d7c8a0859c1884027ff23",
-              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-dev/plugify-source2-runtime-linux-1.0.1-dev.12-host-only.tar.gz"
+              "size": 16958104,
+              "sha256": "110f98b14d1f245f4ec456128d62bd1beaf49abc2b3d285ea312af84a3af6499",
+              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v1.1.0/plugify-source2-runtime-linux-1.1.0-host-only.tar.gz"
             },
             {
-              "name": "plugify-source2-runtime-linux-1.0.1-dev.12.tar.gz",
+              "name": "plugify-source2-runtime-linux-1.1.0.tar.gz",
               "variant": "full",
               "host": "runtime",
               "os": "linux",
-              "size": 39417542,
-              "sha256": "2d9f72a99e72833d06e6ea65cbad8e2c22ddecaada1f9cd7776c674185945035",
-              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-dev/plugify-source2-runtime-linux-1.0.1-dev.12.tar.gz"
+              "size": 39917291,
+              "sha256": "8965686758b1870dd3e80a4604b5b825f23b7748a991823979634d32433db6a7",
+              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v1.1.0/plugify-source2-runtime-linux-1.1.0.tar.gz"
+            }
+          ]
+        },
+        {
+          "version": "1.0.1-dev.25+342b141",
+          "channel": "dev",
+          "tag": "plugify-source2-dev",
+          "date": "2026-11-11",
+          "url": "https://github.com/untrustedmodders/plugify-builds/releases/tag/plugify-source2-dev",
+          "changelog": "- feat: adopt the s2sdk 3.4.0 per-plugin config layout (342b141)",
+          "core": "3.1.0",
+          "channel_url": "https://untrustedmodders.github.io/plugify-builds/source2-dev/",
+          "packages": {
+            "modules": [
+              "plugify-module-cpp",
+              "plugify-module-golang"
+            ],
+            "plugins": [
+              "plugify-plugin-s2sdk",
+              "plugify-plugin-polyhook",
+              "plugify-plugin-configs",
+              "plugify-plugin-translations",
+              "plugify-plugin-permissions",
+              "plugify-plugin-dyncall",
+              "permissions-storage",
+              "permissions-connector-s2"
+            ]
+          },
+          "components": [
+            {
+              "name": "plugify-source2-launcher",
+              "kind": "host",
+              "version": "2.5.6",
+              "repo": "untrustedmodders/plugify-source2-launcher",
+              "tag": "v2.5.6",
+              "release_url": "https://github.com/untrustedmodders/plugify-source2-launcher/releases/tag/v2.5.6"
+            },
+            {
+              "name": "plugify-metamod-loader",
+              "kind": "host",
+              "version": "2.1.5",
+              "repo": "untrustedmodders/plugify-metamod-loader",
+              "tag": "v2.1.5",
+              "release_url": "https://github.com/untrustedmodders/plugify-metamod-loader/releases/tag/v2.1.5"
+            },
+            {
+              "name": "plugify-plugin-s2sdk",
+              "kind": "plugin",
+              "version": "3.4.0",
+              "repo": "untrustedmodders/plugify-plugin-s2sdk",
+              "tag": "v3.4.0",
+              "release_url": "https://github.com/untrustedmodders/plugify-plugin-s2sdk/releases/tag/v3.4.0"
+            },
+            {
+              "name": "plugify-plugin-polyhook",
+              "kind": "plugin",
+              "version": "2.5.9",
+              "repo": "untrustedmodders/plugify-plugin-polyhook",
+              "tag": "v2.5.9",
+              "release_url": "https://github.com/untrustedmodders/plugify-plugin-polyhook/releases/tag/v2.5.9"
+            },
+            {
+              "name": "plugify-plugin-configs",
+              "kind": "plugin",
+              "version": "2.1.2",
+              "repo": "untrustedmodders/plugify-plugin-configs",
+              "tag": "v2.1.2",
+              "release_url": "https://github.com/untrustedmodders/plugify-plugin-configs/releases/tag/v2.1.2"
+            },
+            {
+              "name": "plugify-plugin-translations",
+              "kind": "plugin",
+              "version": "1.0.3",
+              "repo": "untrustedmodders/plugify-plugin-translations",
+              "tag": "v1.0.3",
+              "release_url": "https://github.com/untrustedmodders/plugify-plugin-translations/releases/tag/v1.0.3"
+            },
+            {
+              "name": "plugify-plugin-permissions",
+              "kind": "plugin",
+              "version": "1.3.1",
+              "repo": "untrustedmodders/plugify-plugin-permissions",
+              "tag": "v1.3.1",
+              "release_url": "https://github.com/untrustedmodders/plugify-plugin-permissions/releases/tag/v1.3.1"
+            },
+            {
+              "name": "plugify-plugin-dyncall",
+              "kind": "plugin",
+              "version": "2.0.9",
+              "repo": "untrustedmodders/plugify-plugin-dyncall",
+              "tag": "v2.0.9",
+              "release_url": "https://github.com/untrustedmodders/plugify-plugin-dyncall/releases/tag/v2.0.9"
+            },
+            {
+              "name": "permissions-storage",
+              "kind": "plugin",
+              "version": "1.0.0",
+              "repo": "fr0nch/permissions-storage",
+              "tag": "v1.0.0",
+              "release_url": "https://github.com/fr0nch/permissions-storage/releases/tag/v1.0.0"
+            },
+            {
+              "name": "permissions-connector-s2",
+              "kind": "plugin",
+              "version": "1.0.0",
+              "repo": "fr0nch/permissions-connector-s2",
+              "tag": "v1.0.0",
+              "release_url": "https://github.com/fr0nch/permissions-connector-s2/releases/tag/v1.0.0"
+            },
+            {
+              "name": "plugify-module-cpp",
+              "kind": "module",
+              "version": "2.4.5",
+              "repo": "untrustedmodders/plugify-module-cpp",
+              "tag": "v2.4.5",
+              "release_url": "https://github.com/untrustedmodders/plugify-module-cpp/releases/tag/v2.4.5"
+            },
+            {
+              "name": "plugify-module-golang",
+              "kind": "module",
+              "version": "2.7.5",
+              "repo": "untrustedmodders/plugify-module-golang",
+              "tag": "v2.7.5",
+              "release_url": "https://github.com/untrustedmodders/plugify-module-golang/releases/tag/v2.7.5"
+            }
+          ],
+          "files": [
+            {
+              "name": "plugify-source2-launcher-linux-1.0.1-dev.25+342b141-host-only.tar.gz",
+              "variant": "host-only",
+              "host": "launcher",
+              "os": "linux",
+              "size": 16955989,
+              "sha256": "5927b5d471102cb11f1068f9de587f21ccea133a224402f736a49b49e4a26887",
+              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-dev/plugify-source2-launcher-linux-1.0.1-dev.25+342b141-host-only.tar.gz"
+            },
+            {
+              "name": "plugify-source2-launcher-linux-1.0.1-dev.25+342b141.tar.gz",
+              "variant": "full",
+              "host": "launcher",
+              "os": "linux",
+              "size": 39914868,
+              "sha256": "ea8ecbebca40ee6491c559fb4dee1e0131991026b08901970cc74cc02525245b",
+              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-dev/plugify-source2-launcher-linux-1.0.1-dev.25+342b141.tar.gz"
+            },
+            {
+              "name": "plugify-source2-launcher-windows-1.0.1-dev.25+342b141-host-only.zip",
+              "variant": "host-only",
+              "host": "launcher",
+              "os": "windows",
+              "size": 6507729,
+              "sha256": "19da70b45b43fb04545297efa627f082d94b518c189a3500171cdf25246635ce",
+              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-dev/plugify-source2-launcher-windows-1.0.1-dev.25+342b141-host-only.zip"
+            },
+            {
+              "name": "plugify-source2-launcher-windows-1.0.1-dev.25+342b141.zip",
+              "variant": "full",
+              "host": "launcher",
+              "os": "windows",
+              "size": 16359624,
+              "sha256": "5f8862eb7964111230ecda735a73d2ab19031d243fd0defd000c60afda35036a",
+              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-dev/plugify-source2-launcher-windows-1.0.1-dev.25+342b141.zip"
+            },
+            {
+              "name": "plugify-source2-metamod-linux-1.0.1-dev.25+342b141-host-only.tar.gz",
+              "variant": "host-only",
+              "host": "metamod",
+              "os": "linux",
+              "size": 12284532,
+              "sha256": "c4439b80ff234a4b8b19e8a146f23640980044f28138b2f4eabfbf98f00fb11a",
+              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-dev/plugify-source2-metamod-linux-1.0.1-dev.25+342b141-host-only.tar.gz"
+            },
+            {
+              "name": "plugify-source2-metamod-linux-1.0.1-dev.25+342b141.tar.gz",
+              "variant": "full",
+              "host": "metamod",
+              "os": "linux",
+              "size": 35243816,
+              "sha256": "1ae73b1be7ff9cada51b6f5a6030539d9dbb865a7e2d351cf2975998b5f776c4",
+              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-dev/plugify-source2-metamod-linux-1.0.1-dev.25+342b141.tar.gz"
+            },
+            {
+              "name": "plugify-source2-metamod-windows-1.0.1-dev.25+342b141-host-only.zip",
+              "variant": "host-only",
+              "host": "metamod",
+              "os": "windows",
+              "size": 5544758,
+              "sha256": "de96d19bb4440f71a8a07b97982d13151ea52f24afd540cad259a7d44efdf829",
+              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-dev/plugify-source2-metamod-windows-1.0.1-dev.25+342b141-host-only.zip"
+            },
+            {
+              "name": "plugify-source2-metamod-windows-1.0.1-dev.25+342b141.zip",
+              "variant": "full",
+              "host": "metamod",
+              "os": "windows",
+              "size": 15396653,
+              "sha256": "64579efabde3c53bd511921e2421df2e6b8a93551428062206ce9feb3772e9da",
+              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-dev/plugify-source2-metamod-windows-1.0.1-dev.25+342b141.zip"
+            },
+            {
+              "name": "plugify-source2-runtime-linux-1.0.1-dev.25+342b141-host-only.tar.gz",
+              "variant": "host-only",
+              "host": "runtime",
+              "os": "linux",
+              "size": 16958145,
+              "sha256": "39c0d87df50f5e1f45ece19a18dbc98bc400c824d03380b73b99b5dc84b0d63c",
+              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-dev/plugify-source2-runtime-linux-1.0.1-dev.25+342b141-host-only.tar.gz"
+            },
+            {
+              "name": "plugify-source2-runtime-linux-1.0.1-dev.25+342b141.tar.gz",
+              "variant": "full",
+              "host": "runtime",
+              "os": "linux",
+              "size": 39917477,
+              "sha256": "7595d053a0691176140030f683f59cc871b528bca49a7064da55e76d6819853f",
+              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-dev/plugify-source2-runtime-linux-1.0.1-dev.25+342b141.tar.gz"
             }
           ]
         },
@@ -232,7 +447,7 @@
           "tag": "plugify-source2-v1.0.0",
           "date": "2026-11-10",
           "url": "https://github.com/untrustedmodders/plugify-builds/releases/tag/plugify-source2-v1.0.0",
-          "changelog": "### Features\n\n* **source2:** add permissions-storage and permissions-connector-s2\n* **source2:** bump plugify-source2-launcher 2.4.9 to 2.5.4\n\n### Bug Fixes\n\n* **source2:** bump plugify-plugin-s2sdk 3.3.0 to 3.3.1\n",
+          "changelog": "## 1.0.0 (2026-11-10)\n\n\n### Features\n\n* add plugify-source2 build distribution ([bd0ac19](https://github.com/untrustedmodders/plugify-builds/commit/bd0ac192bd07da663b14bd0eaa52ac94331b94bc))",
           "core": "3.1.0",
           "channel_url": "https://untrustedmodders.github.io/plugify-builds/source2/",
           "packages": {
@@ -355,8 +570,8 @@
               "variant": "host-only",
               "host": "launcher",
               "os": "linux",
-              "size": 16968560,
-              "sha256": "5d2e932b3ba08db6d9bbbe7df9dd482ecd198b710fa3ac0a97f5978cb10a81ac",
+              "size": 16968502,
+              "sha256": "77352313f847282f52292af1397b91f918323faf39d663e6513f5683194a13a1",
               "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v1.0.0/plugify-source2-launcher-linux-1.0.0-host-only.tar.gz"
             },
             {
@@ -364,8 +579,8 @@
               "variant": "full",
               "host": "launcher",
               "os": "linux",
-              "size": 39418413,
-              "sha256": "c6c359af973a7a9ae8b6e43ffd3a26ad960dc5fe3db372cc497593835d58bb8b",
+              "size": 39418482,
+              "sha256": "e37f17dcf329787a151441a5bf350ea3e7fcc58e899f25af4b510d741acf6aa9",
               "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v1.0.0/plugify-source2-launcher-linux-1.0.0.tar.gz"
             },
             {
@@ -373,8 +588,8 @@
               "variant": "host-only",
               "host": "launcher",
               "os": "windows",
-              "size": 6505545,
-              "sha256": "6c7c26fad89ca4acda6f4eaeca875ededaafc55d2b34dda45164f312172083e2",
+              "size": 6505575,
+              "sha256": "95fdad66406316e2fa228f90a91a8aea34c6bccfadbbbdbdf9e6b96eeb5958cc",
               "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v1.0.0/plugify-source2-launcher-windows-1.0.0-host-only.zip"
             },
             {
@@ -382,8 +597,8 @@
               "variant": "full",
               "host": "launcher",
               "os": "windows",
-              "size": 15995860,
-              "sha256": "a06d30e928e123071777b4d5d01de528bd34e5251a419f1241e579204d67ae19",
+              "size": 15995948,
+              "sha256": "1be05490c8e2aada0b62029d84bc547abe08182efe1b5c7e8d012843270479ca",
               "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v1.0.0/plugify-source2-launcher-windows-1.0.0.zip"
             },
             {
@@ -391,8 +606,8 @@
               "variant": "host-only",
               "host": "metamod",
               "os": "linux",
-              "size": 12159554,
-              "sha256": "e9be13285d57d765d3ce336dd3a5f1cdece38f91e4e6b5447b8b704f0da050d4",
+              "size": 12159461,
+              "sha256": "5e2f5a09c1c38b51671cdeee3c47bffc6ab98bf00b63c671a05b84e47e734c37",
               "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v1.0.0/plugify-source2-metamod-linux-1.0.0-host-only.tar.gz"
             },
             {
@@ -400,8 +615,8 @@
               "variant": "full",
               "host": "metamod",
               "os": "linux",
-              "size": 34608965,
-              "sha256": "a2788c899a1087c4bff1a63b4998fd5e6fafd79c0b61d3133d5bebffdc83364d",
+              "size": 34608947,
+              "sha256": "6c756aeb663b35a98707261944b56e0b8804f95f7e7773cd8a2250298323b9bd",
               "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v1.0.0/plugify-source2-metamod-linux-1.0.0.tar.gz"
             },
             {
@@ -409,8 +624,8 @@
               "variant": "host-only",
               "host": "metamod",
               "os": "windows",
-              "size": 5493746,
-              "sha256": "32ba38fe6496e0ac714efe9036c84cb544871614b908d822b95ebe62accf1f63",
+              "size": 5493776,
+              "sha256": "2b6414c05545468a3974f2ed3ae559df4c7f2b2e6e74b32683a7ef39a9cc48f8",
               "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v1.0.0/plugify-source2-metamod-windows-1.0.0-host-only.zip"
             },
             {
@@ -418,8 +633,8 @@
               "variant": "full",
               "host": "metamod",
               "os": "windows",
-              "size": 14984061,
-              "sha256": "537eac7ab9ce3d8349870a945710ab83926f375d56f393c6eb7312c70737c284",
+              "size": 14984149,
+              "sha256": "f585baec8663c088e5dee2bcdb5af2547c57a011225a8cfe0e4e5feab26ff6de",
               "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v1.0.0/plugify-source2-metamod-windows-1.0.0.zip"
             },
             {
@@ -427,8 +642,8 @@
               "variant": "host-only",
               "host": "runtime",
               "os": "linux",
-              "size": 16965452,
-              "sha256": "63bf52bac787f70e246bf4ff3927aa3badad0a1d12d81f74dcde250508927d55",
+              "size": 16965386,
+              "sha256": "d4b7b19e5906acf823f23b583e1b345c52f020351f95caf518f1c889bc362609",
               "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v1.0.0/plugify-source2-runtime-linux-1.0.0-host-only.tar.gz"
             },
             {
@@ -436,198 +651,9 @@
               "variant": "full",
               "host": "runtime",
               "os": "linux",
-              "size": 39417542,
-              "sha256": "c228027728016312ae5084bfed936ff25b629c62cd7e9dd6e02a418d0a594fd9",
+              "size": 39417456,
+              "sha256": "f07477a43adab6c1b4ea2f1a03cdd0f08c6f76a51896806900ea02834132bcf5",
               "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v1.0.0/plugify-source2-runtime-linux-1.0.0.tar.gz"
-            }
-          ]
-        },
-        {
-          "version": "0.9.0",
-          "channel": "stable",
-          "tag": "plugify-source2-v0.9.0",
-          "date": "2026-10-30",
-          "url": "https://github.com/untrustedmodders/plugify-builds/releases/tag/plugify-source2-v0.9.0",
-          "changelog": "### Features\n\n* **source2:** first release\n",
-          "core": "3.1.0",
-          "channel_url": "https://untrustedmodders.github.io/plugify-builds/source2/",
-          "packages": {
-            "modules": [
-              "plugify-module-cpp"
-            ],
-            "plugins": [
-              "plugify-plugin-s2sdk",
-              "plugify-plugin-polyhook",
-              "plugify-plugin-configs",
-              "plugify-plugin-translations",
-              "plugify-plugin-permissions",
-              "plugify-plugin-dyncall"
-            ]
-          },
-          "components": [
-            {
-              "name": "plugify-source2-launcher",
-              "kind": "host",
-              "version": "2.4.9",
-              "repo": "untrustedmodders/plugify-source2-launcher",
-              "tag": "v2.4.9",
-              "release_url": "https://github.com/untrustedmodders/plugify-source2-launcher/releases/tag/v2.4.9"
-            },
-            {
-              "name": "plugify-metamod-loader",
-              "kind": "host",
-              "version": "2.1.4",
-              "repo": "untrustedmodders/plugify-metamod-loader",
-              "tag": "v2.1.4",
-              "release_url": "https://github.com/untrustedmodders/plugify-metamod-loader/releases/tag/v2.1.4"
-            },
-            {
-              "name": "plugify-plugin-s2sdk",
-              "kind": "plugin",
-              "version": "3.3.0",
-              "repo": "untrustedmodders/plugify-plugin-s2sdk",
-              "tag": "v3.3.0",
-              "release_url": "https://github.com/untrustedmodders/plugify-plugin-s2sdk/releases/tag/v3.3.0"
-            },
-            {
-              "name": "plugify-plugin-polyhook",
-              "kind": "plugin",
-              "version": "2.5.9",
-              "repo": "untrustedmodders/plugify-plugin-polyhook",
-              "tag": "v2.5.9",
-              "release_url": "https://github.com/untrustedmodders/plugify-plugin-polyhook/releases/tag/v2.5.9"
-            },
-            {
-              "name": "plugify-plugin-configs",
-              "kind": "plugin",
-              "version": "2.1.2",
-              "repo": "untrustedmodders/plugify-plugin-configs",
-              "tag": "v2.1.2",
-              "release_url": "https://github.com/untrustedmodders/plugify-plugin-configs/releases/tag/v2.1.2"
-            },
-            {
-              "name": "plugify-plugin-translations",
-              "kind": "plugin",
-              "version": "1.0.3",
-              "repo": "untrustedmodders/plugify-plugin-translations",
-              "tag": "v1.0.3",
-              "release_url": "https://github.com/untrustedmodders/plugify-plugin-translations/releases/tag/v1.0.3"
-            },
-            {
-              "name": "plugify-plugin-permissions",
-              "kind": "plugin",
-              "version": "1.3.1",
-              "repo": "untrustedmodders/plugify-plugin-permissions",
-              "tag": "v1.3.1",
-              "release_url": "https://github.com/untrustedmodders/plugify-plugin-permissions/releases/tag/v1.3.1"
-            },
-            {
-              "name": "plugify-plugin-dyncall",
-              "kind": "plugin",
-              "version": "2.0.9",
-              "repo": "untrustedmodders/plugify-plugin-dyncall",
-              "tag": "v2.0.9",
-              "release_url": "https://github.com/untrustedmodders/plugify-plugin-dyncall/releases/tag/v2.0.9"
-            },
-            {
-              "name": "plugify-module-cpp",
-              "kind": "module",
-              "version": "2.4.5",
-              "repo": "untrustedmodders/plugify-module-cpp",
-              "tag": "v2.4.5",
-              "release_url": "https://github.com/untrustedmodders/plugify-module-cpp/releases/tag/v2.4.5"
-            }
-          ],
-          "files": [
-            {
-              "name": "plugify-source2-launcher-linux-0.9.0-host-only.tar.gz",
-              "variant": "host-only",
-              "host": "launcher",
-              "os": "linux",
-              "size": 16968560,
-              "sha256": "9611fa799e77b5c6d60966f21d4ce886f73042fe9f1d94e763cb8078d039a4e9",
-              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v0.9.0/plugify-source2-launcher-linux-0.9.0-host-only.tar.gz"
-            },
-            {
-              "name": "plugify-source2-launcher-linux-0.9.0.tar.gz",
-              "variant": "full",
-              "host": "launcher",
-              "os": "linux",
-              "size": 39418413,
-              "sha256": "bdadafb335dd57b99adc64013c64b3fc09eb5b6547458e17644eb1f468e5fe24",
-              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v0.9.0/plugify-source2-launcher-linux-0.9.0.tar.gz"
-            },
-            {
-              "name": "plugify-source2-launcher-windows-0.9.0-host-only.zip",
-              "variant": "host-only",
-              "host": "launcher",
-              "os": "windows",
-              "size": 6505545,
-              "sha256": "fdc87ff90eceaa5feb0861a6a6a6626c0fa9273e4cb4faed981b04b4fef26c28",
-              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v0.9.0/plugify-source2-launcher-windows-0.9.0-host-only.zip"
-            },
-            {
-              "name": "plugify-source2-launcher-windows-0.9.0.zip",
-              "variant": "full",
-              "host": "launcher",
-              "os": "windows",
-              "size": 15995860,
-              "sha256": "1562ee10036bd47aeffb1324935fd36f64580984f0482b0dabc1edde737f9822",
-              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v0.9.0/plugify-source2-launcher-windows-0.9.0.zip"
-            },
-            {
-              "name": "plugify-source2-metamod-linux-0.9.0-host-only.tar.gz",
-              "variant": "host-only",
-              "host": "metamod",
-              "os": "linux",
-              "size": 12159554,
-              "sha256": "1ea122af0ea5c77f3068945bf00199f360f93eb388d7dc99a6e84ab4411694be",
-              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v0.9.0/plugify-source2-metamod-linux-0.9.0-host-only.tar.gz"
-            },
-            {
-              "name": "plugify-source2-metamod-linux-0.9.0.tar.gz",
-              "variant": "full",
-              "host": "metamod",
-              "os": "linux",
-              "size": 34608965,
-              "sha256": "59779518b3893f82305a7bcf7fb6c858ec4675f9a7fee506f859ef48db66526f",
-              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v0.9.0/plugify-source2-metamod-linux-0.9.0.tar.gz"
-            },
-            {
-              "name": "plugify-source2-metamod-windows-0.9.0-host-only.zip",
-              "variant": "host-only",
-              "host": "metamod",
-              "os": "windows",
-              "size": 5493746,
-              "sha256": "9aae840acc6a74b610bd4c7e18ec5e08c421ce8fd72119b6d6fad4ebd91813e6",
-              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v0.9.0/plugify-source2-metamod-windows-0.9.0-host-only.zip"
-            },
-            {
-              "name": "plugify-source2-metamod-windows-0.9.0.zip",
-              "variant": "full",
-              "host": "metamod",
-              "os": "windows",
-              "size": 14984061,
-              "sha256": "e630dd1048a5939a24d74482a0bb94b8b2d91b7f989365aebd3777617e5e2e0a",
-              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v0.9.0/plugify-source2-metamod-windows-0.9.0.zip"
-            },
-            {
-              "name": "plugify-source2-runtime-linux-0.9.0-host-only.tar.gz",
-              "variant": "host-only",
-              "host": "runtime",
-              "os": "linux",
-              "size": 16965452,
-              "sha256": "9b06ac516ef1b770d75c8ceef6afb82815c46adeff7cc6bdfaf8675826f9beae",
-              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v0.9.0/plugify-source2-runtime-linux-0.9.0-host-only.tar.gz"
-            },
-            {
-              "name": "plugify-source2-runtime-linux-0.9.0.tar.gz",
-              "variant": "full",
-              "host": "runtime",
-              "os": "linux",
-              "size": 39417542,
-              "sha256": "9512f4d171140189ee221c5a12a45f713188a6ff05c1f2c837ddb757385ccd4a",
-              "url": "https://github.com/untrustedmodders/plugify-builds/releases/download/plugify-source2-v0.9.0/plugify-source2-runtime-linux-0.9.0.tar.gz"
             }
           ]
         }

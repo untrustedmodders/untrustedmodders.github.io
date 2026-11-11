@@ -6,7 +6,8 @@
     class="min-w-4"
   />
 
-  <span :class="{ 'truncate text-nowrap': link.navTruncate !== false }">
+  <!-- Long titles wrap to a second line instead of being cut with an ellipsis -->
+  <span class="min-w-0 leading-snug [overflow-wrap:anywhere]">
     {{ link.title }}
   </span>
 

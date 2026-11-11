@@ -97,3 +97,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Wider sidebar than the theme default (220px / 240px): group items are
+   indented, and long titles need the room. */
+@media (min-width: 768px) {
+  .md\:grid:has(> aside) {
+    grid-template-columns: 272px minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .md\:grid:has(> aside) {
+    grid-template-columns: 288px minmax(0, 1fr);
+  }
+}
