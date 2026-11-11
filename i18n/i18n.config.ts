@@ -338,7 +338,7 @@ export default defineI18nConfig(() => ({
       'Builds': 'Билды',
 
       // Builds
-      'No builds have been published yet, so the versions and files below are examples.': 'Сборки ещё не опубликованы, поэтому версии и файлы ниже приведены как пример.',
+      'No builds have been published yet, so the versions and files below are examples.': 'Билды ещё не опубликованы, поэтому версии и файлы ниже приведены как пример.',
       'Changelog': 'Список изменений',
       'for Counter-Strike 2': 'для Counter-Strike 2',
       'OS': 'ОС',
@@ -358,7 +358,7 @@ export default defineI18nConfig(() => ({
       'Plugify core': 'Ядро Plugify',
       'docs': 'документация',
       'release notes': 'релиз',
-      'Development build': 'Сборка для разработки',
+      'Development build': 'Билд для разработки',
       'Previous versions': 'Предыдущие версии',
       'All versions': 'Все версии',
       'Copy': 'Копировать',
