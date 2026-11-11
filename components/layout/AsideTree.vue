@@ -1,0 +1,23 @@
+<template>
+  <ul
+    class="flex flex-col gap-1 py-1"
+    :class="[level > 0 && 'mx-3.5 border-l px-2.5']"
+  >
+    <!-- Folders have no `_id`: keyed by path, otherwise items of another section reuse the open state -->
+    <template v-for="link in links" :key="link._path">
+      <LayoutAsideTreeItem
+        :link="link"
+        :level="level"
+      />
+    </template>
+  </ul>
+</template>
+
+<script setup lang="ts">
+import type { NavItem } from '@ztl-uwu/nuxt-content';
+
+defineProps<{
+  links: NavItem[];
+  level: number;
+}>();
+</script>
