@@ -175,3 +175,15 @@
 
   --ring: 240 4.9% 83.9%;
 }
+
+/* Phones: long inline code and wide tab lists must not widen the page */
+.inline-code {
+  /* break-word, not anywhere: table cells keep their code in one piece and scroll instead */
+  overflow-wrap: break-word;
+}
+
+.docs-content [role='tablist'] {
+  max-width: 100%;
+  overflow-x: auto;
+  justify-content: flex-start;
+}
