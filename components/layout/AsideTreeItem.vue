@@ -77,7 +77,7 @@ function defaultOpen() {
   return level < collapseLevel && !collapse;
 }
 
-// Folders marked `collapse: true` (languages, base plugins) follow the route:
+// Folders marked `collapse: true` (languages, standard plugins) follow the route:
 // only the one that holds the current page is open.
 const followsRoute = link.collapse === true;
 

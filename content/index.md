@@ -49,7 +49,7 @@ title: Builds
 icon: lucide:package-open
 to: /builds
 ---
-Ready-to-run packs: the host, language modules and base plugins in **one archive**.
+Ready-to-run packs: the host, language modules and standard plugins in **one archive**.
 ::
 
 ::card
