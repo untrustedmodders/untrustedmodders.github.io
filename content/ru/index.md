@@ -64,84 +64,68 @@ to: /ru/core
 
 ## Языки
 
-::card-group{cols=4 class="grid-cols-2 [&_h3]:text-base [&_.p-6]:p-4"}
-::card
+::card-group{cols=4 class="grid-cols-2"}
+::lang-card
 ---
 title: Python
 icon: vscode-icons:file-type-python
 to: /ru/plugins/languages/python/quick-start
-horizontal: true
-showLinkIcon: false
 ---
 ::
 
-::card
+::lang-card
 ---
 title: C++
 icon: vscode-icons:file-type-cpp3
 to: /ru/plugins/languages/cpp/quick-start
-horizontal: true
-showLinkIcon: false
 ---
 ::
 
-::card
+::lang-card
 ---
 title: C#
 icon: vscode-icons:file-type-csharp2
 to: /ru/plugins/languages/csharp/quick-start
-horizontal: true
-showLinkIcon: false
 ---
 ::
 
-::card
+::lang-card
 ---
 title: JavaScript
 icon: vscode-icons:file-type-js-official
 to: /ru/plugins/languages/javascript/quick-start
-horizontal: true
-showLinkIcon: false
 ---
 ::
 
-::card
+::lang-card
 ---
 title: Go
 icon: vscode-icons:file-type-go
 to: /ru/plugins/languages/golang/quick-start
-horizontal: true
-showLinkIcon: false
 ---
 ::
 
-::card
+::lang-card
 ---
 title: Lua
 icon: vscode-icons:file-type-lua
 to: /ru/plugins/languages/lua/quick-start
-horizontal: true
-showLinkIcon: false
 ---
 ::
 
-::card
+::lang-card
 ---
 title: Rust
 icon: vscode-icons:file-type-rust
 to: /ru/plugins/languages/rust/quick-start
-horizontal: true
-showLinkIcon: false
 ---
 ::
 
-::card
+::lang-card
 ---
 title: D
 icon: vscode-icons:file-type-dlang
 to: /ru/plugins/languages/dlang/quick-start
-horizontal: true
-showLinkIcon: false
 ---
 ::
 

@@ -64,84 +64,68 @@ Embed Plugify in your own app or add a **new language module**.
 
 ## Languages
 
-::card-group{cols=4 class="grid-cols-2 [&_h3]:text-base [&_.p-6]:p-4"}
-::card
+::card-group{cols=4 class="grid-cols-2"}
+::lang-card
 ---
 title: Python
 icon: vscode-icons:file-type-python
 to: /plugins/languages/python/quick-start
-horizontal: true
-showLinkIcon: false
 ---
 ::
 
-::card
+::lang-card
 ---
 title: C++
 icon: vscode-icons:file-type-cpp3
 to: /plugins/languages/cpp/quick-start
-horizontal: true
-showLinkIcon: false
 ---
 ::
 
-::card
+::lang-card
 ---
 title: C#
 icon: vscode-icons:file-type-csharp2
 to: /plugins/languages/csharp/quick-start
-horizontal: true
-showLinkIcon: false
 ---
 ::
 
-::card
+::lang-card
 ---
 title: JavaScript
 icon: vscode-icons:file-type-js-official
 to: /plugins/languages/javascript/quick-start
-horizontal: true
-showLinkIcon: false
 ---
 ::
 
-::card
+::lang-card
 ---
 title: Go
 icon: vscode-icons:file-type-go
 to: /plugins/languages/golang/quick-start
-horizontal: true
-showLinkIcon: false
 ---
 ::
 
-::card
+::lang-card
 ---
 title: Lua
 icon: vscode-icons:file-type-lua
 to: /plugins/languages/lua/quick-start
-horizontal: true
-showLinkIcon: false
 ---
 ::
 
-::card
+::lang-card
 ---
 title: Rust
 icon: vscode-icons:file-type-rust
 to: /plugins/languages/rust/quick-start
-horizontal: true
-showLinkIcon: false
 ---
 ::
 
-::card
+::lang-card
 ---
 title: D
 icon: vscode-icons:file-type-dlang
 to: /plugins/languages/dlang/quick-start
-horizontal: true
-showLinkIcon: false
 ---
 ::
 
