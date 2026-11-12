@@ -62,7 +62,7 @@ Embed Plugify in your own app or add a **new language module**.
 ::
 ::
 
-## Languages
+## Supported Languages
 
 ::card-group{cols=4 class="grid-cols-2"}
 ::lang-card

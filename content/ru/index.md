@@ -62,7 +62,7 @@ to: /ru/core
 ::
 ::
 
-## Языки
+## Поддерживаемые языки
 
 ::card-group{cols=4 class="grid-cols-2"}
 ::lang-card
